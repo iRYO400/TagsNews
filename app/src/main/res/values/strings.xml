@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TagsNews</string>
+    <string name="tvReadMore"><u>ReadMore</u></string>
+    <string name="tvReadSource">Читать подробности…</string>
 </resources>

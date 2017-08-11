@@ -3,23 +3,24 @@ package workshop.akbolatss.tagsnews.di.module;
 import dagger.Module;
 import dagger.Provides;
 import workshop.akbolatss.tagsnews.di.scope.ActivityScope;
-import workshop.akbolatss.tagsnews.screen.news.NewsView;
+import workshop.akbolatss.tagsnews.screen.splash.SplashView;
 
 /**
- * Created by AkbolatSS on 08.08.2017.
+ * Created by AkbolatSS on 11.08.2017.
  */
+
 @Module
-public class NewsListModule {
+public class SplashModule {
 
-    private NewsView mView;
+    private SplashView mView;
 
-    public NewsListModule(NewsView mView) {
+    public SplashModule(SplashView mView) {
         this.mView = mView;
     }
 
     @ActivityScope
     @Provides
-    NewsView provideView(){
+    SplashView provideView() {
         return mView;
     }
 }

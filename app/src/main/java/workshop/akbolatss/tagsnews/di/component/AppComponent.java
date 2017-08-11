@@ -16,8 +16,6 @@ import workshop.akbolatss.tagsnews.di.module.AppModule;
 @Component(modules = AppModule.class)
 public interface AppComponent {
 
-    Retrofit exposeRetrofit();
-
     NewsApiService exposeApi();
 
     Context exposeContext();

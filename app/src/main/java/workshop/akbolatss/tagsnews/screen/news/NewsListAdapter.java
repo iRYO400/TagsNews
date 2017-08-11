@@ -1,10 +1,13 @@
 package workshop.akbolatss.tagsnews.screen.news;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,42 +18,61 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.toptas.rssconverter.RssItem;
 import workshop.akbolatss.tagsnews.R;
-import workshop.akbolatss.tagsnews.screen.news.model.Article;
 
 /**
  * Created by AkbolatSS on 08.08.2017.
  */
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder> {
+public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHolder> {
 
 
-    private LayoutInflater mLayoutInflater;
-    private List<Article> mNewsList;
+    private List<RssItem> mNewsList;
 
-    public NewsAdapter(LayoutInflater mLayoutInflater) {
-        this.mLayoutInflater = mLayoutInflater;
+    private final NewsView mNewsView;
+
+    public NewsListAdapter(NewsView mNewsView) {
         mNewsList = new ArrayList<>();
+        this.mNewsView = mNewsView;
     }
+
+    private final View.OnClickListener mInternalListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            RssItem rssItem = (RssItem) view.getTag();
+            mNewsView.onOpenDetails(rssItem);
+            Log.d("BolaDebug", "mInternalListener");
+        }
+    };
 
     @Override
     public NewsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater mLayoutInflater = LayoutInflater.from(parent.getContext());
         View view = mLayoutInflater.inflate(R.layout.rv_news_item, parent, false);
         return new NewsHolder(view);
     }
 
     @Override
     public void onBindViewHolder(NewsHolder holder, int position) {
-        holder.bind(mNewsList.get(position));
+        RssItem rssItem = mNewsList.get(position);
+        holder.bind(rssItem);
+
+
+        holder.mFrameLayout.setOnClickListener(mInternalListener);
+        holder.mFrameLayout.setTag(rssItem);
     }
 
     @Override
     public int getItemCount() {
+        if (mNewsList == null) {
+            return 0;
+        }
         return mNewsList.size();
     }
 
-    public void onAddArticles(List<Article> articles) {
-        mNewsList.addAll(articles);
+    public void onAddItems(List<RssItem> rssItems) {
+        mNewsList.addAll(rssItems);
         notifyDataSetChanged();
     }
 
@@ -65,20 +87,25 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder> {
         TextView mDescription;
         @BindView(R.id.tvTimestamp)
         TextView mTimestamp;
+        @BindView(R.id.frameLayout)
+        FrameLayout mFrameLayout;
 
         public NewsHolder(View itemView) {
             super(itemView);
             mContext = itemView.getContext();
             ButterKnife.bind(this, itemView);
+
         }
 
-        public void bind(Article article) {
-            mTitle.setText(article.getTitle());
-            mDescription.setText(article.getDescription());
+        public void bind(RssItem rssItem) {
+            mTitle.setText(rssItem.getTitle());
+            mDescription.setText(rssItem.getDescription());
 
-            mTimestamp.setText(article.getTimestamp());
+            mTimestamp.setText(rssItem.getPublishDate());
 
-            Picasso.with(mContext).load(article.getImageUrl())
+            Picasso.with(mContext)
+                    .load(rssItem.getImage())
+                    .placeholder(R.drawable.placeholder)
                     .into(mImage);
         }
     }
