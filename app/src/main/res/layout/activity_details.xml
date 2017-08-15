@@ -1,63 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true">
 
-    <ImageView
-        android:id="@+id/imgView"
-        android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/placeholder"
-        tools:ignore="ContentDescription" />
-
-    <TextView
-        android:id="@+id/tvTitle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_margin="12dp"
-        android:ellipsize="end"
-        android:fontFamily="sans-serif-medium"
-        android:maxLines="2"
-        android:text="Growing up in Michigan, I was lucky enough to"
-        android:textSize="24sp" />
+        android:orientation="vertical"
+        tools:context=".screen.details.DetailsActivity">
 
-    <TextView
-        android:id="@+id/tvTimestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginBottom="6dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginStart="12dp"
-        android:text="Sat, 05 Aug 2017 10:22:45"
-        android:textColor="@color/colorTextDark"
-        android:textSize="12sp" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:background="@color/colorPrimary"
+            android:popupTheme="@style/ToolbarStyle"
+            android:theme="@style/ToolbarStyle" />
 
-    <TextView
-        android:id="@+id/tvDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:layout_marginEnd="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="12dp"
-        android:ellipsize="end"
-        android:fontFamily="sans-serif-medium"
-        android:maxLines="6"
-        android:text="Growing up in Michigan, I was lucky enough to"
-        android:textSize="18sp" />
+        <ImageView
+            android:id="@+id/imgView"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/placeholder"
+            tools:ignore="ContentDescription" />
 
-    <Button
-        android:background="@drawable/bg_btn"
-        android:id="@+id/btnOpenSource"
-        android:text="@string/tvReadSource"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="12dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="2"
+            android:text="Growing up in Michigan, I was lucky enough to"
+            android:textSize="24sp" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tvTimestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginBottom="6dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:text="Sat, 05 Aug 2017 10:22:45"
+            android:textColor="@color/colorTextDark"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginBottom="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="6dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="6"
+            android:text="Growing up in Michigan, I was lucky enough to"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btnOpenSource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bg_btn"
+            android:text="@string/tvReadSource" />
+
+    </LinearLayout>
+</ScrollView>

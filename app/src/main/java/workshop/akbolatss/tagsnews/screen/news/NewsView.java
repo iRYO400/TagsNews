@@ -1,10 +1,6 @@
 package workshop.akbolatss.tagsnews.screen.news;
 
-import android.support.annotation.NonNull;
-import android.view.View;
-
 import me.toptas.rssconverter.RssFeed;
-import me.toptas.rssconverter.RssItem;
 import workshop.akbolatss.tagsnews.base.BaseView;
 
 /**
@@ -19,7 +15,5 @@ public interface NewsView extends BaseView {
     public void onShowError();
 
     public void onLoadNews(RssFeed rssFeed);
-
-    public void onOpenDetails(@NonNull RssItem rssItem);
 
 }

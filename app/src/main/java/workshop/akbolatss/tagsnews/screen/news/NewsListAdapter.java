@@ -20,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.toptas.rssconverter.RssItem;
 import workshop.akbolatss.tagsnews.R;
+import workshop.akbolatss.tagsnews.base.BaseView;
 
 /**
  * Created by AkbolatSS on 08.08.2017.
@@ -30,19 +31,18 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
 
     private List<RssItem> mNewsList;
 
-    private final NewsView mNewsView;
+    private final OnRssClickInterface mClickInterface;
 
-    public NewsListAdapter(NewsView mNewsView) {
+    public NewsListAdapter(OnRssClickInterface mClickInterface) {
         mNewsList = new ArrayList<>();
-        this.mNewsView = mNewsView;
+        this.mClickInterface = mClickInterface;
     }
 
     private final View.OnClickListener mInternalListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             RssItem rssItem = (RssItem) view.getTag();
-            mNewsView.onOpenDetails(rssItem);
-            Log.d("BolaDebug", "mInternalListener");
+            mClickInterface.OnItemClick(rssItem);
         }
     };
 
@@ -72,8 +72,19 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
     }
 
     public void onAddItems(List<RssItem> rssItems) {
-        mNewsList.addAll(rssItems);
-        notifyDataSetChanged();
+        if (rssItems != null) {
+            mNewsList.addAll(rssItems); // TO-DO throws exception NULL POINTER
+            notifyDataSetChanged();
+        }
+
+        if (rssItems.size() == 0) {
+            Log.d("BolaDebug","RSS size is NULL");
+        }
+    }
+
+    public interface OnRssClickInterface{
+
+        public void OnItemClick(RssItem rssItem);
     }
 
     public class NewsHolder extends RecyclerView.ViewHolder {

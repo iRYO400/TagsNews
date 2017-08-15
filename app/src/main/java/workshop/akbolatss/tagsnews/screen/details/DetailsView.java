@@ -9,4 +9,6 @@ import workshop.akbolatss.tagsnews.base.BaseView;
 public interface DetailsView extends BaseView {
 
     void onOpenSource();
+
+    void onRefreshToolbar(boolean isFavorite);
 }

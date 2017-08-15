@@ -1,7 +1,5 @@
 package workshop.akbolatss.tagsnews.screen.news;
 
-import android.util.Log;
-
 import javax.inject.Inject;
 
 import io.reactivex.Observer;
@@ -19,7 +17,6 @@ import workshop.akbolatss.tagsnews.base.BasePresenter;
 
 public class NewsPresenter extends BasePresenter<NewsView> implements Observer<RssFeed>{
 
-    private static final String TAG = "BolaDebug";
     private String mUrl;
 
     @Inject

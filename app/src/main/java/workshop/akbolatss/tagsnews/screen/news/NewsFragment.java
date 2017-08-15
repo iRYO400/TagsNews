@@ -33,7 +33,7 @@ import static workshop.akbolatss.tagsnews.util.Constants.INTENT_RSS_ITEM;
  * Created by AkbolatSS on 09.08.2017.
  */
 
-public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayout.OnRefreshListener {
+public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayout.OnRefreshListener, NewsListAdapter.OnRssClickInterface {
 
     @Inject
     protected NewsPresenter mPresenter;
@@ -70,7 +70,6 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
                 }
                 mUrl = bundle.getString(mName);
             }
-
         }
         return rootView;
     }
@@ -127,8 +126,7 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
     }
 
     @Override
-    public void onOpenDetails(@NonNull RssItem rssItem) {
-        Log.d("BolaDebug", "OnOpenDetails");
+    public void OnItemClick(@NonNull RssItem rssItem) {
         Intent i = new Intent(mContext, DetailsActivity.class);
         i.putExtra(INTENT_RSS_ITEM, rssItem);
         startActivity(i);

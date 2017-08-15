@@ -1,7 +1,5 @@
 package workshop.akbolatss.tagsnews.screen.news;
 
-import android.os.Bundle;
-
 /**
  * Created by AkbolatSS on 10.08.2017.
  */

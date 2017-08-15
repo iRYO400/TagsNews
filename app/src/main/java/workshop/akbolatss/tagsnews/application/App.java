@@ -14,7 +14,6 @@ import workshop.akbolatss.tagsnews.di.module.AppModule;
 public class App extends Application {
 
     private static final String BASE_URL = "https://dtf.ru/";
-//    private static final String BASE_URL = "https://newsapi.org/";
     private static AppComponent mAppComponent;
 
 

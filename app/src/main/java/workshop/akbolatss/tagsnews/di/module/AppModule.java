@@ -3,6 +3,8 @@ package workshop.akbolatss.tagsnews.di.module;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import org.greenrobot.greendao.database.Database;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
@@ -11,11 +13,12 @@ import dagger.Module;
 import dagger.Provides;
 import me.toptas.rssconverter.RssConverterFactory;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 import workshop.akbolatss.tagsnews.api.NewsApiService;
+import workshop.akbolatss.tagsnews.repositories.source.DaoMaster;
+import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
+
 
 /**
  * Created by AkbolatSS on 08.08.2017.
@@ -35,6 +38,14 @@ public class AppModule {
     @Provides
     Context provideContext() {
         return mContext;
+    }
+
+    @Singleton
+    @Provides
+    DaoSession provideDaoSession(Context context) {
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, "rss-db");
+        Database db = helper.getWritableDb();
+        return new DaoMaster(db).newSession();
     }
 
     @Singleton
