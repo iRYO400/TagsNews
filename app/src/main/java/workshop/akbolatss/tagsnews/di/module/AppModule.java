@@ -11,11 +11,11 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import me.toptas.rssconverter.RssConverterFactory;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import workshop.akbolatss.tagsnews.api.NewsApiService;
+import workshop.akbolatss.tagsnews.api.XmlOrJsonConverterFactory;
 import workshop.akbolatss.tagsnews.repositories.source.DaoMaster;
 import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
 
@@ -71,7 +71,7 @@ public class AppModule {
     Retrofit provideRetrofit(OkHttpClient client) {
         return new Retrofit.Builder()
                 .baseUrl(mBaseUrl)
-                .addConverterFactory(RssConverterFactory.create())
+                .addConverterFactory(new XmlOrJsonConverterFactory())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
                 .build();

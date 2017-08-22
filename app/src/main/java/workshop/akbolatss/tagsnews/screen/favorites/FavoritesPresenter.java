@@ -10,10 +10,8 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import me.toptas.rssconverter.RssItem;
-import workshop.akbolatss.tagsnews.api.NewsApiService;
 import workshop.akbolatss.tagsnews.base.BasePresenter;
 import workshop.akbolatss.tagsnews.repositories.DBRssItemRepository;
-import workshop.akbolatss.tagsnews.repositories.RssItemRepository;
 
 /**
  * Created by AkbolatSS on 14.08.2017.
@@ -22,14 +20,14 @@ import workshop.akbolatss.tagsnews.repositories.RssItemRepository;
 public class FavoritesPresenter extends BasePresenter<FavoritesView> implements Observer<List<RssItem>> {
 
     @Inject
-    protected DBRssItemRepository dbRssItemRepository;
+    protected DBRssItemRepository mRepository;
 
     @Inject
     public FavoritesPresenter() {
     }
 
     public void onLoadFavorites() {
-        dbRssItemRepository.getFavorites()
+        mRepository.getFavorites()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(this);

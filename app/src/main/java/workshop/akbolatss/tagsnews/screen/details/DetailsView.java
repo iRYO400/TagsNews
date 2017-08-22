@@ -10,5 +10,7 @@ public interface DetailsView extends BaseView {
 
     void onOpenSource();
 
+    void onShareNews();
+
     void onRefreshToolbar(boolean isFavorite);
 }

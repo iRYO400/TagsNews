@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.orhanobut.hawk.Hawk;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,6 +24,7 @@ import workshop.akbolatss.tagsnews.di.component.DaggerFavoritesComponent;
 import workshop.akbolatss.tagsnews.di.module.FavoritesModule;
 import workshop.akbolatss.tagsnews.screen.details.DetailsActivity;
 import workshop.akbolatss.tagsnews.screen.news.NewsListAdapter;
+import workshop.akbolatss.tagsnews.util.Constants;
 
 import static workshop.akbolatss.tagsnews.util.Constants.INTENT_RSS_ITEM;
 
@@ -70,9 +73,8 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, Ne
     private void onInitRecycler() {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-        mRecyclerView.setNestedScrollingEnabled(false);
 
-        mNewsListAdapter = new NewsListAdapter(this);
+        mNewsListAdapter = new NewsListAdapter(this, Hawk.get(Constants.SMALL_ITEMS_MODE, false));
         mRecyclerView.setAdapter(mNewsListAdapter);
     }
 

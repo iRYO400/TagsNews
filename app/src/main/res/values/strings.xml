@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">TagsNews</string>
+    <string name="app_sign">Tag News App bit.ly/</string>
     <string name="tvReadMore"><u>ReadMore</u></string>
     <string name="tvReadSource">Читать подробности…</string>
 
@@ -7,10 +8,29 @@
     <string name="tab_1">tab1</string>
     <string name="tab_2">tab2</string>
     <string name="tab_3">tab3</string>
+    <string name="tvEnter">Введите</string>
+    <string name="tvAdd">Добавить</string>
+    <string name="tvEdit">Изменить</string>
+    <string name="tvCancel">Отмена</string>
 
     <string name="fab1">Закладки</string>
     <string name="fab2">Новый канал</string>
     <string name="tvAddToFavorites">В закладки</string>
     <string name="tvOptions">Дополнительно</string>
+    <string name="tvSearch">Поиск</string>
+    <string name="hint_search">Введите ключевое слово</string>
+    <string name="tvRename">Изменить имя</string>
+    <string name="menuRemove">Удалить источник</string>
+    <string name="menuEditDescription">Добавить описание</string>
+    <string name="menuRename">Изменить название</string>
+    <string name="menuReaddress">Изменить адрес</string>
+    <string name="tvDescription">Описание</string>
+    <string name="tvNewAddress">Новый адрес</string>
+    <string name="tvNewName">Новое имя</string>
+    <string name="hintNewSource">адрес сайта или ленты</string>
+    <string name="tvShare">Поделиться</string>
+    <string name="fab_viewMode">Вид</string>
+    <string name="fab_favorites">Закладки</string>
+    <string name="fab_sources">Каналы</string>
 
 </resources>

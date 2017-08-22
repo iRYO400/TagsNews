@@ -10,10 +10,14 @@
 
         <item name="android:textColor">@color/colorTextPrimary</item>
 
+        //For CheckBox
+        <item name="android:textColorSecondary">@color/colorAccent</item>
+
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:fitsSystemWindows">true</item>
+
     </style>
 
     <style name="ToolbarStyle" parent="Theme.AppCompat.Light.NoActionBar">
@@ -23,6 +27,15 @@
     <style name="FabMenu">
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- Used for the buttons -->
+        <item name="colorAccent">@color/colorAccent</item>
+        <!-- Used for the title and text -->
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <!-- Used for the background -->
+        <item name="android:background">@color/colorPrimary</item>
     </style>
 
 </resources>

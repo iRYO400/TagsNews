@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context="workshop.akbolatss.tagsnews.screen.news.NewsActivity">
+    tools:context="workshop.akbolatss.tagsnews.screen.board.BoardActivity">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
@@ -26,37 +27,56 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.getbase.floatingactionbutton.FloatingActionsMenu
+        <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/btnFam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            app:fab_addButtonColorNormal="@color/colorAccent"
-            app:fab_addButtonColorPressed="@color/colorAccentDark"
-            app:fab_addButtonPlusIconColor="@android:color/white"
-            app:fab_expandDirection="up"
-            app:fab_labelStyle="@style/FabMenu">
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:elevation="6dp"
+            fab:menu_colorNormal="@color/colorAccent"
+            fab:menu_colorPressed="@color/colorAccentDark"
+            fab:menu_colorRipple="#99FFFFFF"
+            fab:menu_fab_size="normal"
+            fab:menu_icon="@drawable/ic_settings_white_24dp"
+            fab:menu_labels_ellipsize="end"
+            fab:menu_labels_singleLine="true"
+            fab:menu_openDirection="up">
 
-            <com.getbase.floatingactionbutton.FloatingActionButton
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/btnFab3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_art_track_white_24dp"
+                app:fab_colorNormal="@color/colorAccent"
+                app:fab_colorPressed="@color/colorAccentDark"
+                app:fab_colorRipple="#99FFFFFF"
+                fab:fab_label="@string/fab_viewMode"
+                fab:fab_size="mini" />
+
+            <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/btnFab1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_cloud_queue_black_24dp"
-                app:fab_colorNormal="#ffffff"
-                app:fab_colorPressed="#909090"
-                app:fab_size="mini"
-                app:fab_title="@string/fab1" />
+                android:src="@drawable/ic_favorite_white_24dp"
+                app:fab_colorNormal="@color/colorAccent"
+                app:fab_colorPressed="@color/colorAccentDark"
+                app:fab_colorRipple="#99FFFFFF"
+                fab:fab_label="@string/fab_favorites"
+                fab:fab_size="mini" />
 
-            <com.getbase.floatingactionbutton.FloatingActionButton
+            <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/btnFab2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:fab_colorNormal="#ffffff"
-                app:fab_colorPressed="#909090"
-                app:fab_size="mini"
-                app:fab_title="@string/fab2" />
-
-        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+                android:src="@drawable/ic_rss_feed_24dp"
+                app:fab_colorNormal="@color/colorAccent"
+                app:fab_colorPressed="@color/colorAccentDark"
+                app:fab_colorRipple="#99FFFFFF"
+                fab:fab_label="@string/fab_sources"
+                fab:fab_size="mini" />
+        </com.github.clans.fab.FloatingActionMenu>
     </FrameLayout>
 
 

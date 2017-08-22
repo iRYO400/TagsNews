@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="title">24sp</dimen>
+    <dimen name="description">16sp</dimen>
+    <dimen name="timestamp">12sp</dimen>
+    <dimen name="smTitle">20sp</dimen>
+    <dimen name="smDescription">13sp</dimen>
+    <dimen name="smTimestamp">11sp</dimen>
+</resources>

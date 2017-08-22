@@ -1,9 +1,7 @@
 package workshop.akbolatss.tagsnews.screen.news;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.toptas.rssconverter.RssItem;
 import workshop.akbolatss.tagsnews.R;
-import workshop.akbolatss.tagsnews.base.BaseView;
 
 /**
  * Created by AkbolatSS on 08.08.2017.
@@ -30,11 +27,13 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
 
 
     private List<RssItem> mNewsList;
+    private boolean isSmallItemsEnabled;
 
     private final OnRssClickInterface mClickInterface;
 
-    public NewsListAdapter(OnRssClickInterface mClickInterface) {
+    public NewsListAdapter(OnRssClickInterface mClickInterface, boolean isSmallItemsEnabled) {
         mNewsList = new ArrayList<>();
+        this.isSmallItemsEnabled = isSmallItemsEnabled;
         this.mClickInterface = mClickInterface;
     }
 
@@ -49,7 +48,12 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
     @Override
     public NewsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater mLayoutInflater = LayoutInflater.from(parent.getContext());
-        View view = mLayoutInflater.inflate(R.layout.rv_news_item, parent, false);
+        View view = null;
+        if (!isSmallItemsEnabled) {
+            view = mLayoutInflater.inflate(R.layout.rv_news_item, parent, false);
+        } else {
+            view = mLayoutInflater.inflate(R.layout.rv_news_item_small, parent, false);
+        }
         return new NewsHolder(view);
     }
 
@@ -73,16 +77,12 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
 
     public void onAddItems(List<RssItem> rssItems) {
         if (rssItems != null) {
-            mNewsList.addAll(rssItems); // TO-DO throws exception NULL POINTER
+            mNewsList.addAll(rssItems); // TODO throws exception NULL POINTER
             notifyDataSetChanged();
-        }
-
-        if (rssItems.size() == 0) {
-            Log.d("BolaDebug","RSS size is NULL");
         }
     }
 
-    public interface OnRssClickInterface{
+    public interface OnRssClickInterface {
 
         public void OnItemClick(RssItem rssItem);
     }

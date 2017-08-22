@@ -1,17 +1,21 @@
 package workshop.akbolatss.tagsnews.screen.details;
 
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsCallback;
+import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.customtabs.CustomTabsServiceConnection;
+import android.support.customtabs.CustomTabsSession;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -27,6 +31,7 @@ import workshop.akbolatss.tagsnews.di.component.DaggerDetailsComponent;
 import workshop.akbolatss.tagsnews.di.module.DetailsModule;
 import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
 import workshop.akbolatss.tagsnews.util.Constants;
+import workshop.akbolatss.tagsnews.util.customTabs.CustomTabActivityHelper;
 
 /**
  * Created by AkbolatSS on 10.08.2017.
@@ -94,16 +99,16 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     public void onRefreshToolbar(boolean isFavorite) {
         this.isFavorite = isFavorite;
         if (isFavorite) {
-            mToolbar.getMenu().findItem(R.id.action_favorite).setIcon(R.drawable.ic_favorite_24dp);
+            mToolbar.getMenu().findItem(R.id.mAdd2Favorites).setIcon(R.drawable.ic_favorite_24dp);
         } else {
-            mToolbar.getMenu().findItem(R.id.action_favorite).setIcon(R.drawable.ic_favorite_border_24dp);
+            mToolbar.getMenu().findItem(R.id.mAdd2Favorites).setIcon(R.drawable.ic_favorite_border_24dp);
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_details, menu);
-        MenuItem item = menu.findItem(R.id.action_favorite);
+        MenuItem item = menu.findItem(R.id.mAdd2Favorites);
         if (isFavorite) {
             item.setIcon(R.drawable.ic_favorite_24dp);
         } else {
@@ -118,12 +123,15 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             case android.R.id.home:
                 onBackPressed();
                 return true;
-            case R.id.action_favorite:
+            case R.id.mAdd2Favorites:
                 if (isFavorite) {
                     mPresenter.OnRemoveFromFavorites(mRssItem.getPublishDate());
                 } else {
                     mPresenter.OnAddToFavorites(mRssItem);
                 }
+                return true;
+            case R.id.mShare:
+                onShareNews();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -138,12 +146,30 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     @OnClick(R.id.btnOpenSource)
     @Override
     public void onOpenSource() {
-        //Start Custom ChromeExtension
-        Toast.makeText(mContext, mRssItem.getTitle(), Toast.LENGTH_SHORT).show();
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left);
+        builder.setExitAnimations(this, R.anim.slide_in_left, R.anim.slide_out_right);
         builder.setToolbarColor(getResources().getColor(R.color.colorAccent));
-        builder.setCloseButtonIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_cloud_queue_black_24dp));
+
+
         CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(this, Uri.parse(mRssItem.getLink()));
+        CustomTabActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(mRssItem.getLink()),
+                new CustomTabActivityHelper.CustomTabFallback() {
+                    @Override
+                    public void openUri(Activity activity, Uri uri) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        activity.startActivity(intent);
+                    }
+                });
+    }
+
+    @Override
+    public void onShareNews() {
+        String messageSend = mRssItem.getTitle() + "\n\n" + mRssItem.getLink() + " \n\n---\n" + "Tag News App bit.ly/";
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, messageSend);
+        shareIntent.setType("text/plain");
+        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.tvShare)));
     }
 }

@@ -38,11 +38,17 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 
+    //GreenDAO
     compile 'org.greenrobot:greendao:3.2.2'
     compile 'org.greenrobot:greendao-generator:3.2.2'
 
     //Floating Action Menu
-    compile 'com.getbase:floatingactionbutton:1.10.1'
+    compile 'com.github.clans:fab:1.6.4'
+
+
+
+
+
 
     //Picasso
     compile 'com.squareup.picasso:picasso:2.5.2'

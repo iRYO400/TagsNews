@@ -4,14 +4,16 @@
 
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
-        android:id="@+id/action_favorite"
+        android:id="@+id/mAdd2Favorites"
         android:icon="@drawable/ic_favorite_border_24dp"
         android:title="@string/tvAddToFavorites"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 
     <!-- Settings, should always be in the overflow -->
-    <item android:id="@+id/action_settings"
-        android:title="@string/tvOptions"
-        app:showAsAction="never"/>
+    <item
+        android:id="@+id/mShare"
+        android:icon="@drawable/ic_share_white_24dp"
+        android:title="@string/tvShare"
+        app:showAsAction="ifRoom" />
 
 </menu>

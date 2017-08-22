@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.orhanobut.hawk.Hawk;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -26,6 +28,7 @@ import workshop.akbolatss.tagsnews.application.App;
 import workshop.akbolatss.tagsnews.di.component.DaggerNewsComponent;
 import workshop.akbolatss.tagsnews.di.module.NewsListModule;
 import workshop.akbolatss.tagsnews.screen.details.DetailsActivity;
+import workshop.akbolatss.tagsnews.util.Constants;
 
 import static workshop.akbolatss.tagsnews.util.Constants.INTENT_RSS_ITEM;
 
@@ -95,7 +98,7 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setNestedScrollingEnabled(false);
 
-        mNewsListAdapter = new NewsListAdapter(this);
+        mNewsListAdapter = new NewsListAdapter(this, Hawk.get(Constants.SMALL_ITEMS_MODE, false));
         mRecyclerView.setAdapter(mNewsListAdapter);
     }
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mRename"
+        android:title="@string/menuRename" />
+
+    <item
+        android:id="@+id/mReaddress"
+        android:title="@string/menuReaddress" />
+
+    <!--<item-->
+        <!--android:id="@+id/mEditDesc"-->
+        <!--android:title="@string/menuEditDescription" />-->
+
+    <item
+        android:id="@+id/mRemove"
+        android:title="@string/menuRemove" />
+</menu>

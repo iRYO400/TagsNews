@@ -1,10 +1,13 @@
 package workshop.akbolatss.tagsnews.repositories.source;
 
+import java.util.List;
+import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.Property;
+import org.greenrobot.greendao.internal.SqlUtils;
 import org.greenrobot.greendao.internal.DaoConfig;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
@@ -23,13 +26,15 @@ public class RssFeedItemDao extends AbstractDao<RssFeedItem, Long> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Feed_title = new Property(1, String.class, "feed_title", false, "FEED_TITLE");
-        public final static Property Feed_link = new Property(2, String.class, "feed_link", false, "FEED_LINK");
-        public final static Property Feed_pubDate = new Property(3, String.class, "feed_pubDate", false, "FEED_PUB_DATE");
-        public final static Property Feed_image = new Property(4, String.class, "feed_image", false, "FEED_IMAGE");
-        public final static Property Feed_description = new Property(5, String.class, "feed_description", false, "FEED_DESCRIPTION");
-        public final static Property Feed_source = new Property(6, String.class, "feed_source", false, "FEED_SOURCE");
+        public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
+        public final static Property Link = new Property(2, String.class, "link", false, "LINK");
+        public final static Property PubDate = new Property(3, String.class, "pubDate", false, "PUB_DATE");
+        public final static Property Image = new Property(4, String.class, "image", false, "IMAGE");
+        public final static Property Description = new Property(5, String.class, "description", false, "DESCRIPTION");
+        public final static Property RssSourceId = new Property(6, Long.class, "rssSourceId", false, "RSS_SOURCE_ID");
     }
+
+    private DaoSession daoSession;
 
 
     public RssFeedItemDao(DaoConfig config) {
@@ -38,6 +43,7 @@ public class RssFeedItemDao extends AbstractDao<RssFeedItem, Long> {
     
     public RssFeedItemDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -45,12 +51,12 @@ public class RssFeedItemDao extends AbstractDao<RssFeedItem, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"RSS_FEED_ITEM\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"FEED_TITLE\" TEXT," + // 1: feed_title
-                "\"FEED_LINK\" TEXT," + // 2: feed_link
-                "\"FEED_PUB_DATE\" TEXT," + // 3: feed_pubDate
-                "\"FEED_IMAGE\" TEXT," + // 4: feed_image
-                "\"FEED_DESCRIPTION\" TEXT," + // 5: feed_description
-                "\"FEED_SOURCE\" TEXT);"); // 6: feed_source
+                "\"TITLE\" TEXT," + // 1: title
+                "\"LINK\" TEXT," + // 2: link
+                "\"PUB_DATE\" TEXT," + // 3: pubDate
+                "\"IMAGE\" TEXT," + // 4: image
+                "\"DESCRIPTION\" TEXT," + // 5: description
+                "\"RSS_SOURCE_ID\" INTEGER);"); // 6: rssSourceId
     }
 
     /** Drops the underlying database table. */
@@ -68,34 +74,34 @@ public class RssFeedItemDao extends AbstractDao<RssFeedItem, Long> {
             stmt.bindLong(1, id);
         }
  
-        String feed_title = entity.getFeed_title();
-        if (feed_title != null) {
-            stmt.bindString(2, feed_title);
+        String title = entity.getTitle();
+        if (title != null) {
+            stmt.bindString(2, title);
         }
  
-        String feed_link = entity.getFeed_link();
-        if (feed_link != null) {
-            stmt.bindString(3, feed_link);
+        String link = entity.getLink();
+        if (link != null) {
+            stmt.bindString(3, link);
         }
  
-        String feed_pubDate = entity.getFeed_pubDate();
-        if (feed_pubDate != null) {
-            stmt.bindString(4, feed_pubDate);
+        String pubDate = entity.getPubDate();
+        if (pubDate != null) {
+            stmt.bindString(4, pubDate);
         }
  
-        String feed_image = entity.getFeed_image();
-        if (feed_image != null) {
-            stmt.bindString(5, feed_image);
+        String image = entity.getImage();
+        if (image != null) {
+            stmt.bindString(5, image);
         }
  
-        String feed_description = entity.getFeed_description();
-        if (feed_description != null) {
-            stmt.bindString(6, feed_description);
+        String description = entity.getDescription();
+        if (description != null) {
+            stmt.bindString(6, description);
         }
  
-        String feed_source = entity.getFeed_source();
-        if (feed_source != null) {
-            stmt.bindString(7, feed_source);
+        Long rssSourceId = entity.getRssSourceId();
+        if (rssSourceId != null) {
+            stmt.bindLong(7, rssSourceId);
         }
     }
 
@@ -108,35 +114,41 @@ public class RssFeedItemDao extends AbstractDao<RssFeedItem, Long> {
             stmt.bindLong(1, id);
         }
  
-        String feed_title = entity.getFeed_title();
-        if (feed_title != null) {
-            stmt.bindString(2, feed_title);
+        String title = entity.getTitle();
+        if (title != null) {
+            stmt.bindString(2, title);
         }
  
-        String feed_link = entity.getFeed_link();
-        if (feed_link != null) {
-            stmt.bindString(3, feed_link);
+        String link = entity.getLink();
+        if (link != null) {
+            stmt.bindString(3, link);
         }
  
-        String feed_pubDate = entity.getFeed_pubDate();
-        if (feed_pubDate != null) {
-            stmt.bindString(4, feed_pubDate);
+        String pubDate = entity.getPubDate();
+        if (pubDate != null) {
+            stmt.bindString(4, pubDate);
         }
  
-        String feed_image = entity.getFeed_image();
-        if (feed_image != null) {
-            stmt.bindString(5, feed_image);
+        String image = entity.getImage();
+        if (image != null) {
+            stmt.bindString(5, image);
         }
  
-        String feed_description = entity.getFeed_description();
-        if (feed_description != null) {
-            stmt.bindString(6, feed_description);
+        String description = entity.getDescription();
+        if (description != null) {
+            stmt.bindString(6, description);
         }
  
-        String feed_source = entity.getFeed_source();
-        if (feed_source != null) {
-            stmt.bindString(7, feed_source);
+        Long rssSourceId = entity.getRssSourceId();
+        if (rssSourceId != null) {
+            stmt.bindLong(7, rssSourceId);
         }
+    }
+
+    @Override
+    protected final void attachEntity(RssFeedItem entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     @Override
@@ -148,12 +160,12 @@ public class RssFeedItemDao extends AbstractDao<RssFeedItem, Long> {
     public RssFeedItem readEntity(Cursor cursor, int offset) {
         RssFeedItem entity = new RssFeedItem( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // feed_title
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // feed_link
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // feed_pubDate
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // feed_image
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // feed_description
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // feed_source
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // title
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // link
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // pubDate
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // image
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // description
+            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6) // rssSourceId
         );
         return entity;
     }
@@ -161,12 +173,12 @@ public class RssFeedItemDao extends AbstractDao<RssFeedItem, Long> {
     @Override
     public void readEntity(Cursor cursor, RssFeedItem entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setFeed_title(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setFeed_link(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setFeed_pubDate(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setFeed_image(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setFeed_description(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setFeed_source(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setTitle(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setLink(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setPubDate(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setImage(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setDescription(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setRssSourceId(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
      }
     
     @Override
@@ -194,4 +206,95 @@ public class RssFeedItemDao extends AbstractDao<RssFeedItem, Long> {
         return true;
     }
     
+    private String selectDeep;
+
+    protected String getSelectDeep() {
+        if (selectDeep == null) {
+            StringBuilder builder = new StringBuilder("SELECT ");
+            SqlUtils.appendColumns(builder, "T", getAllColumns());
+            builder.append(',');
+            SqlUtils.appendColumns(builder, "T0", daoSession.getRssFeedItemDao().getAllColumns());
+            builder.append(" FROM RSS_FEED_ITEM T");
+            builder.append(" LEFT JOIN RSS_FEED_ITEM T0 ON T.\"RSS_SOURCE_ID\"=T0.\"_id\"");
+            builder.append(' ');
+            selectDeep = builder.toString();
+        }
+        return selectDeep;
+    }
+    
+    protected RssFeedItem loadCurrentDeep(Cursor cursor, boolean lock) {
+        RssFeedItem entity = loadCurrent(cursor, 0, lock);
+        int offset = getAllColumns().length;
+
+        RssFeedItem rssFeedItem = loadCurrentOther(daoSession.getRssFeedItemDao(), cursor, offset);
+        entity.setRssFeedItem(rssFeedItem);
+
+        return entity;    
+    }
+
+    public RssFeedItem loadDeep(Long key) {
+        assertSinglePk();
+        if (key == null) {
+            return null;
+        }
+
+        StringBuilder builder = new StringBuilder(getSelectDeep());
+        builder.append("WHERE ");
+        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
+        String sql = builder.toString();
+        
+        String[] keyArray = new String[] { key.toString() };
+        Cursor cursor = db.rawQuery(sql, keyArray);
+        
+        try {
+            boolean available = cursor.moveToFirst();
+            if (!available) {
+                return null;
+            } else if (!cursor.isLast()) {
+                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
+            }
+            return loadCurrentDeep(cursor, true);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
+    public List<RssFeedItem> loadAllDeepFromCursor(Cursor cursor) {
+        int count = cursor.getCount();
+        List<RssFeedItem> list = new ArrayList<RssFeedItem>(count);
+        
+        if (cursor.moveToFirst()) {
+            if (identityScope != null) {
+                identityScope.lock();
+                identityScope.reserveRoom(count);
+            }
+            try {
+                do {
+                    list.add(loadCurrentDeep(cursor, false));
+                } while (cursor.moveToNext());
+            } finally {
+                if (identityScope != null) {
+                    identityScope.unlock();
+                }
+            }
+        }
+        return list;
+    }
+    
+    protected List<RssFeedItem> loadDeepAllAndCloseCursor(Cursor cursor) {
+        try {
+            return loadAllDeepFromCursor(cursor);
+        } finally {
+            cursor.close();
+        }
+    }
+    
+
+    /** A raw-style query where you can pass any WHERE clause and arguments. */
+    public List<RssFeedItem> queryDeep(String where, String... selectionArg) {
+        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
+        return loadDeepAllAndCloseCursor(cursor);
+    }
+ 
 }
