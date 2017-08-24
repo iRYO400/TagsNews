@@ -1,4 +1,4 @@
-#TagNews
+##TagNews
 Минималистичное приложение для чтения RSS новостей
 
 <p align="center">
