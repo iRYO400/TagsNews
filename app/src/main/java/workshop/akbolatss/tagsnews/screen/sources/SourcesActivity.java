@@ -10,6 +10,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,8 +37,8 @@ import workshop.akbolatss.tagsnews.application.App;
 import workshop.akbolatss.tagsnews.base.BaseActivity;
 import workshop.akbolatss.tagsnews.di.component.DaggerSourcesComponent;
 import workshop.akbolatss.tagsnews.di.module.SourcesModule;
-import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
 import workshop.akbolatss.tagsnews.repositories.source.RssSource;
+import workshop.akbolatss.tagsnews.screen.sources.helper.SimpleItemTouchHelperCallback;
 
 /**
  * Created by AkbolatSS on 17.08.2017.
@@ -52,9 +53,6 @@ public class SourcesActivity extends BaseActivity implements SourcesView,
 
     @Inject
     protected SourcesPresenter mPresenter;
-
-    @Inject
-    protected DaoSession mDaoSession;
 
     @BindView(R.id.btnFabAdd)
     protected FloatingActionButton btnFabAdd;
@@ -102,6 +100,10 @@ public class SourcesActivity extends BaseActivity implements SourcesView,
 
         mSourcesAdapter = new SourcesAdapter(this);
         mRecyclerView.setAdapter(mSourcesAdapter);
+
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mSourcesAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(mRecyclerView);
     }
 
     private void onInitRecyclerResult() {
@@ -217,6 +219,10 @@ public class SourcesActivity extends BaseActivity implements SourcesView,
         } else {
             mSourcesSearchAdapter.onAddItems(rssSourceList);
         }
+    }
+
+    @Override
+    public void onItemsSwapped(RssSource fromSource, RssSource toSource) {
     }
 
     @Override

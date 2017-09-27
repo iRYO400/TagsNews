@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +65,7 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
                 .build().inject(this);
 
         Bundle bundle = getArguments();
-        if (bundle != null){
+        if (bundle != null) {
             for (int i = 0; i < 10; i++) {
                 if (bundle.containsKey(String.valueOf(i))) {
                     mName = bundle.getString(String.valueOf(i));
@@ -98,7 +97,7 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setNestedScrollingEnabled(false);
 
-        mNewsListAdapter = new NewsListAdapter(this, Hawk.get(Constants.SMALL_ITEMS_MODE, false));
+        mNewsListAdapter = new NewsListAdapter(this, Hawk.get(Constants.ITEMS_VIEW_MODE, 0));
         mRecyclerView.setAdapter(mNewsListAdapter);
     }
 
@@ -133,5 +132,6 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
         Intent i = new Intent(mContext, DetailsActivity.class);
         i.putExtra(INTENT_RSS_ITEM, rssItem);
         startActivity(i);
+
     }
 }

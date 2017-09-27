@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TagsNews</string>
+    <string name="tvReadMore"><u>Читать далее</u></string>
+    <string name="tvReadSource">Читать подробности…</string>
+
+
+    <string name="tvEnter">Введите</string>
+    <string name="tvAdd">Добавить</string>
+    <string name="tvEdit">Изменить</string>
+    <string name="tvCancel">Отмена</string>
+
+
+    <string name="tvSave">Сохранить</string>
+
+    <string name="fab1">Закладки</string>
+    <string name="fab2">Новый источник</string>
+    <string name="tvAddToFavorites">В закладки</string>
+    <string name="tvOptions">Дополнительно</string>
+    <string name="tvSearch">Поиск</string>
+    <string name="hint_search">Введите ключевое слово</string>
+    <string name="tvRename">Изменить название</string>
+    <string name="menuRemove">Удалить источник</string>
+    <string name="menuEditDescription">Добавить описание</string>
+    <string name="menuRename">Изменить название</string>
+    <string name="menuReaddress">Изменить адрес</string>
+    <string name="tvDescription">Описание</string>
+    <string name="tvNewAddress">Новый адрес</string>
+    <string name="tvNewName">Новое имя</string>
+    <string name="hintNewSource">адрес сайта или ленты</string>
+    <string name="tvShare">Поделиться</string>
+    <string name="fab_viewMode">Настройки отображения</string>
+    <string name="fab_favorites">Закладки</string>
+    <string name="fab_sources">Каналы</string>
+    <string name="tvSelectTheme">Выберите тему</string>
+</resources>

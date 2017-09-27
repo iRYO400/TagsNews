@@ -1,19 +1,17 @@
 package workshop.akbolatss.tagsnews.screen.details;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.customtabs.CustomTabsCallback;
-import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.customtabs.CustomTabsServiceConnection;
-import android.support.customtabs.CustomTabsSession;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -77,6 +75,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
         initView();
     }
+
 
     private void initView() {
         mRssItem = (RssItem) getIntent().getSerializableExtra(Constants.INTENT_RSS_ITEM);
@@ -165,7 +164,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     @Override
     public void onShareNews() {
-        String messageSend = mRssItem.getTitle() + "\n\n" + mRssItem.getLink() + " \n\n---\n" + "Tag News App bit.ly/";
+        String messageSend = mRssItem.getTitle() + "\n\n" + mRssItem.getLink() + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_TEXT, messageSend);

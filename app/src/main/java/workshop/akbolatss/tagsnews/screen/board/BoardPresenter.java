@@ -26,7 +26,7 @@ public class BoardPresenter extends BasePresenter<BoardView> implements Observer
     public BoardPresenter() {
     }
 
-    public void initPresenter() {
+    public void onLoadSources() {
         mRepository.getAllSources()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
