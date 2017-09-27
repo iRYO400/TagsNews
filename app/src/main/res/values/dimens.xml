@@ -6,4 +6,6 @@
     <dimen name="smTitle">20sp</dimen>
     <dimen name="smDescription">13sp</dimen>
     <dimen name="smTimestamp">11sp</dimen>
+
+    <dimen name="toTitle">16sp</dimen>
 </resources>

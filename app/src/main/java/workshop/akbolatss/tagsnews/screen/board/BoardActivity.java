@@ -1,11 +1,18 @@
 package workshop.akbolatss.tagsnews.screen.board;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.AppCompatRadioButton;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.RadioGroup;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.orhanobut.hawk.Hawk;
@@ -27,6 +34,9 @@ import workshop.akbolatss.tagsnews.screen.favorites.FavoritesActivity;
 import workshop.akbolatss.tagsnews.screen.news.NewsSource;
 import workshop.akbolatss.tagsnews.screen.sources.SourcesActivity;
 import workshop.akbolatss.tagsnews.util.Constants;
+
+import static workshop.akbolatss.tagsnews.util.Constants.ITEMS_VIEW_MODE;
+import static workshop.akbolatss.tagsnews.util.Constants.SELECTED_THEME;
 
 public class BoardActivity extends BaseActivity implements BoardView {
 
@@ -56,9 +66,7 @@ public class BoardActivity extends BaseActivity implements BoardView {
                 .build()
                 .inject(this);
 
-        Hawk.init(this).build();
-
-        mPresenter.initPresenter();
+        mPresenter.onLoadSources();
     }
 
     @Override
@@ -66,7 +74,7 @@ public class BoardActivity extends BaseActivity implements BoardView {
         super.onPostResume();
         if (isUpdateBoardNeeded) {
             isUpdateBoardNeeded = false;
-            mPresenter.initPresenter();
+            mPresenter.onLoadSources();
         }
     }
 
@@ -100,16 +108,76 @@ public class BoardActivity extends BaseActivity implements BoardView {
 
     @OnClick(R.id.btnFab3)
     public void onSwitchRVLayout() {
-        if (Hawk.contains(Constants.SMALL_ITEMS_MODE)) {
-            if (Hawk.get(Constants.SMALL_ITEMS_MODE)) {
-                Hawk.put(Constants.SMALL_ITEMS_MODE, false);
+        LayoutInflater layoutInflater = LayoutInflater.from(BoardActivity.this);
+        final View subView = layoutInflater.inflate(R.layout.dialog_theme, null);
+
+        final RadioGroup rGroupTheme = subView.findViewById(R.id.rGroupTheme);
+        final RadioGroup rGroupViewItems = subView.findViewById(R.id.rGroupViewItems);
+
+        final AppCompatRadioButton rbDaytheme = rGroupTheme.findViewById(R.id.rButtonDay);
+        final AppCompatRadioButton rbNightTheme = rGroupTheme.findViewById(R.id.rButtonNight);
+        final AppCompatRadioButton rbTextOnly = rGroupViewItems.findViewById(R.id.rButtonTextOnly);
+        final AppCompatRadioButton rbSmall = rGroupViewItems.findViewById(R.id.rButtonSmallBlock);
+        final AppCompatRadioButton rbLarge = rGroupViewItems.findViewById(R.id.rButtonLargeBlock);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Dialog);
+
+        if (Hawk.contains(SELECTED_THEME)) { // False = Day, True = Night
+            if (Hawk.get(SELECTED_THEME)) {
+                rGroupTheme.check(rbNightTheme.getId());
             } else {
-                Hawk.put(Constants.SMALL_ITEMS_MODE, true);
+                rGroupTheme.check(rbDaytheme.getId());
             }
         } else {
-            Hawk.put(Constants.SMALL_ITEMS_MODE, true);
+            Hawk.put(SELECTED_THEME, true);
+            rGroupTheme.check(rbNightTheme.getId());
         }
-        mPresenter.initPresenter();
+
+
+        if (Hawk.contains(ITEMS_VIEW_MODE)) {
+            if (Hawk.get(ITEMS_VIEW_MODE).equals(0)) {
+                rGroupViewItems.check(rbTextOnly.getId());
+            } else if (Hawk.get(ITEMS_VIEW_MODE).equals(1)) {
+                rGroupViewItems.check(rbSmall.getId());
+            } else if (Hawk.get(ITEMS_VIEW_MODE).equals(2)) {
+                rGroupViewItems.check(rbLarge.getId());
+            }
+        } else {
+            Hawk.put(ITEMS_VIEW_MODE, 2);
+            rGroupViewItems.check(rbLarge.getId());
+        }
+
+
+        builder.setTitle(R.string.tvEnter);
+        builder.setView(subView);
+        builder.setPositiveButton(R.string.tvSave, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (rbTextOnly.isChecked()) {
+                    Hawk.put(ITEMS_VIEW_MODE, 0);
+                } else if (rbSmall.isChecked()) {
+                    Hawk.put(ITEMS_VIEW_MODE, 1);
+                } else if (rbLarge.isChecked()) {
+                    Hawk.put(ITEMS_VIEW_MODE, 2);
+                }
+
+                if (rbDaytheme.isChecked()) {
+                    Hawk.put(SELECTED_THEME, false);
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                } else if (rbNightTheme.isChecked()) {
+                    Hawk.put(SELECTED_THEME, true);
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                }
+                recreate();
+                dialogInterface.dismiss();
+            }
+        });
+        builder.setNegativeButton(R.string.tvCancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        builder.show();
     }
 
     @Override

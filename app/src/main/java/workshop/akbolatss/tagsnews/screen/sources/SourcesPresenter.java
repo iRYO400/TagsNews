@@ -54,10 +54,10 @@ public class SourcesPresenter extends BasePresenter<SourcesView> implements Obse
         //getView().onUpdate();
     }
 
-    public void onUpdateSource(RssSource rssSource){
+    public void onUpdateSource(RssSource rssSource) {
         mRepository.updateSource(rssSource);
 
-        getView().onUpdate();
+//        getView().onUpdate();
     }
 
     public void onRemoveSource(RssSource rssSource) {

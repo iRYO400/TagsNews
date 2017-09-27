@@ -19,6 +19,8 @@ public interface RssSourceRepository {
 
     Single<FeedlyResponse> getQueryResult(String query);
 
+    void updateSources(List<RssSource> sourceList);
+
     void updateSource(RssSource source);
 
     void deleteSource(RssSource source);

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.orhanobut.hawk.Hawk;
@@ -74,7 +73,7 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, Ne
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
 
-        mNewsListAdapter = new NewsListAdapter(this, Hawk.get(Constants.SMALL_ITEMS_MODE, false));
+        mNewsListAdapter = new NewsListAdapter(this, Hawk.get(Constants.ITEMS_VIEW_MODE, 0));
         mRecyclerView.setAdapter(mNewsListAdapter);
     }
 

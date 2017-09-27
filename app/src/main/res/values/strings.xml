@@ -1,36 +1,40 @@
 <resources>
     <string name="app_name">TagsNews</string>
-    <string name="app_sign">Tag News App bit.ly/</string>
-    <string name="tvReadMore"><u>ReadMore</u></string>
-    <string name="tvReadSource">Читать подробности…</string>
+    <string name="app_sign" translatable="false">Tag News App bit.ly/</string>
+    <string name="tvReadMore"><u>Read more</u></string>
+    <string name="tvReadSource">Read more…</string>
 
 
-    <string name="tab_1">tab1</string>
-    <string name="tab_2">tab2</string>
-    <string name="tab_3">tab3</string>
-    <string name="tvEnter">Введите</string>
-    <string name="tvAdd">Добавить</string>
-    <string name="tvEdit">Изменить</string>
-    <string name="tvCancel">Отмена</string>
+    <string name="tab_1" translatable="false">tab1</string>
+    <string name="tab_2" translatable="false">tab2</string>
+    <string name="tab_3" translatable="false">tab3</string>
+    <string name="tvEnter">Enter</string>
+    <string name="tvAdd">Add</string>
+    <string name="tvEdit">Edit</string>
+    <string name="tvCancel">Cancel</string>
 
-    <string name="fab1">Закладки</string>
-    <string name="fab2">Новый канал</string>
-    <string name="tvAddToFavorites">В закладки</string>
-    <string name="tvOptions">Дополнительно</string>
-    <string name="tvSearch">Поиск</string>
-    <string name="hint_search">Введите ключевое слово</string>
-    <string name="tvRename">Изменить имя</string>
-    <string name="menuRemove">Удалить источник</string>
-    <string name="menuEditDescription">Добавить описание</string>
-    <string name="menuRename">Изменить название</string>
-    <string name="menuReaddress">Изменить адрес</string>
-    <string name="tvDescription">Описание</string>
-    <string name="tvNewAddress">Новый адрес</string>
-    <string name="tvNewName">Новое имя</string>
-    <string name="hintNewSource">адрес сайта или ленты</string>
-    <string name="tvShare">Поделиться</string>
-    <string name="fab_viewMode">Вид</string>
-    <string name="fab_favorites">Закладки</string>
-    <string name="fab_sources">Каналы</string>
+
+    <string name="tvSave">Save</string>
+
+    <string name="fab1">Bookmarks</string>
+    <string name="fab2">New source</string>
+    <string name="tvAddToFavorites">Mark</string>
+    <string name="tvOptions">Additional</string>
+    <string name="tvSearch">Search</string>
+    <string name="hint_search">Please, enter a keyword</string>
+    <string name="tvRename">Edit title</string>
+    <string name="menuRemove">Remove</string>
+    <string name="menuEditDescription">Add description</string>
+    <string name="menuRename">Edit title</string>
+    <string name="menuReaddress">Edit address</string>
+    <string name="tvDescription">Description</string>
+    <string name="tvNewAddress">New feed source</string>
+    <string name="tvNewName">New title</string>
+    <string name="hintNewSource">feed address</string>
+    <string name="tvShare">Share</string>
+    <string name="fab_viewMode">View options</string>
+    <string name="fab_favorites">Bookmarks</string>
+    <string name="fab_sources">Channels</string>
+    <string name="tvSelectTheme">Select Theme</string>
 
 </resources>

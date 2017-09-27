@@ -1,15 +1,10 @@
 package workshop.akbolatss.tagsnews.repositories;
 
-import android.util.Log;
-
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.Single;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 import workshop.akbolatss.tagsnews.api.NewsApiService;
 import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
 import workshop.akbolatss.tagsnews.repositories.source.RssSource;
@@ -57,6 +52,20 @@ public class DBRssSourceRepository implements RssSourceRepository {
     @Override
     public Single<FeedlyResponse> getQueryResult(String query) {
         return mApiService.getFeedlyResponse(query);
+    }
+
+    @Override
+    public void updateSources(List<RssSource> sourceList) {
+
+    }
+
+    private Observable<List<RssSource>> getObservable() {
+        return Observable.fromCallable(new Callable<List<RssSource>>() {
+            @Override
+            public List<RssSource> call() throws Exception {
+                return null;
+            }
+        });
     }
 
 

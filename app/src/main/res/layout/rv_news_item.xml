@@ -39,11 +39,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_margin="12dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginStart="12dp"
                 android:ellipsize="end"
                 android:fontFamily="sans-serif-medium"
                 android:maxLines="2"
-                android:text=""
                 android:textSize="@dimen/title" />
         </FrameLayout>
 
@@ -54,24 +55,21 @@
             android:layout_gravity="start"
             android:layout_marginEnd="12dp"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="6dp"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
             android:maxLines="2"
-            android:text=""
             android:textSize="@dimen/description" />
 
         <TextView
             android:id="@+id/tvTimestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_gravity="start"
+            android:layout_marginBottom="6dp"
             android:layout_marginEnd="12dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
             android:textColor="@color/colorTextDark"
-            android:text=""
             android:textSize="@dimen/timestamp" />
 
         <TextView

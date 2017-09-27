@@ -2,6 +2,7 @@ package workshop.akbolatss.tagsnews.screen.news;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,13 +28,13 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
 
 
     private List<RssItem> mNewsList;
-    private boolean isSmallItemsEnabled;
+    private int mViewItemMode;
 
     private final OnRssClickInterface mClickInterface;
 
-    public NewsListAdapter(OnRssClickInterface mClickInterface, boolean isSmallItemsEnabled) {
+    public NewsListAdapter(OnRssClickInterface mClickInterface, int mViewItemMode) {
         mNewsList = new ArrayList<>();
-        this.isSmallItemsEnabled = isSmallItemsEnabled;
+        this.mViewItemMode = mViewItemMode;
         this.mClickInterface = mClickInterface;
     }
 
@@ -49,10 +50,17 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
     public NewsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater mLayoutInflater = LayoutInflater.from(parent.getContext());
         View view = null;
-        if (!isSmallItemsEnabled) {
-            view = mLayoutInflater.inflate(R.layout.rv_news_item, parent, false);
-        } else {
-            view = mLayoutInflater.inflate(R.layout.rv_news_item_small, parent, false);
+        switch (mViewItemMode) {
+            case 0:
+                view = mLayoutInflater.inflate(R.layout.rv_news_item_text_only, parent, false);
+                break;
+            case 1:
+                view = mLayoutInflater.inflate(R.layout.rv_news_item_small, parent, false);
+                break;
+            case 2:
+                view = mLayoutInflater.inflate(R.layout.rv_news_item, parent, false);
+                break;
+            default:
         }
         return new NewsHolder(view);
     }
@@ -60,7 +68,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
     @Override
     public void onBindViewHolder(NewsHolder holder, int position) {
         RssItem rssItem = mNewsList.get(position);
-        holder.bind(rssItem);
+        holder.bind(rssItem, mViewItemMode == 0);
 
 
         holder.mFrameLayout.setOnClickListener(mInternalListener);
@@ -108,16 +116,28 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
 
         }
 
-        public void bind(RssItem rssItem) {
+        public void bind(RssItem rssItem, boolean isTextOnly) {
             mTitle.setText(rssItem.getTitle());
-            mDescription.setText(rssItem.getDescription());
-
             mTimestamp.setText(rssItem.getPublishDate());
 
-            Picasso.with(mContext)
-                    .load(rssItem.getImage())
-                    .placeholder(R.drawable.placeholder)
-                    .into(mImage);
+            if (!isTextOnly) {
+                mDescription.setText(rssItem.getDescription());
+
+                if (rssItem.getImage() != null) {
+                    Log.d("BolaDebug", "It's not null. " + rssItem.getImage());
+                } else {
+                    Log.d("BolaDebug", "NULL");
+                }
+                if (rssItem.getImage() != null) {
+                    mImage.setVisibility(View.VISIBLE);
+                    Picasso.with(mContext)
+                            .load(rssItem.getImage())
+                            .placeholder(R.drawable.placeholder)
+                            .into(mImage);
+                } else {
+                    mImage.setVisibility(View.GONE);
+                }
+            }
         }
     }
 }
