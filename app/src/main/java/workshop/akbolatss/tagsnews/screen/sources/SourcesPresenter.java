@@ -14,11 +14,7 @@ import workshop.akbolatss.tagsnews.base.BasePresenter;
 import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
 import workshop.akbolatss.tagsnews.repositories.source.RssSource;
 
-/**
- * Created by AkbolatSS on 17.08.2017.
- */
-
-public class SourcesPresenter extends BasePresenter<SourcesView> implements Observer<List<RssSource>> {
+public class SourcesPresenter extends BasePresenter<SourcesView> {
 
     @Inject
     protected DBRssSourceRepository mRepository;
@@ -31,7 +27,28 @@ public class SourcesPresenter extends BasePresenter<SourcesView> implements Obse
         mRepository.getAllSources()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this);
+                .subscribe(new Observer<List<RssSource>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull List<RssSource> rssSources) {
+                        getView().onLoadSources(rssSources);
+                        getView().onHideLoading();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     public void onSearchSources(String s) {
@@ -48,41 +65,20 @@ public class SourcesPresenter extends BasePresenter<SourcesView> implements Obse
                 });
     }
 
-    public void onAddNewSource(RssSource rssSource) {
-        mRepository.addNewSource(rssSource);
+    public void onSwapPositions(RssSource from, RssSource to){
+        mRepository.swapSources(from, to);
+    }
 
-        //getView().onUpdate();
+    public void onAddNewSource(RssSource rssSource) {
+
+        mRepository.addNewSource(rssSource);
     }
 
     public void onUpdateSource(RssSource rssSource) {
         mRepository.updateSource(rssSource);
-
-//        getView().onUpdate();
     }
 
     public void onRemoveSource(RssSource rssSource) {
         mRepository.deleteSource(rssSource);
-
-        //getView().onUpdate();
-    }
-
-    @Override
-    public void onSubscribe(@NonNull Disposable d) {
-
-    }
-
-    @Override
-    public void onNext(@NonNull List<RssSource> rssSources) {
-        getView().onLoadSources(rssSources);
-        getView().onHideLoading();
-    }
-
-    @Override
-    public void onError(@NonNull Throwable e) {
-
-    }
-
-    @Override
-    public void onComplete() {
     }
 }

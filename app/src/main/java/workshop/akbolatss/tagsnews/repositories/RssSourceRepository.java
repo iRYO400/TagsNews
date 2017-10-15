@@ -13,15 +13,19 @@ import workshop.akbolatss.tagsnews.screen.sources.FeedlyResponse;
 
 public interface RssSourceRepository {
 
-    void addNewSource(RssSource source);
-
     Observable<List<RssSource>> getAllSources();
+
+    Observable<List<RssSource>> getOnlyActive();
 
     Single<FeedlyResponse> getQueryResult(String query);
 
-    void updateSources(List<RssSource> sourceList);
+    void initDefaultSource(RssSource source);
+
+    void addNewSource(RssSource source);
 
     void updateSource(RssSource source);
+
+    void swapSources(RssSource from, RssSource to);
 
     void deleteSource(RssSource source);
 }

@@ -13,6 +13,12 @@
     <color name="colorWhite">#FFFFFF</color>
 
     <color name="colorGrey">#909090</color>
-
+    <color name="colorTransBack">#6000BCD4</color>
     <color name="colorTransparent">#00000000</color>
+    <color name="colorGreyTransparent">#30000000</color>
+
+
+    <color name="color_twitter">#1dcaff</color>
+    <color name="color_facebook">#3b5998</color>
+    <color name="color_vk">#45668e</color>
 </resources>

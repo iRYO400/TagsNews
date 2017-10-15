@@ -2,7 +2,6 @@ package workshop.akbolatss.tagsnews.application;
 
 import android.app.Application;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatDelegate;
 
 import com.orhanobut.hawk.Hawk;
 

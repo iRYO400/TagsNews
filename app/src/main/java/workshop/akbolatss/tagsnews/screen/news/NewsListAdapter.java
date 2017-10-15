@@ -124,11 +124,6 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
                 mDescription.setText(rssItem.getDescription());
 
                 if (rssItem.getImage() != null) {
-                    Log.d("BolaDebug", "It's not null. " + rssItem.getImage());
-                } else {
-                    Log.d("BolaDebug", "NULL");
-                }
-                if (rssItem.getImage() != null) {
                     mImage.setVisibility(View.VISIBLE);
                     Picasso.with(mContext)
                             .load(rssItem.getImage())

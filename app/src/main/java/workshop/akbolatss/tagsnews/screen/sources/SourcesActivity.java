@@ -222,7 +222,8 @@ public class SourcesActivity extends BaseActivity implements SourcesView,
     }
 
     @Override
-    public void onItemsSwapped(RssSource fromSource, RssSource toSource) {
+    public void onItemsSwapped(RssSource from, RssSource to) {
+        mPresenter.onSwapPositions(from, to);
     }
 
     @Override

@@ -23,20 +23,20 @@
         android:paddingStart="16dp">
 
         <android.support.v7.widget.AppCompatRadioButton
-            android:id="@+id/rButtonDay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/r_button_padding"
-            android:text="Day Theme"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/r_button_text_size" />
-
-        <android.support.v7.widget.AppCompatRadioButton
             android:id="@+id/rButtonNight"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/r_button_padding"
             android:text="Night Theme"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/r_button_text_size" />
+
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/rButtonDay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/r_button_padding"
+            android:text="Day Theme"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/r_button_text_size" />
     </RadioGroup>

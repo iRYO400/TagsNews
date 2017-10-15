@@ -20,7 +20,7 @@ public interface NewsApiService {
 
     @GET
     @Xml
-    Observable<RssFeed> getRss(@Url String url);
+    Single<RssFeed> getRss(@Url String url);
 
     @GET("v3/search/feeds")
     @Json

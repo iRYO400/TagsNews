@@ -61,7 +61,6 @@ public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.NewsHold
 
         holder.mCheckBox.setOnClickListener(mInternalListener);
         holder.mCheckBox.setTag(rssSource);
-
     }
 
     @Override
@@ -87,9 +86,14 @@ public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.NewsHold
         return true;
     }
 
+    @Override
+    public void onItemsMoved(int fromPosition, int toPosition) {
+        mClickInterface.onItemsSwapped(mSourcesList.get(fromPosition), mSourcesList.get(toPosition));
+    }
+
     public interface OnRssClickInterface {
 
-        public void onItemsSwapped(RssSource fromSource, RssSource toSource);
+        public void onItemsSwapped(RssSource from, RssSource to);
 
         public void onItemCheckBoxClick(RssSource rssSource, View view);
     }
@@ -119,7 +123,6 @@ public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.NewsHold
             mTitle.setText(rssItem.getTitle());
             mLink.setText(rssItem.getLink());
             mCheckBox.setChecked(rssItem.getIsActive());
-
         }
 
         @Override

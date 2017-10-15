@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -31,10 +30,7 @@ import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
 import workshop.akbolatss.tagsnews.util.Constants;
 import workshop.akbolatss.tagsnews.util.customTabs.CustomTabActivityHelper;
 
-/**
- * Created by AkbolatSS on 10.08.2017.
- */
-
+//TODO: Replace with DRAWER LAYOUT
 public class DetailsActivity extends BaseActivity implements DetailsView {
 
     @Inject

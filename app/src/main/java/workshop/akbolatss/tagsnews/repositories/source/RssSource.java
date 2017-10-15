@@ -17,6 +17,7 @@ public class RssSource {
 
     @Id(autoincrement = true)
     private Long id;
+    private Integer positionIndex;
     private Boolean isActive;
     @SerializedName("title")
     private String title;
@@ -44,8 +45,9 @@ public class RssSource {
     }
 
     @Generated
-    public RssSource(Long id, Boolean isActive, String title, String link, String description, String website, String visualUrl, Integer subscribers) {
+    public RssSource(Long id, Integer positionIndex, Boolean isActive, String title, String link, String description, String website, String visualUrl, Integer subscribers) {
         this.id = id;
+        this.positionIndex = positionIndex;
         this.isActive = isActive;
         this.title = title;
         this.link = link;
@@ -61,6 +63,14 @@ public class RssSource {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getPositionIndex() {
+        return positionIndex;
+    }
+
+    public void setPositionIndex(Integer positionIndex) {
+        this.positionIndex = positionIndex;
     }
 
     public Boolean getIsActive() {

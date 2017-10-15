@@ -2,6 +2,7 @@ package workshop.akbolatss.tagsnews.screen.sources.helper;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 
 /**
  * Created by AkbolatSS on 21.09.2017.
@@ -10,7 +11,9 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private final ItemTouchHelperAdapter mAdapter;
-
+    private int dragFrom = -1;
+    private int dragTo = -1;
+    private boolean mOrderChanged;
     public SimpleItemTouchHelperCallback(ItemTouchHelperAdapter mAdapter) {
         this.mAdapter = mAdapter;
     }
@@ -18,6 +21,11 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     @Override
     public boolean isLongPressDragEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean isItemViewSwipeEnabled() {
+        return false;
     }
 
     @Override
@@ -29,13 +37,17 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        mAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+        dragFrom = viewHolder.getAdapterPosition();
+        dragTo = target.getAdapterPosition();
+
+        mOrderChanged = true;
+
+        mAdapter.onItemMove(dragFrom, dragTo);
         return true;
     }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-
     }
 
     @Override
@@ -47,7 +59,10 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
                 itemViewHolder.onItemSelected();
             }
         }
-
+        if (actionState == ItemTouchHelper.ACTION_STATE_IDLE && mOrderChanged) {
+            mAdapter.onItemsMoved(dragFrom, dragTo);
+            mOrderChanged = false;
+        }
         super.onSelectedChanged(viewHolder, actionState);
     }
 

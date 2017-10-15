@@ -36,34 +36,28 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             rssSource.setTitle("DTF.ru");
             rssSource.setLink("https://dtf.ru/rss/all");
             rssSource.setDescription("DTF — игры, разработка, монетизация, продвижение");
-            mRepository.addNewSource(rssSource);
+            rssSource.setPositionIndex(0);
+            mRepository.initDefaultSource(rssSource);
 
             rssSource = new RssSource();
             rssSource.setIsActive(true);
             rssSource.setTitle("3DNews.ru");
             rssSource.setLink("https://3dnews.ru/software-news/rss/");
             rssSource.setDescription("");
-            mRepository.addNewSource(rssSource);
-
-            rssSource = new RssSource();
-            rssSource.setIsActive(true);
-            rssSource.setTitle("Новости — Игромания");
-            rssSource.setLink("http://www.igromania.ru/rss/news.rss");
-            rssSource.setDescription("Игромания — это оперативные новости из мира игр и кино от крупнейшего развлекательного медиа России.");
-            mRepository.addNewSource(rssSource);
+            rssSource.setPositionIndex(1);
+            mRepository.initDefaultSource(rssSource);
 
             rssSource = new RssSource();
             rssSource.setIsActive(true);
             rssSource.setTitle("Kanobu.ru: статьи");
             rssSource.setLink("http://kanobu.ru/rss/best/");
             rssSource.setDescription("Статьи от KANOBU.ru: обзоры, интервью, рецензиии");
-            mRepository.addNewSource(rssSource);
+            rssSource.setPositionIndex(2);
+            mRepository.initDefaultSource(rssSource);
         }
     }
 
     public boolean isAlreadyInited() {
-//        Hawk.init(mContext).build();
-
         if (Hawk.contains(Constants.FIRST_START)){
             return true;
         } else {

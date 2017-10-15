@@ -10,6 +10,7 @@ import workshop.akbolatss.tagsnews.base.BaseView;
 public interface NewsView extends BaseView {
 
     public void onShowLoading();
+
     public void onHideLoading();
 
     public void onShowError();
