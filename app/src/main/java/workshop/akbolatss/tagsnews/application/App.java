@@ -9,10 +9,6 @@ import workshop.akbolatss.tagsnews.di.component.AppComponent;
 import workshop.akbolatss.tagsnews.di.component.DaggerAppComponent;
 import workshop.akbolatss.tagsnews.di.module.AppModule;
 
-/**
- * Created by AkbolatSS on 08.08.2017.
- */
-
 public class App extends Application {
 
     private static final String BASE_URL = "http://cloud.feedly.com/";

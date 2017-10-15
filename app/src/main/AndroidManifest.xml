@@ -23,7 +23,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".screen.details.DetailsActivity" />
         <activity android:name=".screen.favorites.FavoritesActivity" />
         <activity android:name=".screen.sources.SourcesActivity" />
     </application>

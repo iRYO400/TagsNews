@@ -1,8 +1,7 @@
-package workshop.akbolatss.tagsnews.screen.news;
+package workshop.akbolatss.tagsnews.screen.favorites;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,19 +18,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.toptas.rssconverter.RssItem;
 import workshop.akbolatss.tagsnews.R;
-import workshop.akbolatss.tagsnews.screen.favorites.FavoritesActivity;
 
-public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHolder> {
-
+public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdapter.NewsHolder> {
 
     private List<RssItem> mNewsList;
-    private int mViewItemMode;
 
     private final OnRssClickInterface mClickInterface;
 
-    public NewsListAdapter(OnRssClickInterface mClickInterface, int mViewItemMode) {
+    public FavoritesListAdapter(OnRssClickInterface mClickInterface) {
         mNewsList = new ArrayList<>();
-        this.mViewItemMode = mViewItemMode;
         this.mClickInterface = mClickInterface;
     }
 
@@ -46,26 +41,14 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
     @Override
     public NewsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater mLayoutInflater = LayoutInflater.from(parent.getContext());
-        View view = null;
-        switch (mViewItemMode) {
-            case 0:
-                view = mLayoutInflater.inflate(R.layout.rv_news_item_text_only, parent, false);
-                break;
-            case 1:
-                view = mLayoutInflater.inflate(R.layout.rv_news_item_small, parent, false);
-                break;
-            case 2:
-                view = mLayoutInflater.inflate(R.layout.rv_news_item, parent, false);
-                break;
-            default:
-        }
+        View view = mLayoutInflater.inflate(R.layout.rv_news_item_favorite, parent, false);
         return new NewsHolder(view);
     }
 
     @Override
     public void onBindViewHolder(NewsHolder holder, int position) {
         RssItem rssItem = mNewsList.get(position);
-        holder.bind(rssItem, mViewItemMode == 0);
+        holder.bind(rssItem);
 
 
         holder.mFrameLayout.setOnClickListener(mInternalListener);
@@ -82,7 +65,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
 
     public void onAddItems(List<RssItem> rssItems) {
         if (rssItems != null) {
-            mNewsList.addAll(rssItems); // TODO throws exception NULL POINTER
+            mNewsList.addAll(rssItems);
             notifyDataSetChanged();
         }
     }
@@ -113,22 +96,20 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
 
         }
 
-        public void bind(RssItem rssItem, boolean isTextOnly) {
+        public void bind(RssItem rssItem) {
             mTitle.setText(rssItem.getTitle());
             mTimestamp.setText(rssItem.getPublishDate());
 
-            if (!isTextOnly) {
-                mDescription.setText(rssItem.getDescription());
+            mDescription.setText(rssItem.getDescription());
 
-                if (rssItem.getImage() != null) {
-                    mImage.setVisibility(View.VISIBLE);
-                    Picasso.with(mContext)
-                            .load(rssItem.getImage())
-                            .placeholder(R.drawable.placeholder)
-                            .into(mImage);
-                } else {
-                    mImage.setVisibility(View.GONE);
-                }
+            if (rssItem.getImage() != null) {
+                mImage.setVisibility(View.VISIBLE);
+                Picasso.with(mContext)
+                        .load(rssItem.getImage())
+                        .placeholder(R.drawable.placeholder)
+                        .into(mImage);
+            } else {
+                mImage.setVisibility(View.GONE);
             }
         }
     }

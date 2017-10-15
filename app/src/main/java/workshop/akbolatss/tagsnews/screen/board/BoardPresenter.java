@@ -25,9 +25,6 @@ public class BoardPresenter extends BasePresenter<BoardView> {
     protected DBRssSourceRepository mRepository;
 
     @Inject
-    protected DBRssItemRepository mDbRssItemRepository;
-
-    @Inject
     public BoardPresenter() {
     }
 
@@ -56,19 +53,5 @@ public class BoardPresenter extends BasePresenter<BoardView> {
 
                     }
                 });
-    }
-
-    public void OnAddToFavorites(RssItem rssItem) {
-        mDbRssItemRepository.addRssItem(rssItem);
-        getView().onRefreshToolbar(true);
-    }
-
-    public void OnRemoveFromFavorites(final String pubDate){
-        mDbRssItemRepository.removeRssItem(pubDate);
-        getView().onRefreshToolbar(false);
-    }
-
-    public boolean onCheckFavorites(final String pubDate) {
-        return mDbRssItemRepository.checkIfExists(pubDate);
     }
 }

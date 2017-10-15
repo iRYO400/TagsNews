@@ -8,10 +8,6 @@ import workshop.akbolatss.tagsnews.repositories.RssItemRepository;
 import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
 import workshop.akbolatss.tagsnews.screen.favorites.FavoritesView;
 
-/**
- * Created by AkbolatSS on 14.08.2017.
- */
-
 @Module
 public class FavoritesModule {
 
@@ -27,9 +23,4 @@ public class FavoritesModule {
         return mView;
     }
 
-    @ActivityScope
-    @Provides
-    DBRssItemRepository provideRepository(DaoSession daoSession) {
-        return new DBRssItemRepository(daoSession);
-    }
 }

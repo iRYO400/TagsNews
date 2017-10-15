@@ -43,7 +43,10 @@ import workshop.akbolatss.tagsnews.application.App;
 import workshop.akbolatss.tagsnews.base.BaseActivity;
 import workshop.akbolatss.tagsnews.di.component.DaggerBoardComponent;
 import workshop.akbolatss.tagsnews.di.module.BoardModule;
+import workshop.akbolatss.tagsnews.di.module.DetailsModule;
 import workshop.akbolatss.tagsnews.repositories.source.RssSource;
+import workshop.akbolatss.tagsnews.screen.details.DetailsPresenter;
+import workshop.akbolatss.tagsnews.screen.details.DetailsView;
 import workshop.akbolatss.tagsnews.screen.favorites.FavoritesActivity;
 import workshop.akbolatss.tagsnews.screen.news.NewsSource;
 import workshop.akbolatss.tagsnews.screen.sources.SourcesActivity;
@@ -56,11 +59,14 @@ import static workshop.akbolatss.tagsnews.util.Constants.SELECTED_THEME;
 import static workshop.akbolatss.tagsnews.util.Constants.TW_PACHAGE_NAME;
 import static workshop.akbolatss.tagsnews.util.Constants.VK_PACHAGE_NAME;
 
-public class BoardActivity extends BaseActivity implements BoardView {
+public class BoardActivity extends BaseActivity implements BoardView, DetailsView {
 
     private static final String TAG = "TAG";
     @Inject
-    BoardPresenter mPresenter;
+    protected BoardPresenter mPresenter;
+
+    @Inject
+    protected DetailsPresenter mDetailsPresenter;
 
     @BindView(R.id.fullDrawer)
     protected FullDrawerLayout mFullDrawerLayout;
@@ -108,6 +114,7 @@ public class BoardActivity extends BaseActivity implements BoardView {
         DaggerBoardComponent.builder()
                 .appComponent(App.getAppComponent())
                 .boardModule(new BoardModule(this))
+                .detailsModule(new DetailsModule(this))
                 .build()
                 .inject(this);
 
@@ -148,7 +155,6 @@ public class BoardActivity extends BaseActivity implements BoardView {
         if (isUpdateBoardNeeded) {
             isUpdateBoardNeeded = false;
             mPresenter.onLoadSources();
-            Log.d("TAG", "onPostResume, The BoardActivity is Updated");
         }
     }
 
@@ -195,79 +201,6 @@ public class BoardActivity extends BaseActivity implements BoardView {
                 });
     }
 
-    @OnClick(R.id.btnVkShare)
-    protected void shareVk() {
-        String messageSend = mRssItem.getTitle() + "\n\n" + mRssItem.getLink() + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, messageSend);
-        boolean socialAppFound = false;
-        List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
-        for (ResolveInfo info : matches) {
-            if (info.activityInfo.packageName.toLowerCase().startsWith(VK_PACHAGE_NAME)) {
-                intent.setPackage(info.activityInfo.packageName);
-                socialAppFound = true;
-                break;
-            }
-        }
-        if (socialAppFound) {
-            startActivity(intent);
-        } else {  // As fallback, realize sharing through browser
-            shareWithWebIntent(VK_PACHAGE_NAME);
-        }
-    }
-
-    @OnClick(R.id.btnFbShare)
-    protected void shareFb() {
-        String messageSend = mRssItem.getTitle() + "\n\n" + mRssItem.getLink() + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, messageSend);
-        boolean socialAppFound = false;
-        List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
-        for (ResolveInfo info : matches) {
-            if (info.activityInfo.packageName.toLowerCase().startsWith(FB_PACHAGE_NAME)) {
-                intent.setPackage(info.activityInfo.packageName);
-                socialAppFound = true;
-                break;
-            }
-        }
-        if (socialAppFound) {
-            startActivity(intent);
-        } else {  // As fallback, realize sharing through browser
-            shareWithWebIntent(FB_PACHAGE_NAME);
-            Log.d("TAG", "Share with WebView intent");
-        }
-    }
-
-    @OnClick(R.id.btnTwShare)
-    protected void shareTw() {
-        String messageSend = mRssItem.getTitle() + "\n\n" + mRssItem.getLink() + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, messageSend);
-        boolean socialAppFound = false;
-        List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
-        for (ResolveInfo info : matches) {
-            if (info.activityInfo.packageName.toLowerCase().startsWith(TW_PACHAGE_NAME)) {
-                intent.setPackage(info.activityInfo.packageName);
-                socialAppFound = true;
-                break;
-            }
-        }
-        if (socialAppFound) {
-            startActivity(intent);
-        } else {  // As fallback, realize sharing through browser
-            shareWithWebIntent(TW_PACHAGE_NAME);
-        }
-    }
-
-    protected void shareWithWebIntent(String socialNetwrkId) {
-        String shareUrl = "market://details?id=" + socialNetwrkId;
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(shareUrl));
-        startActivity(intent);
-    }
-
     @Override
     public void onRefreshDrawerDetails() {
         mImageView.setImageBitmap(null);
@@ -290,7 +223,7 @@ public class BoardActivity extends BaseActivity implements BoardView {
                     .placeholder(R.drawable.placeholder)
                     .into(mImageView);
 
-            isFavorite = mPresenter.onCheckFavorites(rssItem.getPublishDate());
+            isFavorite = mDetailsPresenter.onCheckFavorites(rssItem.getPublishDate());
         }
     }
 
@@ -315,9 +248,9 @@ public class BoardActivity extends BaseActivity implements BoardView {
                 return true;
             case R.id.mAdd2Favorites:
                 if (isFavorite) {
-                    mPresenter.OnRemoveFromFavorites(mRssItem.getPublishDate());
+                    mDetailsPresenter.OnRemoveFromFavorites(mRssItem.getPublishDate());
                 } else {
-                    mPresenter.OnAddToFavorites(mRssItem);
+                    mDetailsPresenter.OnAddToFavorites(mRssItem);
                 }
                 return true;
             case R.id.mShare:
@@ -336,6 +269,82 @@ public class BoardActivity extends BaseActivity implements BoardView {
         shareIntent.putExtra(Intent.EXTRA_TEXT, messageSend);
         shareIntent.setType("text/plain");
         startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.tvShare)));
+    }
+
+    @Override
+    public void onShareWithWebIntent(String socialNetwrkId) {
+        String shareUrl = "market://details?id=" + socialNetwrkId;
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(shareUrl));
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.btnVkShare)
+    @Override
+    public void onShareVk() {
+        String messageSend = mRssItem.getTitle() + "\n\n" + mRssItem.getLink() + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, messageSend);
+        boolean socialAppFound = false;
+        List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
+        for (ResolveInfo info : matches) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith(VK_PACHAGE_NAME)) {
+                intent.setPackage(info.activityInfo.packageName);
+                socialAppFound = true;
+                break;
+            }
+        }
+        if (socialAppFound) {
+            startActivity(intent);
+        } else {
+            onShareWithWebIntent(VK_PACHAGE_NAME);
+        }
+    }
+
+    @OnClick(R.id.btnFbShare)
+    @Override
+    public void onShareFb() {
+        String messageSend = mRssItem.getTitle() + "\n\n" + mRssItem.getLink() + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, messageSend);
+        boolean socialAppFound = false;
+        List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
+        for (ResolveInfo info : matches) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith(FB_PACHAGE_NAME)) {
+                intent.setPackage(info.activityInfo.packageName);
+                socialAppFound = true;
+                break;
+            }
+        }
+        if (socialAppFound) {
+            startActivity(intent);
+        } else {
+            onShareWithWebIntent(FB_PACHAGE_NAME);
+        }
+    }
+
+    @OnClick(R.id.btnTwShare)
+    @Override
+    public void onShareTw() {
+        String messageSend = mRssItem.getTitle() + "\n\n" + mRssItem.getLink() + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, messageSend);
+        boolean socialAppFound = false;
+        List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
+        for (ResolveInfo info : matches) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith(TW_PACHAGE_NAME)) {
+                intent.setPackage(info.activityInfo.packageName);
+                socialAppFound = true;
+                break;
+            }
+        }
+        if (socialAppFound) {
+            startActivity(intent);
+        } else {
+            onShareWithWebIntent(TW_PACHAGE_NAME);
+        }
     }
 
     @Override

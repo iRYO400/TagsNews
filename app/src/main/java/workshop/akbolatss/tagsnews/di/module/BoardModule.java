@@ -10,10 +10,6 @@ import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
 import workshop.akbolatss.tagsnews.screen.board.BoardView;
 import workshop.akbolatss.tagsnews.screen.sources.SourcesView;
 
-/**
- * Created by AkbolatSS on 17.08.2017.
- */
-
 @Module
 public class BoardModule {
 
@@ -33,11 +29,5 @@ public class BoardModule {
     @Provides
     DBRssSourceRepository provideDbRssSourceRepository(DaoSession daoSession, NewsApiService newsApiService) {
         return new DBRssSourceRepository(daoSession, newsApiService);
-    }
-
-    @ActivityScope
-    @Provides
-    DBRssItemRepository provideRepository(DaoSession daoSession) {
-        return new DBRssItemRepository(daoSession);
     }
 }

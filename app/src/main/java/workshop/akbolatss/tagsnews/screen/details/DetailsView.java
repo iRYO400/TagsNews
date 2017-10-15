@@ -1,10 +1,9 @@
 package workshop.akbolatss.tagsnews.screen.details;
 
-import workshop.akbolatss.tagsnews.base.BaseView;
+import android.support.annotation.NonNull;
 
-/**
- * Created by AkbolatSS on 10.08.2017.
- */
+import me.toptas.rssconverter.RssItem;
+import workshop.akbolatss.tagsnews.base.BaseView;
 
 public interface DetailsView extends BaseView {
 
@@ -12,5 +11,17 @@ public interface DetailsView extends BaseView {
 
     void onShareNews();
 
+    void onShareVk();
+
+    void onShareFb();
+
+    void onShareTw();
+
+    void onShareWithWebIntent(String socialNetwrkId);
+
+    void onOpenItemDetails(@NonNull RssItem rssItem, String sourceName);
+
     void onRefreshToolbar(boolean isFavorite);
+
+    void onRefreshDrawerDetails();
 }
