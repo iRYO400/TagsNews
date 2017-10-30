@@ -26,6 +26,8 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
     }
 
     public boolean onCheckFavorites(final String pubDate) {
-        return mDbRssItemRepository.checkIfExists(pubDate);
+        boolean b = mDbRssItemRepository.checkIfExists(pubDate);
+        getView().onRefreshToolbar(b);
+        return b;
     }
 }

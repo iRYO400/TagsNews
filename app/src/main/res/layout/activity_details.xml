@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,8 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="64dp"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -24,6 +24,12 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/placeholder"
                 tools:ignore="ContentDescription" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -51,7 +57,7 @@
                     android:ellipsize="end"
                     android:fontFamily="sans-serif-thin"
                     android:maxLines="2"
-                    android:tag="@string/bb_ref_tag"
+
                     android:text="Growing up in Michigan, I was lucky enough to"
                     android:textSize="@dimen/title" />
 
@@ -82,8 +88,9 @@
                     android:textColor="@color/colorTextDark"
                     android:textSize="@dimen/timestamp" />
             </LinearLayout>
-        </FrameLayout>
 
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/tvDescription"
@@ -143,6 +150,15 @@
                 android:src="@drawable/ic_twitter_logo_silhouette" />
 
         </LinearLayout>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="72dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/banner_ad_unit_id"/>
 
 
     </LinearLayout>

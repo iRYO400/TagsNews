@@ -15,10 +15,6 @@ import workshop.akbolatss.tagsnews.repositories.DBRssItemRepository;
 import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
 import workshop.akbolatss.tagsnews.repositories.source.RssSource;
 
-/**
- * Created by AkbolatSS on 22.08.2017.
- */
-
 public class BoardPresenter extends BasePresenter<BoardView> {
 
     @Inject

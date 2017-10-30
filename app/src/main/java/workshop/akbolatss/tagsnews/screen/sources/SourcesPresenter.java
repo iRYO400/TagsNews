@@ -9,6 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import workshop.akbolatss.tagsnews.base.BasePresenter;
 import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
@@ -27,12 +28,7 @@ public class SourcesPresenter extends BasePresenter<SourcesView> {
         mRepository.getAllSources()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<RssSource>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
+                .subscribe(new DisposableObserver<List<RssSource>>() {
                     @Override
                     public void onNext(@NonNull List<RssSource> rssSources) {
                         getView().onLoadSources(rssSources);
@@ -70,7 +66,6 @@ public class SourcesPresenter extends BasePresenter<SourcesView> {
     }
 
     public void onAddNewSource(RssSource rssSource) {
-
         mRepository.addNewSource(rssSource);
     }
 

@@ -1,7 +1,5 @@
 package workshop.akbolatss.tagsnews.repositories;
 
-import android.util.Log;
-
 import java.util.List;
 import java.util.concurrent.Callable;
 

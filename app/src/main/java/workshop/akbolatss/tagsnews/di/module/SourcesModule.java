@@ -8,9 +8,6 @@ import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
 import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
 import workshop.akbolatss.tagsnews.screen.sources.SourcesView;
 
-/**
- * Created by AkbolatSS on 17.08.2017.
- */
 
 @Module
 public class SourcesModule {

@@ -40,10 +40,6 @@ import workshop.akbolatss.tagsnews.di.module.SourcesModule;
 import workshop.akbolatss.tagsnews.repositories.source.RssSource;
 import workshop.akbolatss.tagsnews.screen.sources.helper.SimpleItemTouchHelperCallback;
 
-/**
- * Created by AkbolatSS on 17.08.2017.
- */
-
 public class SourcesActivity extends BaseActivity implements SourcesView,
         SourcesAdapter.OnRssClickInterface, SearchView.OnQueryTextListener,
         View.OnClickListener {
@@ -82,7 +78,7 @@ public class SourcesActivity extends BaseActivity implements SourcesView,
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         DaggerSourcesComponent.builder()
-                .appComponent(App.getAppComponent())
+                .appComponent(getAppComponent())
                 .sourcesModule(new SourcesModule(this))
                 .build()
                 .inject(this);
@@ -200,6 +196,7 @@ public class SourcesActivity extends BaseActivity implements SourcesView,
                 rssSource.setLink(etLink.getText().toString());
                 mPresenter.onAddNewSource(rssSource);
 
+                mSourcesAdapter.onAddItem(rssSource);
                 dialogInterface.dismiss();
             }
         });
@@ -227,7 +224,7 @@ public class SourcesActivity extends BaseActivity implements SourcesView,
     }
 
     @Override
-    public void onItemCheckBoxClick(final RssSource rssSource, View view) {
+    public void onItemClick(final RssSource rssSource, View view) {
         if (!isSearchEnabled) {
             if (view instanceof CheckBox) {
                 CheckBox cb = (CheckBox) view;

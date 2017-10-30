@@ -7,9 +7,6 @@ import io.reactivex.Single;
 import workshop.akbolatss.tagsnews.repositories.source.RssSource;
 import workshop.akbolatss.tagsnews.screen.sources.FeedlyResponse;
 
-/**
- * Created by AkbolatSS on 16.08.2017.
- */
 
 public interface RssSourceRepository {
 

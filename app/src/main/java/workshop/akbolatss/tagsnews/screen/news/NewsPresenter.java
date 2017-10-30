@@ -2,10 +2,9 @@ package workshop.akbolatss.tagsnews.screen.news;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import me.toptas.rssconverter.RssFeed;
@@ -37,6 +36,14 @@ public class NewsPresenter extends BasePresenter<NewsView> {
         mApiService.getRss(getUrl())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doAfterSuccess(new Consumer<RssFeed>() {
+                    @Override
+                    public void accept(RssFeed rssFeed) throws Exception {
+//                        Cache.give(rssFeed)
+//                                .build()
+//                                .getNow();
+                    }
+                })
                 .subscribe(new DisposableSingleObserver<RssFeed>() {
                     @Override
                     public void onSuccess(@NonNull RssFeed rssFeed) {
@@ -50,27 +57,5 @@ public class NewsPresenter extends BasePresenter<NewsView> {
                         getView().onShowError();
                     }
                 });
-//                .subscribe(new Observer<RssFeed>() {
-//                    @Override
-//                    public void onSubscribe(@NonNull Disposable d) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onNext(@NonNull RssFeed rssFeed) {
-//                        getView().onLoadNews(rssFeed);
-//                    }
-//
-//                    @Override
-//                    public void onError(@NonNull Throwable e) {
-//                        getView().onHideLoading();
-//                        getView().onShowError();
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//                        getView().onHideLoading();
-//                    }
-//                });
     }
 }

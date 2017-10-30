@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-
         android:name=".application.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_main"
@@ -25,6 +24,10 @@
         </activity>
         <activity android:name=".screen.favorites.FavoritesActivity" />
         <activity android:name=".screen.sources.SourcesActivity" />
+        <activity android:name=".screen.reminders.RemindersActivity"/>
+
+        <receiver android:name=".screen.reminders.ReminderReceiver"/>
+        <service android:name=".screen.reminders.ReminderService"/>
     </application>
 
 </manifest>

@@ -61,8 +61,8 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
     protected Toolbar mToolbar;
 
     @BindView(R.id.recyclerView)
-
     protected RecyclerView mRecyclerView;
+
     private FavoritesListAdapter mListAdapter;
 
     //Details activity's views
@@ -93,7 +93,7 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         DaggerFavoritesComponent.builder()
-                .appComponent(App.getAppComponent())
+                .appComponent(getAppComponent())
                 .favoritesModule(new FavoritesModule(this))
                 .detailsModule(new DetailsModule(this))
                 .build()
@@ -109,6 +109,7 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
             @Override
             public void onDrawerOpened(View drawerView) {
                 mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                mToolbar.getMenu().findItem(R.id.mAdd2Favorites).setIcon(R.drawable.ic_favorite_24dp);
             }
 
             @Override

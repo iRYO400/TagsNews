@@ -24,16 +24,14 @@ import me.toptas.rssconverter.RssFeed;
 import me.toptas.rssconverter.RssItem;
 import workshop.akbolatss.tagsnews.R;
 import workshop.akbolatss.tagsnews.application.App;
+import workshop.akbolatss.tagsnews.di.component.AppComponent;
 import workshop.akbolatss.tagsnews.di.component.DaggerNewsComponent;
 import workshop.akbolatss.tagsnews.di.module.NewsListModule;
 import workshop.akbolatss.tagsnews.screen.board.BoardActivity;
 import workshop.akbolatss.tagsnews.util.Constants;
 
-/**
- * Created by AkbolatSS on 09.08.2017.
- */
-
-public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayout.OnRefreshListener, NewsListAdapter.OnRssClickInterface {
+public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayout.OnRefreshListener,
+        NewsListAdapter.OnRssClickInterface {
 
     private static final String TAG = "TAG";
     @Inject
@@ -65,9 +63,10 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
         ButterKnife.bind(this, rootView);
 
         DaggerNewsComponent.builder()
-                .appComponent(App.getAppComponent())
+                .appComponent(getAppComponent())
                 .newsListModule(new NewsListModule(this))
-                .build().inject(this);
+                .build()
+                .inject(this);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -134,5 +133,9 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
     @Override
     public void OnItemClick(@NonNull RssItem rssItem) {
         ((BoardActivity) getActivity()).onOpenItemDetails(rssItem, mName);
+    }
+
+    public AppComponent getAppComponent() {
+        return ((App) getContext().getApplicationContext()).getAppComponent();
     }
 }

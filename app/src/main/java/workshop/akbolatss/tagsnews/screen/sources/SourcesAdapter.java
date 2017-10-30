@@ -21,10 +21,6 @@ import workshop.akbolatss.tagsnews.repositories.source.RssSource;
 import workshop.akbolatss.tagsnews.screen.sources.helper.ItemTouchHelperAdapter;
 import workshop.akbolatss.tagsnews.screen.sources.helper.ItemTouchHelperViewHolder;
 
-/**
- * Created by AkbolatSS on 08.08.2017.
- */
-
 public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.NewsHolder> implements ItemTouchHelperAdapter {
 
     private List<RssSource> mSourcesList;
@@ -40,9 +36,18 @@ public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.NewsHold
         @Override
         public void onClick(View view) {
             RssSource rssSource = (RssSource) view.getTag();
-            mClickInterface.onItemCheckBoxClick(rssSource, view);
+            mClickInterface.onItemClick(rssSource, view);
         }
     };
+
+
+
+    public interface OnRssClickInterface {
+
+        public void onItemsSwapped(RssSource from, RssSource to);
+
+        public void onItemClick(RssSource rssSource, View view);
+    }
 
     @Override
     public NewsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -79,6 +84,13 @@ public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.NewsHold
         }
     }
 
+    public void onAddItem(RssSource rssSource) {
+        if (rssSource != null){
+            mSourcesList.add(rssSource);
+            notifyItemInserted(mSourcesList.size() + 1);
+        }
+    }
+
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
         Collections.swap(mSourcesList, fromPosition, toPosition);
@@ -89,13 +101,6 @@ public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.NewsHold
     @Override
     public void onItemsMoved(int fromPosition, int toPosition) {
         mClickInterface.onItemsSwapped(mSourcesList.get(fromPosition), mSourcesList.get(toPosition));
-    }
-
-    public interface OnRssClickInterface {
-
-        public void onItemsSwapped(RssSource from, RssSource to);
-
-        public void onItemCheckBoxClick(RssSource rssSource, View view);
     }
 
     public class NewsHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {

@@ -30,7 +30,11 @@
     <string name="hintNewSource">адрес сайта или ленты</string>
     <string name="tvShare">Поделиться</string>
     <string name="fab_viewMode">Настройки отображения</string>
+    <string name="fab_notifications">Уведомления</string>
     <string name="fab_favorites">Закладки</string>
     <string name="fab_sources">Каналы</string>
     <string name="tvSelectTheme">Выберите тему</string>
+
+    <string name="notification_title">Новости к этому часу</string>
+    <string name="notification_text">Потяните, чтобы увидеть больше</string>
 </resources>

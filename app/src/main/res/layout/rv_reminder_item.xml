@@ -7,7 +7,7 @@
     android:layout_marginBottom="2dp"
     android:layout_marginEnd="4dp"
     android:layout_marginStart="4dp"
-    android:layout_marginTop="2dp"
+    android:layout_marginTop="4dp"
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
     app:cardBackgroundColor="@color/colorPrimary"
@@ -15,49 +15,29 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingEnd="4dp"
+        android:paddingStart="4dp">
 
         <CheckBox
-            android:id="@+id/cbInit"
+            android:id="@+id/cbActivate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical" />
 
-        <ImageView
-            android:id="@+id/imgIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="8dp"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:src="@drawable/ic_rss_feed_24dp" />
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:text="DTF.ru"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/tvLink"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="https://dtf.ru/all/rss" />
-
-        </LinearLayout>
+            android:fontFamily="sans-serif"
+            android:text="10:55 PM"
+            android:textSize="24sp" />
 
         <ImageView
             android:id="@+id/imgOptions"

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="title">24sp</dimen>
-    <dimen name="description">16sp</dimen>
+    <dimen name="title">20sp</dimen>
+    <dimen name="description">14sp</dimen>
     <dimen name="timestamp">12sp</dimen>
-    <dimen name="smTitle">20sp</dimen>
+    <dimen name="smTitle">16sp</dimen>
     <dimen name="smDescription">13sp</dimen>
     <dimen name="smTimestamp">11sp</dimen>
 
     <dimen name="rssSourceName">14sp</dimen>
 
-    <dimen name="largeImageHeight">320dp</dimen>
+    <dimen name="largeImageHeight">292dp</dimen>
 
     <dimen name="toTitle">16sp</dimen>
 

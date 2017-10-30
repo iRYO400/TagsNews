@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
+
 //apply plugin: 'org.greenrobot.greendao' // only when using greendaogenerator
 
 def androidSupportLibVersion = "26.+"
@@ -12,9 +12,12 @@ android {
         applicationId "workshop.akbolatss.tagsnews"
         minSdkVersion 22
         targetSdkVersion 26
-        versionCode 4
-        versionName "1.2.1"
+        versionCode 6
+        versionName "1.6.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        renderscriptTargetApi 24 //for blurKit
+        renderscriptSupportModeEnabled true //for blurKit
 
     }
     buildTypes {
@@ -26,6 +29,9 @@ android {
 
     repositories {
         maven { url "https://jitpack.io" }
+        maven {
+            url "https://maven.google.com"
+        }
     }
 
     packagingOptions { exclude 'META-INF/rxjava.properties' }
@@ -38,22 +44,24 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.+'
+
     compile "com.android.support:appcompat-v7:$androidSupportLibVersion"
     compile "com.android.support:design:$androidSupportLibVersion"
     compile "com.android.support:recyclerview-v7:$androidSupportLibVersion"
     compile "com.android.support:cardview-v7:$androidSupportLibVersion"
     compile "com.android.support:customtabs:$androidSupportLibVersion"
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.google.firebase:firebase-ads:11.0.2'
+
+//    compile 'com.wonderkiln:blurkit:1.0.0'
 
     // Blended Background
-    compile 'com.github.alxgrk.blendedbackground:blendedbackground:1.0.0'
-
-    compile "com.github.VictorAlbertos.RxCache:runtime:1.8.1-2.x"
-    compile 'com.github.VictorAlbertos.Jolyglot:gson:0.0.3'
+//    compile 'com.github.alxgrk.blendedbackground:blendedbackground:1.0.0'
+    //Internet Connectivity
+//    compile 'com.treebo:internetavailabilitychecker:1.0.1'
 
     //GreenDAO
     compile 'org.greenrobot:greendao:3.2.2'
-    compile 'org.greenrobot:greendao-generator:3.2.2'
+//    compile 'org.greenrobot:greendao-generator:3.2.2'
     //Floating Action Menu
     compile 'com.github.clans:fab:1.6.4'
     //Picasso
@@ -76,3 +84,5 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.8.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

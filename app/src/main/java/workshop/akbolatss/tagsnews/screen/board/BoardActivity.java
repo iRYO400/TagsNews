@@ -27,6 +27,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.orhanobut.hawk.Hawk;
 import com.squareup.picasso.Picasso;
 
@@ -39,7 +41,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import me.toptas.rssconverter.RssItem;
 import workshop.akbolatss.tagsnews.R;
-import workshop.akbolatss.tagsnews.application.App;
 import workshop.akbolatss.tagsnews.base.BaseActivity;
 import workshop.akbolatss.tagsnews.di.component.DaggerBoardComponent;
 import workshop.akbolatss.tagsnews.di.module.BoardModule;
@@ -49,6 +50,7 @@ import workshop.akbolatss.tagsnews.screen.details.DetailsPresenter;
 import workshop.akbolatss.tagsnews.screen.details.DetailsView;
 import workshop.akbolatss.tagsnews.screen.favorites.FavoritesActivity;
 import workshop.akbolatss.tagsnews.screen.news.NewsSource;
+import workshop.akbolatss.tagsnews.screen.reminders.RemindersActivity;
 import workshop.akbolatss.tagsnews.screen.sources.SourcesActivity;
 import workshop.akbolatss.tagsnews.util.FullDrawerLayout;
 import workshop.akbolatss.tagsnews.util.customTabs.CustomTabActivityHelper;
@@ -106,13 +108,21 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     private boolean isFavorite;
 
     private RssItem mRssItem;
+    View rootView;
+
+//    @BindView(R.id.adView);
+    protected AdView mAdView;
 
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
 
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
         DaggerBoardComponent.builder()
-                .appComponent(App.getAppComponent())
+                .appComponent(getAppComponent())
                 .boardModule(new BoardModule(this))
                 .detailsModule(new DetailsModule(this))
                 .build()
@@ -123,26 +133,33 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        rootView = findViewById(R.id.boardLayout);
+
         mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mFullDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
+                rootView.setX(slideOffset * -100);
+//                drawerView.setX();
 
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                mAdView.resume();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
+                mAdView.pause();
+                mAdView.destroyDrawingCache();
                 mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                mToolbar.getMenu().findItem(R.id.mAdd2Favorites).setIcon(R.drawable.ic_favorite_border_24dp);
             }
 
             @Override
             public void onDrawerStateChanged(int newState) {
-
             }
         });
 
@@ -156,11 +173,25 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
             isUpdateBoardNeeded = false;
             mPresenter.onLoadSources();
         }
+        mAdView.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        mAdView.pause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mAdView.destroy();
+        super.onDestroy();
     }
 
     @Override
     public void onInitSources(List<RssSource> rssSources) {
         List<NewsSource> fragments = new ArrayList<>();
+        fragments.add(new NewsSource("+", ""));
         for (RssSource rssSource : rssSources) {
             fragments.add(new NewsSource(rssSource.getTitle(), rssSource.getLink()));
         }
@@ -188,7 +219,6 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
         builder.setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left);
         builder.setExitAnimations(this, R.anim.slide_in_left, R.anim.slide_out_right);
         builder.setToolbarColor(getResources().getColor(R.color.colorAccent));
-
 
         CustomTabsIntent customTabsIntent = builder.build();
         CustomTabActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(mRssItem.getLink()),
@@ -230,12 +260,6 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_details, menu);
-        MenuItem item = menu.findItem(R.id.mAdd2Favorites);
-        if (isFavorite) {
-            item.setIcon(R.drawable.ic_favorite_24dp);
-        } else {
-            item.setIcon(R.drawable.ic_favorite_border_24dp);
-        }
         return true;
     }
 
@@ -363,6 +387,25 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
         Intent i = new Intent(this, FavoritesActivity.class);
         startActivity(i);
     }
+
+    @OnClick(R.id.btnFab4)
+    public void onSetAlarm2() {
+        mFabMenu.close(true);
+        startActivity(new Intent(this, RemindersActivity.class));
+    }
+
+//    @OnClick(R.id.btnFab6)
+//    public void onStopAlarm() {
+//        mFabMenu.close(true);
+//
+//        AlarmManager amc = (AlarmManager) this.getSystemService(ALARM_SERVICE);
+//        Intent myIntent = new Intent(this, ReminderReceiver.class);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
+//        amc.cancel(pendingIntent);
+//
+//        pendingIntent = PendingIntent.getBroadcast(this, 1, myIntent, 0);
+//        amc.cancel(pendingIntent);
+//    }
 
     @OnClick(R.id.btnFab2)
     public void onOpenSourceManager() {

@@ -1,10 +1,8 @@
 package workshop.akbolatss.tagsnews.util;
 
-/**
- * Created by AkbolatSS on 11.08.2017.
- */
-
 public class Constants {
+
+    public static final String TAG = "TAG";
 
     public static final String FB_PACHAGE_NAME = "com.facebook.katana";
     public static final String VK_PACHAGE_NAME = "com.vkontakte.android";
