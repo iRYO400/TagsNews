@@ -12,9 +12,6 @@ import java.util.List;
 import workshop.akbolatss.tagsnews.screen.news.NewsSource;
 import workshop.akbolatss.tagsnews.util.SmartFragmentStatePagerAdapter;
 
-/**
- * Created by AkbolatSS on 09.08.2017.
- */
 
 public class SectionsPagerAdapter extends SmartFragmentStatePagerAdapter<Fragment> {
 

@@ -2,6 +2,7 @@ package workshop.akbolatss.tagsnews.screen.reminders;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +33,8 @@ import workshop.akbolatss.tagsnews.api.NewsApiService;
 import workshop.akbolatss.tagsnews.application.App;
 import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
 import workshop.akbolatss.tagsnews.repositories.source.RssSource;
+import workshop.akbolatss.tagsnews.screen.board.BoardActivity;
+import workshop.akbolatss.tagsnews.screen.splash.SplashActivity;
 
 public class ReminderService extends Service {
 
@@ -48,6 +51,8 @@ public class ReminderService extends Service {
     private Context mContext;
     private NotificationCompat.Builder builder;
     private NotificationCompat.InboxStyle inboxStyle;
+    private NotificationCompat.BigTextStyle bigTextStyle;
+    private String bigText;
     private int mCount;
     @Nullable
     @Override
@@ -62,11 +67,13 @@ public class ReminderService extends Service {
         ((App) getApplicationContext()).getAppComponent().inject(this);
         builder = new NotificationCompat.Builder(mContext);
         inboxStyle = new NotificationCompat.InboxStyle();
+        bigTextStyle = new NotificationCompat.BigTextStyle();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mCount = 0;
+        bigText = "";
         mRepository.getOnlyActive()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -93,18 +100,23 @@ public class ReminderService extends Service {
                                         mCount++;
                                         if (mCount <= 4) {
                                         Log.d(TAG, "onSuccess: " + mCount);
-                                            String text = rssSource.getTitle() + " " + rssFeed.getItems().get(0).getTitle();
+                                            String text = rssSource.getTitle() + " - " + rssFeed.getItems().get(0).getTitle();
 
-                                            inboxStyle.addLine(text);
+                                            bigText = text + "\n" + bigText;
+                                            bigTextStyle.bigText(bigText);
                                             builder.setAutoCancel(true)
                                                     .setDefaults(Notification.DEFAULT_ALL)
                                                     .setWhen(System.currentTimeMillis())
                                                     .setSmallIcon(R.mipmap.ic_main)
                                                     .setContentTitle(getString(R.string.notification_title))
                                                     .setContentText(getString(R.string.notification_text))
-                                                    .setStyle(inboxStyle)
+                                                    .setStyle(bigTextStyle)
                                                     .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND);
 
+                                            PendingIntent contentIntent = PendingIntent.getActivity(mContext, 0,
+                                                    new Intent(mContext, SplashActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                            builder.setContentIntent(contentIntent);
                                             NotificationManager notificationManager = (NotificationManager)
                                                     mContext.getSystemService(Context.NOTIFICATION_SERVICE);
                                             notificationManager.notify(1, builder.build());

@@ -8,10 +8,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 
-/**
- * Created by AkbolatSS on 04.10.2017.
- */
-
 public class FullDrawerLayout extends DrawerLayout{
 
     private static final int MIN_DRAWER_MARGIN = 0; // dp
@@ -42,12 +38,9 @@ public class FullDrawerLayout extends DrawerLayout{
 
         setMeasuredDimension(widthSize, heightSize);
 
-        //for support Android 5+
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) getLayoutParams();
-            params.topMargin = getStatusBarHeight();
-            setLayoutParams(params);
-        }
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) getLayoutParams();
+        params.topMargin = getStatusBarHeight();
+        setLayoutParams(params);
 
         // Gravity value for each drawer we've seen. Only one of each permitted.
         int foundDrawers = 0;

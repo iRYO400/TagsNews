@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -110,6 +111,10 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.Remi
         private String onTimeFixer(int time) {
             if (time == 0) {
                 return "00";
+            }
+            Pattern ptr = Pattern.compile("^(?:[1-9]|0[1-9])$");
+            if (ptr.matcher(String.valueOf(time)).matches()) {
+                return "0" + time;
             }
             return String.valueOf(time);
         }

@@ -1,14 +1,15 @@
 package workshop.akbolatss.tagsnews.screen.board;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -16,7 +17,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +40,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.toptas.rssconverter.RssItem;
+import vcm.github.webkit.proview.ProWebView;
 import workshop.akbolatss.tagsnews.R;
 import workshop.akbolatss.tagsnews.base.BaseActivity;
 import workshop.akbolatss.tagsnews.di.component.DaggerBoardComponent;
@@ -53,7 +54,6 @@ import workshop.akbolatss.tagsnews.screen.news.NewsSource;
 import workshop.akbolatss.tagsnews.screen.reminders.RemindersActivity;
 import workshop.akbolatss.tagsnews.screen.sources.SourcesActivity;
 import workshop.akbolatss.tagsnews.util.FullDrawerLayout;
-import workshop.akbolatss.tagsnews.util.customTabs.CustomTabActivityHelper;
 
 import static workshop.akbolatss.tagsnews.util.Constants.FB_PACHAGE_NAME;
 import static workshop.akbolatss.tagsnews.util.Constants.ITEMS_VIEW_MODE;
@@ -108,9 +108,16 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     private boolean isFavorite;
 
     private RssItem mRssItem;
-    View rootView;
+    @BindView(R.id.boardLayout)
+    protected View rootView;
 
-//    @BindView(R.id.adView);
+    @BindView(R.id.webView)
+    protected ProWebView mProWebView;
+    private boolean isUrlStartLoading; // For preloading when Wi-Fi is connected
+    private boolean isNewOpened; //
+    private String mCurrPageUrl;
+    private String mCurrPageTitle;
+
     protected AdView mAdView;
 
     @Override
@@ -133,15 +140,14 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        rootView = findViewById(R.id.boardLayout);
+        mProWebView.setActivity(this);
+
 
         mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mFullDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 rootView.setX(slideOffset * -100);
-//                drawerView.setX();
-
             }
 
             @Override
@@ -154,7 +160,11 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
             public void onDrawerClosed(View drawerView) {
                 mAdView.pause();
                 mAdView.destroyDrawingCache();
-                mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                if (drawerView.getId() == R.id.drawerDetails) {
+                    mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                    isUrlStartLoading = false;
+                    mProWebView.deleteData();
+                }
                 mToolbar.getMenu().findItem(R.id.mAdd2Favorites).setIcon(R.drawable.ic_favorite_border_24dp);
             }
 
@@ -164,6 +174,14 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
         });
 
         mPresenter.onLoadSources();
+
+        mProWebView.setProClient(new ProWebView.ProClient() {
+            @Override
+            public void onInformationReceived(ProWebView webView, String url, String title, Bitmap favicon) {
+                mCurrPageUrl = url;
+                mCurrPageTitle = title;
+            }
+        });
     }
 
     @Override
@@ -173,7 +191,6 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
             isUpdateBoardNeeded = false;
             mPresenter.onLoadSources();
         }
-        mAdView.resume();
     }
 
     @Override
@@ -191,7 +208,6 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     @Override
     public void onInitSources(List<RssSource> rssSources) {
         List<NewsSource> fragments = new ArrayList<>();
-        fragments.add(new NewsSource("+", ""));
         for (RssSource rssSource : rssSources) {
             fragments.add(new NewsSource(rssSource.getTitle(), rssSource.getLink()));
         }
@@ -212,25 +228,6 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
         }
     }
 
-    @OnClick(R.id.btnOpenSource)
-    @Override
-    public void onOpenSource() {
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left);
-        builder.setExitAnimations(this, R.anim.slide_in_left, R.anim.slide_out_right);
-        builder.setToolbarColor(getResources().getColor(R.color.colorAccent));
-
-        CustomTabsIntent customTabsIntent = builder.build();
-        CustomTabActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(mRssItem.getLink()),
-                new CustomTabActivityHelper.CustomTabFallback() {
-                    @Override
-                    public void openUri(Activity activity, Uri uri) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        activity.startActivity(intent);
-                    }
-                });
-    }
-
     @Override
     public void onRefreshDrawerDetails() {
         mImageView.setImageBitmap(null);
@@ -240,20 +237,88 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     @Override
     public void onOpenItemDetails(@NonNull RssItem rssItem, String sourceName) {
         mFullDrawerLayout.openDrawer(findViewById(R.id.drawerDetails));
-        if (rssItem != null) {
-            mRssItem = rssItem;
-            mTitle.setText(rssItem.getTitle());
-            mTimestamp.setText(rssItem.getPublishDate());
-            mDescription.setText(rssItem.getDescription());
 
-            mSourceName.setText(sourceName);
+        mRssItem = rssItem;
 
-            Picasso.with(this)
-                    .load(rssItem.getImage())
-                    .placeholder(R.drawable.placeholder)
-                    .into(mImageView);
+        mTitle.setText(rssItem.getTitle());
+        mTimestamp.setText(rssItem.getPublishDate());
+        mDescription.setText(rssItem.getDescription());
 
-            isFavorite = mDetailsPresenter.onCheckFavorites(rssItem.getPublishDate());
+        mSourceName.setText(sourceName);
+
+        Picasso.with(this)
+                .load(rssItem.getImage())
+                .placeholder(R.drawable.placeholder)
+                .into(mImageView);
+
+        isFavorite = mDetailsPresenter.onCheckFavorites(rssItem.getPublishDate());
+        if (isWifiConnected()) {
+            mProWebView.loadUrl(rssItem.getLink());
+            isUrlStartLoading = true;
+            isNewOpened = true;
+        }
+    }
+
+    @OnClick(R.id.btnOpenSource)
+    @Override
+    public void onOpenSource() {
+        mFullDrawerLayout.openDrawer(findViewById(R.id.drawerWebView));
+
+        if (!isUrlStartLoading) {
+            mProWebView.loadUrl(mRssItem.getLink());
+            isNewOpened = true;
+        }
+    }
+
+    @OnClick(R.id.btnClose)
+    protected void onCloseWeb(){
+        mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerWebView));
+    }
+
+    @OnClick(R.id.btnBack)
+    protected void onBackWebPage() {
+        if (mProWebView.canGoBack()) {
+            mProWebView.goBack();
+        }
+    }
+
+    @OnClick(R.id.btnForward)
+    protected void onForwardWebPage() {
+        if (mProWebView.canGoForward()) {
+            mProWebView.goForward();
+        }
+    }
+
+    @OnClick(R.id.btnReload)
+    protected void onRefreshWeb() {
+        mProWebView.reload();
+    }
+
+    @OnClick(R.id.btnShareCurrent)
+    protected void onShareCurrPage() {
+        String messageSend = mCurrPageTitle + "\n\n" + mCurrPageUrl + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, messageSend);
+        shareIntent.setType("text/plain");
+        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.tvShare)));
+    }
+
+    @OnClick(R.id.btnBrowser)
+    protected void onOpenInBrowser() {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mCurrPageUrl));
+        startActivity(intent);
+    }
+
+
+    private boolean isWifiConnected() {
+        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+
+        if (wifiInfo.getNetworkId() == -1) {
+            return false;
+        } else {
+            return true;
         }
     }
 
@@ -373,7 +438,13 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
 
     @Override
     public void onBackPressed() {
-        if (mFullDrawerLayout.isDrawerOpen(findViewById(R.id.drawerDetails))) {
+        if (mFullDrawerLayout.isDrawerOpen(findViewById(R.id.drawerWebView))) {
+            if (mProWebView.canGoBack()) {
+                mProWebView.goBack();
+            } else {
+                mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerWebView));
+            }
+        } else if (mFullDrawerLayout.isDrawerOpen(findViewById(R.id.drawerDetails))) {
             mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerDetails));
             onRefreshDrawerDetails();
         } else {
@@ -389,23 +460,10 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     }
 
     @OnClick(R.id.btnFab4)
-    public void onSetAlarm2() {
+    public void onOpenReminders() {
         mFabMenu.close(true);
         startActivity(new Intent(this, RemindersActivity.class));
     }
-
-//    @OnClick(R.id.btnFab6)
-//    public void onStopAlarm() {
-//        mFabMenu.close(true);
-//
-//        AlarmManager amc = (AlarmManager) this.getSystemService(ALARM_SERVICE);
-//        Intent myIntent = new Intent(this, ReminderReceiver.class);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
-//        amc.cancel(pendingIntent);
-//
-//        pendingIntent = PendingIntent.getBroadcast(this, 1, myIntent, 0);
-//        amc.cancel(pendingIntent);
-//    }
 
     @OnClick(R.id.btnFab2)
     public void onOpenSourceManager() {

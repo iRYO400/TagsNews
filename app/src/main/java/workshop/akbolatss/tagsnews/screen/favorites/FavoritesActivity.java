@@ -1,18 +1,15 @@
 package workshop.akbolatss.tagsnews.screen.favorites;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +26,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import me.toptas.rssconverter.RssItem;
 import workshop.akbolatss.tagsnews.R;
-import workshop.akbolatss.tagsnews.application.App;
 import workshop.akbolatss.tagsnews.base.BaseActivity;
 import workshop.akbolatss.tagsnews.di.component.DaggerFavoritesComponent;
 import workshop.akbolatss.tagsnews.di.module.DetailsModule;
@@ -37,7 +33,6 @@ import workshop.akbolatss.tagsnews.di.module.FavoritesModule;
 import workshop.akbolatss.tagsnews.screen.details.DetailsPresenter;
 import workshop.akbolatss.tagsnews.screen.details.DetailsView;
 import workshop.akbolatss.tagsnews.util.FullDrawerLayout;
-import workshop.akbolatss.tagsnews.util.customTabs.CustomTabActivityHelper;
 
 import static workshop.akbolatss.tagsnews.util.Constants.FB_PACHAGE_NAME;
 import static workshop.akbolatss.tagsnews.util.Constants.TW_PACHAGE_NAME;
@@ -135,21 +130,6 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
 
     @Override
     public void onOpenSource() {
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setStartAnimations(this, R.anim.slide_in_right, R.anim.slide_out_left);
-        builder.setExitAnimations(this, R.anim.slide_in_left, R.anim.slide_out_right);
-        builder.setToolbarColor(getResources().getColor(R.color.colorAccent));
-
-
-        CustomTabsIntent customTabsIntent = builder.build();
-        CustomTabActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(mRssItem.getLink()),
-                new CustomTabActivityHelper.CustomTabFallback() {
-                    @Override
-                    public void openUri(Activity activity, Uri uri) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        activity.startActivity(intent);
-                    }
-                });
     }
 
     private void onInitRecycler() {
@@ -179,21 +159,19 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
     @Override
     public void onOpenItemDetails(@NonNull RssItem rssItem, String sourceName) {
         mFullDrawerLayout.openDrawer(findViewById(R.id.drawerDetails));
-        if (rssItem != null) {
-            mRssItem = rssItem;
-            mTitle.setText(rssItem.getTitle());
-            mTimestamp.setText(rssItem.getPublishDate());
-            mDescription.setText(rssItem.getDescription());
+        mRssItem = rssItem;
+        mTitle.setText(rssItem.getTitle());
+        mTimestamp.setText(rssItem.getPublishDate());
+        mDescription.setText(rssItem.getDescription());
 
-            mSourceName.setText("");
+        mSourceName.setText("");
 
-            Picasso.with(this)
-                    .load(rssItem.getImage())
-                    .placeholder(R.drawable.placeholder)
-                    .into(mImageView);
+        Picasso.with(this)
+                .load(rssItem.getImage())
+                .placeholder(R.drawable.placeholder)
+                .into(mImageView);
 
-            isFavorite = mDetailsPresenter.onCheckFavorites(rssItem.getPublishDate());
-        }
+        isFavorite = mDetailsPresenter.onCheckFavorites(rssItem.getPublishDate());
     }
 
     @Override

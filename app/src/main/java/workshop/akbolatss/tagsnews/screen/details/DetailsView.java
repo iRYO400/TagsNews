@@ -17,7 +17,7 @@ public interface DetailsView extends BaseView {
 
     void onShareTw();
 
-    void onShareWithWebIntent(String socialNetwrkId);
+    void onShareWithWebIntent(String socialNetworkId);
 
     void onOpenItemDetails(@NonNull RssItem rssItem, String sourceName);
 
