@@ -1,13 +1,12 @@
 package workshop.akbolatss.tagsnews.screen.board;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -55,17 +54,21 @@ import workshop.akbolatss.tagsnews.screen.reminders.RemindersActivity;
 import workshop.akbolatss.tagsnews.screen.sources.SourcesActivity;
 import workshop.akbolatss.tagsnews.util.FullDrawerLayout;
 
-import static workshop.akbolatss.tagsnews.util.Constants.FB_PACHAGE_NAME;
+import static workshop.akbolatss.tagsnews.util.Constants.FB_PACKAGE_NAME;
 import static workshop.akbolatss.tagsnews.util.Constants.ITEMS_VIEW_MODE;
 import static workshop.akbolatss.tagsnews.util.Constants.SELECTED_THEME;
-import static workshop.akbolatss.tagsnews.util.Constants.TW_PACHAGE_NAME;
-import static workshop.akbolatss.tagsnews.util.Constants.VK_PACHAGE_NAME;
+import static workshop.akbolatss.tagsnews.util.Constants.TW_PACKAGE_NAME;
+import static workshop.akbolatss.tagsnews.util.Constants.VK_PACKAGE_NAME;
+import static workshop.akbolatss.tagsnews.util.UtilityMethods.isWifiConnected;
 
 public class BoardActivity extends BaseActivity implements BoardView, DetailsView {
 
     private static final String TAG = "TAG";
     @Inject
     protected BoardPresenter mPresenter;
+
+    @Inject
+    protected Context mContext;
 
     @Inject
     protected DetailsPresenter mDetailsPresenter;
@@ -108,13 +111,14 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     private boolean isFavorite;
 
     private RssItem mRssItem;
-    @BindView(R.id.boardLayout)
+
+    @BindView(R.id.drawerBack)
     protected View rootView;
 
     @BindView(R.id.webView)
     protected ProWebView mProWebView;
     private boolean isUrlStartLoading; // For preloading when Wi-Fi is connected
-    private boolean isNewOpened; //
+
     private String mCurrPageUrl;
     private String mCurrPageTitle;
 
@@ -162,8 +166,9 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
                 mAdView.destroyDrawingCache();
                 if (drawerView.getId() == R.id.drawerDetails) {
                     mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                } else if (drawerView.getId() == R.id.drawerWebView){
                     isUrlStartLoading = false;
-                    mProWebView.deleteData();
+                    mProWebView.clearHistory();
                 }
                 mToolbar.getMenu().findItem(R.id.mAdd2Favorites).setIcon(R.drawable.ic_favorite_border_24dp);
             }
@@ -252,10 +257,9 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
                 .into(mImageView);
 
         isFavorite = mDetailsPresenter.onCheckFavorites(rssItem.getPublishDate());
-        if (isWifiConnected()) {
+        if (isWifiConnected(mContext)) {
             mProWebView.loadUrl(rssItem.getLink());
             isUrlStartLoading = true;
-            isNewOpened = true;
         }
     }
 
@@ -266,36 +270,40 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
 
         if (!isUrlStartLoading) {
             mProWebView.loadUrl(mRssItem.getLink());
-            isNewOpened = true;
         }
     }
 
     @OnClick(R.id.btnClose)
-    protected void onCloseWeb(){
+    @Override
+    public void onCloseWeb(){
         mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerWebView));
     }
 
     @OnClick(R.id.btnBack)
-    protected void onBackWebPage() {
+    @Override
+    public void onBackWebPage() {
         if (mProWebView.canGoBack()) {
             mProWebView.goBack();
         }
     }
 
     @OnClick(R.id.btnForward)
-    protected void onForwardWebPage() {
+    @Override
+    public void onForwardWebPage() {
         if (mProWebView.canGoForward()) {
             mProWebView.goForward();
         }
     }
 
     @OnClick(R.id.btnReload)
-    protected void onRefreshWeb() {
+    @Override
+    public void onRefreshWeb() {
         mProWebView.reload();
     }
 
     @OnClick(R.id.btnShareCurrent)
-    protected void onShareCurrPage() {
+    @Override
+    public void onShareCurrPage() {
         String messageSend = mCurrPageTitle + "\n\n" + mCurrPageUrl + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
@@ -305,21 +313,10 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     }
 
     @OnClick(R.id.btnBrowser)
-    protected void onOpenInBrowser() {
+    @Override
+    public void onOpenInBrowser() {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mCurrPageUrl));
         startActivity(intent);
-    }
-
-
-    private boolean isWifiConnected() {
-        WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-
-        if (wifiInfo.getNetworkId() == -1) {
-            return false;
-        } else {
-            return true;
-        }
     }
 
     @Override
@@ -377,7 +374,7 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
         boolean socialAppFound = false;
         List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
         for (ResolveInfo info : matches) {
-            if (info.activityInfo.packageName.toLowerCase().startsWith(VK_PACHAGE_NAME)) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith(VK_PACKAGE_NAME)) {
                 intent.setPackage(info.activityInfo.packageName);
                 socialAppFound = true;
                 break;
@@ -386,7 +383,7 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
         if (socialAppFound) {
             startActivity(intent);
         } else {
-            onShareWithWebIntent(VK_PACHAGE_NAME);
+            onShareWithWebIntent(VK_PACKAGE_NAME);
         }
     }
 
@@ -400,7 +397,7 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
         boolean socialAppFound = false;
         List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
         for (ResolveInfo info : matches) {
-            if (info.activityInfo.packageName.toLowerCase().startsWith(FB_PACHAGE_NAME)) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith(FB_PACKAGE_NAME)) {
                 intent.setPackage(info.activityInfo.packageName);
                 socialAppFound = true;
                 break;
@@ -409,7 +406,7 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
         if (socialAppFound) {
             startActivity(intent);
         } else {
-            onShareWithWebIntent(FB_PACHAGE_NAME);
+            onShareWithWebIntent(FB_PACKAGE_NAME);
         }
     }
 
@@ -423,7 +420,7 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
         boolean socialAppFound = false;
         List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
         for (ResolveInfo info : matches) {
-            if (info.activityInfo.packageName.toLowerCase().startsWith(TW_PACHAGE_NAME)) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith(TW_PACKAGE_NAME)) {
                 intent.setPackage(info.activityInfo.packageName);
                 socialAppFound = true;
                 break;
@@ -432,7 +429,7 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
         if (socialAppFound) {
             startActivity(intent);
         } else {
-            onShareWithWebIntent(TW_PACHAGE_NAME);
+            onShareWithWebIntent(TW_PACKAGE_NAME);
         }
     }
 

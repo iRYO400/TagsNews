@@ -3,6 +3,7 @@ package workshop.akbolatss.tagsnews.screen.favorites;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +26,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.toptas.rssconverter.RssItem;
+import vcm.github.webkit.proview.ProWebView;
 import workshop.akbolatss.tagsnews.R;
 import workshop.akbolatss.tagsnews.base.BaseActivity;
 import workshop.akbolatss.tagsnews.di.component.DaggerFavoritesComponent;
@@ -34,9 +36,9 @@ import workshop.akbolatss.tagsnews.screen.details.DetailsPresenter;
 import workshop.akbolatss.tagsnews.screen.details.DetailsView;
 import workshop.akbolatss.tagsnews.util.FullDrawerLayout;
 
-import static workshop.akbolatss.tagsnews.util.Constants.FB_PACHAGE_NAME;
-import static workshop.akbolatss.tagsnews.util.Constants.TW_PACHAGE_NAME;
-import static workshop.akbolatss.tagsnews.util.Constants.VK_PACHAGE_NAME;
+import static workshop.akbolatss.tagsnews.util.Constants.FB_PACKAGE_NAME;
+import static workshop.akbolatss.tagsnews.util.Constants.TW_PACKAGE_NAME;
+import static workshop.akbolatss.tagsnews.util.Constants.VK_PACKAGE_NAME;
 
 public class FavoritesActivity extends BaseActivity implements FavoritesView, DetailsView, FavoritesListAdapter.OnRssClickInterface {
 
@@ -80,6 +82,16 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
 
     private RssItem mRssItem;
 
+    @BindView(R.id.drawerBack)
+    protected View rootView;
+
+    @BindView(R.id.webView)
+    protected ProWebView mProWebView;
+    private boolean isUrlStartLoading; // For preloading when Wi-Fi is connected
+
+    private String mCurrPageUrl;
+    private String mCurrPageTitle;
+
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
@@ -98,7 +110,7 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
         mFullDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-
+                rootView.setX(slideOffset * -100);
             }
 
             @Override
@@ -109,7 +121,13 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                if (drawerView.getId() == R.id.drawerDetails) {
+                    mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                } else if (drawerView.getId() == R.id.drawerWebView){
+                    isUrlStartLoading = false;
+                    mProWebView.clearHistory();
+                }
+                mToolbar.getMenu().findItem(R.id.mAdd2Favorites).setIcon(R.drawable.ic_favorite_border_24dp);
             }
 
             @Override
@@ -120,29 +138,14 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
 
         onInitRecycler();
         mPresenter.onLoadFavorites();
-    }
 
-
-    @Override
-    public void OnLoadFavorites(List<RssItem> rssItems) {
-        mListAdapter.onAddItems(rssItems);
-    }
-
-    @Override
-    public void onOpenSource() {
-    }
-
-    private void onInitRecycler() {
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-
-        mListAdapter = new FavoritesListAdapter(this);
-        mRecyclerView.setAdapter(mListAdapter);
-    }
-
-    @Override
-    protected int getContentView() {
-        return R.layout.activity_favorites;
+        mProWebView.setProClient(new ProWebView.ProClient() {
+            @Override
+            public void onInformationReceived(ProWebView webView, String url, String title, Bitmap favicon) {
+                mCurrPageUrl = url;
+                mCurrPageTitle = title;
+            }
+        });
     }
 
     @Override
@@ -172,6 +175,55 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
                 .into(mImageView);
 
         isFavorite = mDetailsPresenter.onCheckFavorites(rssItem.getPublishDate());
+    }
+
+    @Override
+    public void onOpenSource() {
+        mFullDrawerLayout.openDrawer(findViewById(R.id.drawerWebView));
+
+        if (!isUrlStartLoading) {
+            mProWebView.loadUrl(mRssItem.getLink());
+        }
+    }
+
+    @Override
+    public void onCloseWeb() {
+        mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerWebView));
+    }
+
+    @Override
+    public void onBackWebPage() {
+        if (mProWebView.canGoBack()) {
+            mProWebView.goBack();
+        }
+    }
+
+    @Override
+    public void onForwardWebPage() {
+        if (mProWebView.canGoForward()) {
+            mProWebView.goForward();
+        }
+    }
+
+    @Override
+    public void onRefreshWeb() {
+        mProWebView.reload();
+    }
+
+    @Override
+    public void onShareCurrPage() {
+        String messageSend = mCurrPageTitle + "\n\n" + mCurrPageUrl + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, messageSend);
+        shareIntent.setType("text/plain");
+        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.tvShare)));
+    }
+
+    @Override
+    public void onOpenInBrowser() {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mCurrPageUrl));
+        startActivity(intent);
     }
 
     @Override
@@ -238,7 +290,7 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
         boolean socialAppFound = false;
         List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
         for (ResolveInfo info : matches) {
-            if (info.activityInfo.packageName.toLowerCase().startsWith(VK_PACHAGE_NAME)) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith(VK_PACKAGE_NAME)) {
                 intent.setPackage(info.activityInfo.packageName);
                 socialAppFound = true;
                 break;
@@ -247,7 +299,7 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
         if (socialAppFound) {
             startActivity(intent);
         } else {
-            onShareWithWebIntent(VK_PACHAGE_NAME);
+            onShareWithWebIntent(VK_PACKAGE_NAME);
         }
     }
 
@@ -261,7 +313,7 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
         boolean socialAppFound = false;
         List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
         for (ResolveInfo info : matches) {
-            if (info.activityInfo.packageName.toLowerCase().startsWith(FB_PACHAGE_NAME)) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith(FB_PACKAGE_NAME)) {
                 intent.setPackage(info.activityInfo.packageName);
                 socialAppFound = true;
                 break;
@@ -270,7 +322,7 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
         if (socialAppFound) {
             startActivity(intent);
         } else {
-            onShareWithWebIntent(FB_PACHAGE_NAME);
+            onShareWithWebIntent(FB_PACKAGE_NAME);
         }
     }
 
@@ -284,7 +336,7 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
         boolean socialAppFound = false;
         List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
         for (ResolveInfo info : matches) {
-            if (info.activityInfo.packageName.toLowerCase().startsWith(TW_PACHAGE_NAME)) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith(TW_PACKAGE_NAME)) {
                 intent.setPackage(info.activityInfo.packageName);
                 socialAppFound = true;
                 break;
@@ -293,7 +345,7 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
         if (socialAppFound) {
             startActivity(intent);
         } else {
-            onShareWithWebIntent(TW_PACHAGE_NAME);
+            onShareWithWebIntent(TW_PACKAGE_NAME);
         }
     }
 
@@ -312,5 +364,23 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void OnLoadFavorites(List<RssItem> rssItems) {
+        mListAdapter.onAddItems(rssItems);
+    }
+
+    private void onInitRecycler() {
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+
+        mListAdapter = new FavoritesListAdapter(this);
+        mRecyclerView.setAdapter(mListAdapter);
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_favorites;
     }
 }

@@ -21,6 +21,9 @@ import workshop.akbolatss.tagsnews.repositories.DBReminderItemRepository;
 import workshop.akbolatss.tagsnews.repositories.source.ReminderItem;
 
 import static android.content.Context.ALARM_SERVICE;
+import static workshop.akbolatss.tagsnews.util.Constants.INTENT_HOUR;
+import static workshop.akbolatss.tagsnews.util.Constants.INTENT_MINUTE;
+import static workshop.akbolatss.tagsnews.util.Constants.INTENT_REQUEST_CODE;
 
 public class RemindersPresenter extends BasePresenter<RemindersView> {
 
@@ -41,6 +44,9 @@ public class RemindersPresenter extends BasePresenter<RemindersView> {
 
         AlarmManager amc = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
         Intent myIntent = new Intent(mContext, ReminderReceiver.class);
+        myIntent.putExtra(INTENT_REQUEST_CODE, rItem.getRequestCode());
+        myIntent.putExtra(INTENT_HOUR, rItem.getHour());
+        myIntent.putExtra(INTENT_MINUTE, rItem.getMinute());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, rItem.getRequestCode(), myIntent, 0);
 
         Calendar calendar = Calendar.getInstance();
@@ -48,11 +54,7 @@ public class RemindersPresenter extends BasePresenter<RemindersView> {
         calendar.set(Calendar.HOUR_OF_DAY, rItem.getHour());
         calendar.set(Calendar.MINUTE, rItem.getMinute());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            amc.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        } else {
-            amc.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        }
+        amc.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     public void onDeactivateNotification(ReminderItem rItem) {

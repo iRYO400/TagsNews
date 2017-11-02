@@ -4,11 +4,14 @@ public class Constants {
 
     public static final String TAG = "TAG";
 
-    public static final String FB_PACHAGE_NAME = "com.facebook.katana";
-    public static final String VK_PACHAGE_NAME = "com.vkontakte.android";
-    public static final String TW_PACHAGE_NAME = "com.twitter.android";
+    public static final String FB_PACKAGE_NAME = "com.facebook.katana";
+    public static final String VK_PACKAGE_NAME = "com.vkontakte.android";
+    public static final String TW_PACKAGE_NAME = "com.twitter.android";
 
     public static final String INTENT_RSS_ITEM = "RssItemIntent";
+    public static final String INTENT_REQUEST_CODE = "RequestCode";
+    public static final String INTENT_HOUR = "ReminderHour";
+    public static final String INTENT_MINUTE = "ReminderMinute";
     public static final String FIRST_START = "ITS_FIRST";
 
 

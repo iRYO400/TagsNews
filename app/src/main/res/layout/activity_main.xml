@@ -10,7 +10,7 @@
     tools:context="workshop.akbolatss.tagsnews.screen.board.BoardActivity">
 
     <include
-        android:id="@+id/boardLayout"
+        android:id="@+id/drawerBack"
         layout="@layout/activity_board"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
