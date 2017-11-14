@@ -7,7 +7,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -166,6 +165,13 @@ public class ReminderService extends Service {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
+        int buffMinute = mRepeatMinute + 10;
+        if (buffMinute > 60) {
+            mRepeatHour++;
+            mRepeatMinute = buffMinute - 60;
+        } else {
+            mRepeatMinute = buffMinute;
+        }
         calendar.set(Calendar.HOUR_OF_DAY, mRepeatHour);
         calendar.set(Calendar.MINUTE, mRepeatMinute);
 
@@ -173,7 +179,6 @@ public class ReminderService extends Service {
 
         mContext.stopService(new Intent(mContext, ReminderService.class));
     }
-
 
 
     @Override

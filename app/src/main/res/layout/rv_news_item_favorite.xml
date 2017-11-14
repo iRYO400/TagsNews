@@ -8,7 +8,6 @@
     android:layout_marginEnd="4dp"
     android:layout_marginStart="4dp"
     android:layout_marginTop="4dp"
-    app:cardBackgroundColor="@color/colorPrimary"
     app:cardCornerRadius="0dp">
 
     <LinearLayout
@@ -32,8 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_gravity="bottom"
-                android:background="@color/colorTransBack"
-                />
+                android:background="@color/colorTransBack" />
 
             <TextView
                 android:id="@+id/tvTitle"
@@ -46,19 +44,20 @@
                 android:ellipsize="end"
                 android:fontFamily="sans-serif-medium"
                 android:maxLines="2"
+                android:textColor="@color/colorTextPrimary2"
                 android:textSize="@dimen/title" />
         </FrameLayout>
 
         <TextView
             android:id="@+id/tvDescription"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_marginEnd="12dp"
             android:layout_marginStart="12dp"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
-            android:maxLines="2"
+            android:maxLines="3"
             android:textSize="@dimen/description" />
 
         <TextView
@@ -70,19 +69,7 @@
             android:layout_marginEnd="12dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="6dp"
-            android:textColor="@color/colorTextDark"
-            android:textSize="@dimen/timestamp" />
-
-        <TextView
-            android:id="@+id/tvReadMore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginStart="12dp"
-            android:text="@string/tvReadMore"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorTextPrimary"
             android:textSize="@dimen/timestamp" />
 
     </LinearLayout>

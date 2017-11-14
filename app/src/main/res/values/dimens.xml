@@ -7,6 +7,11 @@
     <dimen name="smDescription">13sp</dimen>
     <dimen name="smTimestamp">11sp</dimen>
 
+
+    <dimen name="sourceTitle">17sp</dimen>
+    <dimen name="sourceUrl">14sp</dimen>
+
+
     <dimen name="rssSourceName">14sp</dimen>
 
     <dimen name="largeImageHeight">292dp</dimen>
@@ -14,4 +19,5 @@
     <dimen name="toTitle">16sp</dimen>
 
     <dimen name="shareButtonsHeight">48dp</dimen>
+    <dimen name="reminderTime">20sp</dimen>
 </resources>

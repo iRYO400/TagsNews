@@ -123,7 +123,7 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
             public void onDrawerClosed(View drawerView) {
                 if (drawerView.getId() == R.id.drawerDetails) {
                     mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                } else if (drawerView.getId() == R.id.drawerWebView){
+                } else if (drawerView.getId() == R.id.drawerWebView) {
                     isUrlStartLoading = false;
                     mProWebView.clearHistory();
                 }
@@ -177,10 +177,10 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
         isFavorite = mDetailsPresenter.onCheckFavorites(rssItem.getPublishDate());
     }
 
+    @OnClick(R.id.btnOpenSource)
     @Override
     public void onOpenSource() {
         mFullDrawerLayout.openDrawer(findViewById(R.id.drawerWebView));
-
         if (!isUrlStartLoading) {
             mProWebView.loadUrl(mRssItem.getLink());
         }
@@ -356,9 +356,16 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
         startActivity(intent);
     }
 
+    @OnClick(R.id.btnCloseFavorites)
     @Override
     public void onBackPressed() {
-        if (mFullDrawerLayout.isDrawerOpen(findViewById(R.id.drawerDetails))) {
+        if (mFullDrawerLayout.isDrawerOpen(findViewById(R.id.drawerWebView))) {
+            if (mProWebView.canGoBack()) {
+                mProWebView.goBack();
+            } else {
+                mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerWebView));
+            }
+        } else if (mFullDrawerLayout.isDrawerOpen(findViewById(R.id.drawerDetails))) {
             mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerDetails));
             onRefreshDrawerDetails();
         } else {

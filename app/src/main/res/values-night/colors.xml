@@ -10,11 +10,12 @@
     <color name="colorTextDark">#676d73</color>
 
 
-    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorTextPrimary2">#FFFFFF</color>
 
-    <color name="colorGrey">#909090</color>
+    <color name="colorLightPrimary">#909090</color>
     <color name="colorTransBack">#6000BCD4</color>
     <color name="colorTransparent">#00000000</color>
+    <color name="colorOverlay">#78ffffff</color>
     <color name="colorGreyTransparent">#30000000</color>
 
 </resources>

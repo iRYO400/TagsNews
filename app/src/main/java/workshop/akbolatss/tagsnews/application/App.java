@@ -3,10 +3,9 @@ package workshop.akbolatss.tagsnews.application;
 import android.app.Application;
 import android.support.annotation.NonNull;
 
-import com.flurgle.blurkit.BlurKit;
 import com.orhanobut.hawk.Hawk;
 
-
+import java.io.IOException;
 
 import workshop.akbolatss.tagsnews.di.component.AppComponent;
 import workshop.akbolatss.tagsnews.di.component.DaggerAppComponent;
@@ -26,7 +25,12 @@ public class App extends Application {
                 .appModule(new AppModule(getApplicationContext(), BASE_URL))
                 .build();
 
-        BlurKit.init(this);
+
+//        try {
+//            Reservoir.init(this, 2048);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         Hawk.init(getApplicationContext()).build();
     }

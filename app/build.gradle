@@ -12,13 +12,15 @@ android {
         applicationId "workshop.akbolatss.tagsnews"
         minSdkVersion 22
         targetSdkVersion 26
-        versionCode 9
-        versionName "1.7.0"
+        versionCode 11
+        versionName "1.7.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        renderscriptTargetApi 24 //for blurKit
-        renderscriptSupportModeEnabled true //for blurKit
-
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
     }
     buildTypes {
         release {
@@ -31,6 +33,9 @@ android {
         maven { url "https://jitpack.io" }
         maven {
             url "https://maven.google.com"
+        }
+        maven {
+            url 'https://dl.bintray.com/kishanvaghela/maven/'
         }
     }
 
@@ -49,12 +54,13 @@ dependencies {
     compile "com.android.support:design:$androidSupportLibVersion"
     compile "com.android.support:recyclerview-v7:$androidSupportLibVersion"
     compile "com.android.support:cardview-v7:$androidSupportLibVersion"
-    compile 'com.google.firebase:firebase-ads:11.0.2'
+    compile 'com.google.firebase:firebase-ads:11.4.2'
 
-    compile 'com.github.vic797:prowebview:-SNAPSHOT'
+    // ProWebView
+    compile 'com.github.vic797:prowebview:1.1'
 
-//    compile 'com.wonderkiln:blurkit:1.0.0'
-
+//    compile 'com.anupcowkur:reservoir:3.1.0'
+//    compile 'org.afinal.simplecache:a-simple-cache:1.0'
     // Blended Background
 //    compile 'com.github.alxgrk.blendedbackground:blendedbackground:1.0.0'
     //Internet Connectivity
@@ -76,14 +82,16 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.+'
     compile 'com.squareup.retrofit2:converter-gson:2.+'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.+'
-    //    compile 'com.github.faruktoptas:RetrofitRssConverterFactory:0.0.2'
+
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
     //Dagger 2
-    provided 'com.google.dagger:dagger-compiler:2.11'
-    compile 'com.google.dagger:dagger:2.11'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.12'
+    provided 'com.google.dagger:dagger-compiler:2.12'
+    compile 'com.google.dagger:dagger:2.12'
+
     //Butter Knife
-    compile 'com.jakewharton:butterknife:8.8.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.0'
+    compile 'com.jakewharton:butterknife:8.8.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

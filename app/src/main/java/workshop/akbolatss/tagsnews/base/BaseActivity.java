@@ -11,10 +11,6 @@ import butterknife.Unbinder;
 import workshop.akbolatss.tagsnews.application.App;
 import workshop.akbolatss.tagsnews.di.component.AppComponent;
 
-/**
- * Created by AkbolatSS on 08.08.2017.
- */
-
 public abstract class BaseActivity extends AppCompatActivity {
 
     private Unbinder unbinder;

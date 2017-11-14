@@ -37,7 +37,7 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif"
             android:text="10:55 PM"
-            android:textSize="24sp" />
+            android:textSize="@dimen/reminderTime" />
 
         <ImageView
             android:id="@+id/imgOptions"

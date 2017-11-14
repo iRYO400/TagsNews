@@ -33,15 +33,15 @@ public class NewsPresenter extends BasePresenter<NewsView> {
     public void onLoadNews() {
         getView().onShowLoading();
 
+
         mApiService.getRss(getUrl())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterSuccess(new Consumer<RssFeed>() {
                     @Override
                     public void accept(RssFeed rssFeed) throws Exception {
-//                        Cache.give(rssFeed)
-//                                .build()
-//                                .getNow();
+//                        Reservoir.putUsingObservable("ASD", rssFeed);
+//                        Log.d("TAG", "doAfterSuccess " + Reservoir.contains("ASD"));
                     }
                 })
                 .subscribe(new DisposableSingleObserver<RssFeed>() {
@@ -57,5 +57,6 @@ public class NewsPresenter extends BasePresenter<NewsView> {
                         getView().onShowError();
                     }
                 });
+
     }
 }

@@ -16,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -115,6 +116,9 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     @BindView(R.id.drawerBack)
     protected View rootView;
 
+    @BindView(R.id.drawerDetails)
+    protected View detailsView;
+
     @BindView(R.id.webView)
     protected ProWebView mProWebView;
     private boolean isUrlStartLoading; // For preloading when Wi-Fi is connected
@@ -146,12 +150,16 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
 
         mProWebView.setActivity(this);
 
-
         mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mFullDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-                rootView.setX(slideOffset * -100);
+                if (drawerView.getId() == detailsView.getId()) {
+                    rootView.setX(slideOffset * -100);
+                }
+                if (drawerView.getId() == R.id.drawerWebView){
+                    detailsView.setX(slideOffset * -100);
+                }
             }
 
             @Override
@@ -169,6 +177,7 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
                 } else if (drawerView.getId() == R.id.drawerWebView){
                     isUrlStartLoading = false;
                     mProWebView.clearHistory();
+                    mProWebView.loadUrl("about:blank");
                 }
                 mToolbar.getMenu().findItem(R.id.mAdd2Favorites).setIcon(R.drawable.ic_favorite_border_24dp);
             }
@@ -207,7 +216,32 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     @Override
     protected void onDestroy() {
         mAdView.destroy();
+        mProWebView.destroy();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mProWebView.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mProWebView.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        mProWebView.onRequestPermissionResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mProWebView.onSavedInstanceState(outState);
     }
 
     @Override

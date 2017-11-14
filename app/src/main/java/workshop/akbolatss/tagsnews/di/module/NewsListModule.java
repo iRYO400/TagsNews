@@ -17,7 +17,8 @@ public class NewsListModule {
 
     @ActivityScope
     @Provides
-    NewsView provideView(){
+    NewsView provideView() {
         return mView;
     }
+
 }

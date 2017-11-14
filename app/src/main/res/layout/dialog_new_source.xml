@@ -14,5 +14,5 @@
         android:textColor="@color/colorTextPrimary"
         android:layout_marginTop="16dp"
         android:hint="@string/hintNewSource"
-        android:textColorHint="@color/colorGrey" />
+        android:textColorHint="@color/colorLightPrimary" />
 </LinearLayout>

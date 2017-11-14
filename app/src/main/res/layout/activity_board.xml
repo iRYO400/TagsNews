@@ -10,10 +10,12 @@
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:tabIndicatorColor="@color/colorAccent"
         app:tabMinWidth="96dp"
         app:tabMode="scrollable"
-        app:tabSelectedTextColor="@color/colorTextPrimary"
-        app:tabTextColor="@color/colorTextDark" />
+        app:tabSelectedTextColor="@color/colorTextPrimary2"
+        app:tabTextColor="@color/colorLightPrimary" />
 
     <FrameLayout
         android:layout_width="match_parent"
