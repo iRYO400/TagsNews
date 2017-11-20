@@ -23,13 +23,14 @@ public class RssSourceDao extends AbstractDao<RssSource, Long> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property IsActive = new Property(1, Boolean.class, "isActive", false, "IS_ACTIVE");
-        public final static Property Title = new Property(2, String.class, "title", false, "TITLE");
-        public final static Property Link = new Property(3, String.class, "link", false, "LINK");
-        public final static Property Description = new Property(4, String.class, "description", false, "DESCRIPTION");
-        public final static Property Website = new Property(5, String.class, "website", false, "WEBSITE");
-        public final static Property VisualUrl = new Property(6, String.class, "visualUrl", false, "VISUAL_URL");
-        public final static Property Subscribers = new Property(7, Integer.class, "subscribers", false, "SUBSCRIBERS");
+        public final static Property PositionIndex = new Property(1, Integer.class, "positionIndex", false, "POSITION_INDEX");
+        public final static Property IsActive = new Property(2, Boolean.class, "isActive", false, "IS_ACTIVE");
+        public final static Property Title = new Property(3, String.class, "title", false, "TITLE");
+        public final static Property Link = new Property(4, String.class, "link", false, "LINK");
+        public final static Property Description = new Property(5, String.class, "description", false, "DESCRIPTION");
+        public final static Property Website = new Property(6, String.class, "website", false, "WEBSITE");
+        public final static Property VisualUrl = new Property(7, String.class, "visualUrl", false, "VISUAL_URL");
+        public final static Property Subscribers = new Property(8, Integer.class, "subscribers", false, "SUBSCRIBERS");
     }
 
 
@@ -46,13 +47,14 @@ public class RssSourceDao extends AbstractDao<RssSource, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"RSS_SOURCE\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"IS_ACTIVE\" INTEGER," + // 1: isActive
-                "\"TITLE\" TEXT," + // 2: title
-                "\"LINK\" TEXT," + // 3: link
-                "\"DESCRIPTION\" TEXT," + // 4: description
-                "\"WEBSITE\" TEXT," + // 5: website
-                "\"VISUAL_URL\" TEXT," + // 6: visualUrl
-                "\"SUBSCRIBERS\" INTEGER);"); // 7: subscribers
+                "\"POSITION_INDEX\" INTEGER," + // 1: positionIndex
+                "\"IS_ACTIVE\" INTEGER," + // 2: isActive
+                "\"TITLE\" TEXT," + // 3: title
+                "\"LINK\" TEXT," + // 4: link
+                "\"DESCRIPTION\" TEXT," + // 5: description
+                "\"WEBSITE\" TEXT," + // 6: website
+                "\"VISUAL_URL\" TEXT," + // 7: visualUrl
+                "\"SUBSCRIBERS\" INTEGER);"); // 8: subscribers
     }
 
     /** Drops the underlying database table. */
@@ -70,39 +72,44 @@ public class RssSourceDao extends AbstractDao<RssSource, Long> {
             stmt.bindLong(1, id);
         }
  
+        Integer positionIndex = entity.getPositionIndex();
+        if (positionIndex != null) {
+            stmt.bindLong(2, positionIndex);
+        }
+ 
         Boolean isActive = entity.getIsActive();
         if (isActive != null) {
-            stmt.bindLong(2, isActive ? 1L: 0L);
+            stmt.bindLong(3, isActive ? 1L: 0L);
         }
  
         String title = entity.getTitle();
         if (title != null) {
-            stmt.bindString(3, title);
+            stmt.bindString(4, title);
         }
  
         String link = entity.getLink();
         if (link != null) {
-            stmt.bindString(4, link);
+            stmt.bindString(5, link);
         }
  
         String description = entity.getDescription();
         if (description != null) {
-            stmt.bindString(5, description);
+            stmt.bindString(6, description);
         }
  
         String website = entity.getWebsite();
         if (website != null) {
-            stmt.bindString(6, website);
+            stmt.bindString(7, website);
         }
  
         String visualUrl = entity.getVisualUrl();
         if (visualUrl != null) {
-            stmt.bindString(7, visualUrl);
+            stmt.bindString(8, visualUrl);
         }
  
         Integer subscribers = entity.getSubscribers();
         if (subscribers != null) {
-            stmt.bindLong(8, subscribers);
+            stmt.bindLong(9, subscribers);
         }
     }
 
@@ -115,39 +122,44 @@ public class RssSourceDao extends AbstractDao<RssSource, Long> {
             stmt.bindLong(1, id);
         }
  
+        Integer positionIndex = entity.getPositionIndex();
+        if (positionIndex != null) {
+            stmt.bindLong(2, positionIndex);
+        }
+ 
         Boolean isActive = entity.getIsActive();
         if (isActive != null) {
-            stmt.bindLong(2, isActive ? 1L: 0L);
+            stmt.bindLong(3, isActive ? 1L: 0L);
         }
  
         String title = entity.getTitle();
         if (title != null) {
-            stmt.bindString(3, title);
+            stmt.bindString(4, title);
         }
  
         String link = entity.getLink();
         if (link != null) {
-            stmt.bindString(4, link);
+            stmt.bindString(5, link);
         }
  
         String description = entity.getDescription();
         if (description != null) {
-            stmt.bindString(5, description);
+            stmt.bindString(6, description);
         }
  
         String website = entity.getWebsite();
         if (website != null) {
-            stmt.bindString(6, website);
+            stmt.bindString(7, website);
         }
  
         String visualUrl = entity.getVisualUrl();
         if (visualUrl != null) {
-            stmt.bindString(7, visualUrl);
+            stmt.bindString(8, visualUrl);
         }
  
         Integer subscribers = entity.getSubscribers();
         if (subscribers != null) {
-            stmt.bindLong(8, subscribers);
+            stmt.bindLong(9, subscribers);
         }
     }
 
@@ -160,13 +172,14 @@ public class RssSourceDao extends AbstractDao<RssSource, Long> {
     public RssSource readEntity(Cursor cursor, int offset) {
         RssSource entity = new RssSource( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0, // isActive
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // title
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // link
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // description
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // website
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // visualUrl
-            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7) // subscribers
+            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // positionIndex
+            cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0, // isActive
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // title
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // link
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // description
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // website
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // visualUrl
+            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8) // subscribers
         );
         return entity;
     }
@@ -174,13 +187,14 @@ public class RssSourceDao extends AbstractDao<RssSource, Long> {
     @Override
     public void readEntity(Cursor cursor, RssSource entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setIsActive(cursor.isNull(offset + 1) ? null : cursor.getShort(offset + 1) != 0);
-        entity.setTitle(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setLink(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setDescription(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setWebsite(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setVisualUrl(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setSubscribers(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
+        entity.setPositionIndex(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
+        entity.setIsActive(cursor.isNull(offset + 2) ? null : cursor.getShort(offset + 2) != 0);
+        entity.setTitle(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setLink(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setDescription(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setWebsite(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setVisualUrl(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setSubscribers(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
      }
     
     @Override

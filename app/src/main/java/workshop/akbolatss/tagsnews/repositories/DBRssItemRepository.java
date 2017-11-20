@@ -12,10 +12,6 @@ import workshop.akbolatss.tagsnews.repositories.source.RssFeedItem;
 import workshop.akbolatss.tagsnews.repositories.source.RssFeedItemDao;
 
 
-/**
- * Created by AkbolatSS on 15.08.2017.
- */
-
 public class DBRssItemRepository implements RssItemRepository {
 
     private DaoSession mDaoSession;
@@ -65,7 +61,6 @@ public class DBRssItemRepository implements RssItemRepository {
 //                })
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread());
-
 
         for (int i = 0; i < rssFeedItemList.size(); i++) {
             if (Objects.equals(rssFeedItemList.get(i).getPubDate(), pubDate)) {

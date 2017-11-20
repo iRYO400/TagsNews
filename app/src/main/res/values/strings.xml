@@ -33,8 +33,14 @@
     <string name="hintNewSource">feed address</string>
     <string name="tvShare">Share</string>
     <string name="fab_viewMode">View options</string>
+    <string name="fab_notifications">Notifications</string>
     <string name="fab_favorites">Bookmarks</string>
     <string name="fab_sources">Channels</string>
     <string name="tvSelectTheme">Select Theme</string>
+
+    <string name="notification_title">News for now</string>
+    <string name="notification_text">Drag down to see more</string>
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-5199160133239078/2831460635</string>
+    <!--<string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>--> //Fake
 
 </resources>

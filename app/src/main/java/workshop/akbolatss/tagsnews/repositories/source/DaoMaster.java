@@ -23,12 +23,14 @@ public class DaoMaster extends AbstractDaoMaster {
     public static void createAllTables(Database db, boolean ifNotExists) {
         RssFeedItemDao.createTable(db, ifNotExists);
         RssSourceDao.createTable(db, ifNotExists);
+        ReminderItemDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
         RssFeedItemDao.dropTable(db, ifExists);
         RssSourceDao.dropTable(db, ifExists);
+        ReminderItemDao.dropTable(db, ifExists);
     }
 
     /**
@@ -49,6 +51,7 @@ public class DaoMaster extends AbstractDaoMaster {
         super(db, SCHEMA_VERSION);
         registerDaoClass(RssFeedItemDao.class);
         registerDaoClass(RssSourceDao.class);
+        registerDaoClass(ReminderItemDao.class);
     }
 
     public DaoSession newSession() {

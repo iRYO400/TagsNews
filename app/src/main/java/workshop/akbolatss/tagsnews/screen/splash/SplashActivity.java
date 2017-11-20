@@ -13,10 +13,6 @@ import workshop.akbolatss.tagsnews.di.component.DaggerSplashComponent;
 import workshop.akbolatss.tagsnews.di.module.SplashModule;
 import workshop.akbolatss.tagsnews.screen.board.BoardActivity;
 
-/**
- * Created by AkbolatSS on 11.08.2017.
- */
-
 public class SplashActivity extends BaseActivity implements SplashView {
 
     @Inject
@@ -27,7 +23,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
         super.onViewReady(savedInstanceState, intent);
 
         DaggerSplashComponent.builder()
-                .appComponent(App.getAppComponent())
+                .appComponent(getAppComponent())
                 .splashModule(new SplashModule(this))
                 .build()
                 .inject(this);
@@ -37,7 +33,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
 
     private void initNewsSources() {
         mPresenter.onInitBaseSources();
-        new CountDownTimer(2000, 1000){
+        new CountDownTimer(1800, 1000){
             public void onTick(long millisUntilFinished) {
             }
 

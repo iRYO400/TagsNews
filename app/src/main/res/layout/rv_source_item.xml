@@ -39,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -46,17 +47,16 @@
                 android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="DTF.ru"
-                android:textSize="20sp" />
+                android:textSize="@dimen/sourceTitle" />
 
             <TextView
                 android:id="@+id/tvLink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="https://dtf.ru/all/rss" />
+                android:text="https://dtf.ru/all/rss"
+                android:textSize="@dimen/sourceUrl"/>
 
         </LinearLayout>
 

@@ -1,7 +1,6 @@
 package workshop.akbolatss.tagsnews.screen.news;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,19 +24,16 @@ import me.toptas.rssconverter.RssFeed;
 import me.toptas.rssconverter.RssItem;
 import workshop.akbolatss.tagsnews.R;
 import workshop.akbolatss.tagsnews.application.App;
+import workshop.akbolatss.tagsnews.di.component.AppComponent;
 import workshop.akbolatss.tagsnews.di.component.DaggerNewsComponent;
 import workshop.akbolatss.tagsnews.di.module.NewsListModule;
-import workshop.akbolatss.tagsnews.screen.details.DetailsActivity;
+import workshop.akbolatss.tagsnews.screen.board.BoardActivity;
 import workshop.akbolatss.tagsnews.util.Constants;
 
-import static workshop.akbolatss.tagsnews.util.Constants.INTENT_RSS_ITEM;
+public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayout.OnRefreshListener,
+        NewsListAdapter.OnRssClickInterface {
 
-/**
- * Created by AkbolatSS on 09.08.2017.
- */
-
-public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayout.OnRefreshListener, NewsListAdapter.OnRssClickInterface {
-
+    private static final String TAG = "TAG";
     @Inject
     protected NewsPresenter mPresenter;
 
@@ -50,7 +47,13 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
     protected RecyclerView mRecyclerView;
     private NewsListAdapter mNewsListAdapter;
 
+    /**
+     * RSS feed url
+     */
     private String mUrl;
+    /**
+     * Name of RSS feed
+     */
     private String mName;
 
     @Nullable
@@ -60,9 +63,10 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
         ButterKnife.bind(this, rootView);
 
         DaggerNewsComponent.builder()
-                .appComponent(App.getAppComponent())
+                .appComponent(getAppComponent())
                 .newsListModule(new NewsListModule(this))
-                .build().inject(this);
+                .build()
+                .inject(this);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -111,7 +115,6 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
         mSwipeRefresh.setRefreshing(true);
     }
 
-
     @Override
     public void onHideLoading() {
         mSwipeRefresh.setRefreshing(false);
@@ -129,9 +132,10 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
 
     @Override
     public void OnItemClick(@NonNull RssItem rssItem) {
-        Intent i = new Intent(mContext, DetailsActivity.class);
-        i.putExtra(INTENT_RSS_ITEM, rssItem);
-        startActivity(i);
+        ((BoardActivity) getActivity()).onOpenItemDetails(rssItem, mName);
+    }
 
+    public AppComponent getAppComponent() {
+        return ((App) getContext().getApplicationContext()).getAppComponent();
     }
 }

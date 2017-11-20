@@ -6,10 +6,6 @@ import me.toptas.rssconverter.RssItem;
 import workshop.akbolatss.tagsnews.base.BasePresenter;
 import workshop.akbolatss.tagsnews.repositories.DBRssItemRepository;
 
-/**
- * Created by AkbolatSS on 10.08.2017.
- */
-
 public class DetailsPresenter extends BasePresenter<DetailsView> {
 
     @Inject
@@ -30,6 +26,8 @@ public class DetailsPresenter extends BasePresenter<DetailsView> {
     }
 
     public boolean onCheckFavorites(final String pubDate) {
-        return mDbRssItemRepository.checkIfExists(pubDate);
+        boolean b = mDbRssItemRepository.checkIfExists(pubDate);
+        getView().onRefreshToolbar(b);
+        return b;
     }
 }

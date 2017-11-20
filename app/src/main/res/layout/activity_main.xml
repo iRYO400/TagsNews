@@ -1,83 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<workshop.akbolatss.tagsnews.util.FullDrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fullDrawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="workshop.akbolatss.tagsnews.screen.board.BoardActivity">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabs"
+    <include
+        android:id="@+id/drawerBack"
+        layout="@layout/activity_board"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabMinWidth="96dp"
-        app:tabMode="scrollable"
-        app:tabSelectedTextColor="@color/colorTextPrimary"
-        app:tabTextColor="@color/colorTextDark" />
+        android:layout_height="match_parent" />
 
-    <FrameLayout
+    <include
+        android:id="@+id/drawerDetails"
+        layout="@layout/activity_details"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_gravity="end" />
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewPager"
+    <LinearLayout
+        android:id="@+id/drawerWebView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp">
 
-        <com.github.clans.fab.FloatingActionMenu
-            android:id="@+id/btnFam"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:elevation="6dp"
-            fab:menu_colorNormal="@color/colorAccent"
-            fab:menu_colorPressed="@color/colorAccentDark"
-            fab:menu_colorRipple="#99FFFFFF"
-            fab:menu_fab_size="normal"
-            fab:menu_icon="@drawable/ic_settings_white_24dp"
-            fab:menu_labels_ellipsize="end"
-            fab:menu_labels_singleLine="true"
-            fab:menu_openDirection="up">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/btnFab3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_art_track_white_24dp"
-                app:fab_colorNormal="@color/colorAccent"
-                app:fab_colorPressed="@color/colorAccentDark"
-                app:fab_colorRipple="#99FFFFFF"
-                fab:fab_label="@string/fab_viewMode"
-                fab:fab_size="mini" />
+                <ImageView
+                    android:id="@+id/btnClose"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_arrow_back_24dp" />
 
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/btnFab1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_favorite_white_24dp"
-                app:fab_colorNormal="@color/colorAccent"
-                app:fab_colorPressed="@color/colorAccentDark"
-                app:fab_colorRipple="#99FFFFFF"
-                fab:fab_label="@string/fab_favorites"
-                fab:fab_size="mini" />
+                <ImageView
+                    android:id="@+id/btnBack"
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_chevron_left_24dp" />
 
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/btnFab2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_rss_feed_24dp"
-                app:fab_colorNormal="@color/colorAccent"
-                app:fab_colorPressed="@color/colorAccentDark"
-                app:fab_colorRipple="#99FFFFFF"
-                fab:fab_label="@string/fab_sources"
-                fab:fab_size="mini" />
-        </com.github.clans.fab.FloatingActionMenu>
-    </FrameLayout>
+                <ImageView
+                    android:id="@+id/btnForward"
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_chevron_right_24dp" />
 
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
-</LinearLayout>
+                <ImageView
+                    android:id="@+id/btnReload"
+                    android:layout_width="48dp"
+                    android:layout_height="56dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_refresh_24dp" />
+
+                <ImageView
+                    android:id="@+id/btnShareCurrent"
+                    android:layout_width="48dp"
+                    android:layout_height="56dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_share_24dp" />
+
+                <ImageView
+                    android:id="@+id/btnBrowser"
+                    android:layout_width="48dp"
+                    android:layout_height="56dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_open_in_browser_24dp" />
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+
+        <vcm.github.webkit.proview.ProWebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cacheMode="cacheElseNetwork"
+            app:javascriptEnabled="true"
+            app:locationEnabled="true"
+            app:locationMode="modeFine"
+            app:nestedScrollingEnabled="true" />
+
+    </LinearLayout>
+
+</workshop.akbolatss.tagsnews.util.FullDrawerLayout>

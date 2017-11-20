@@ -8,10 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-/**
- * Created by AkbolatSS on 08.08.2017.
- */
+import workshop.akbolatss.tagsnews.application.App;
+import workshop.akbolatss.tagsnews.di.component.AppComponent;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -35,6 +33,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         unbinder.unbind();
         super.onDestroy();
+    }
+
+    protected AppComponent getAppComponent() {
+        return ((App) getApplication()).getAppComponent();
     }
 
     protected abstract int getContentView();

@@ -8,10 +8,8 @@ import dagger.Component;
 import workshop.akbolatss.tagsnews.api.NewsApiService;
 import workshop.akbolatss.tagsnews.di.module.AppModule;
 import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
+import workshop.akbolatss.tagsnews.screen.reminders.ReminderService;
 
-/**
- * Created by AkbolatSS on 08.08.2017.
- */
 @Singleton
 @Component(modules = AppModule.class)
 public interface AppComponent {
@@ -21,4 +19,6 @@ public interface AppComponent {
     Context exposeContext();
 
     DaoSession exposeDaoSession();
+
+    void inject(ReminderService reminderService);
 }

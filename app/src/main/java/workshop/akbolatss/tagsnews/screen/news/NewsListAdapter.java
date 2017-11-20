@@ -19,10 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.toptas.rssconverter.RssItem;
 import workshop.akbolatss.tagsnews.R;
-
-/**
- * Created by AkbolatSS on 08.08.2017.
- */
+import workshop.akbolatss.tagsnews.screen.favorites.FavoritesActivity;
 
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHolder> {
 
@@ -123,11 +120,6 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
             if (!isTextOnly) {
                 mDescription.setText(rssItem.getDescription());
 
-                if (rssItem.getImage() != null) {
-                    Log.d("BolaDebug", "It's not null. " + rssItem.getImage());
-                } else {
-                    Log.d("BolaDebug", "NULL");
-                }
                 if (rssItem.getImage() != null) {
                     mImage.setVisibility(View.VISIBLE);
                     Picasso.with(mContext)

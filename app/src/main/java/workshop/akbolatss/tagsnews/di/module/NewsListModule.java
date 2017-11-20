@@ -5,9 +5,7 @@ import dagger.Provides;
 import workshop.akbolatss.tagsnews.di.scope.ActivityScope;
 import workshop.akbolatss.tagsnews.screen.news.NewsView;
 
-/**
- * Created by AkbolatSS on 08.08.2017.
- */
+
 @Module
 public class NewsListModule {
 
@@ -19,7 +17,8 @@ public class NewsListModule {
 
     @ActivityScope
     @Provides
-    NewsView provideView(){
+    NewsView provideView() {
         return mView;
     }
+
 }

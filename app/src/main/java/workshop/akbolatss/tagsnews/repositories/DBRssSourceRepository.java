@@ -11,10 +11,6 @@ import workshop.akbolatss.tagsnews.repositories.source.RssSource;
 import workshop.akbolatss.tagsnews.repositories.source.RssSourceDao;
 import workshop.akbolatss.tagsnews.screen.sources.FeedlyResponse;
 
-/**
- * Created by AkbolatSS on 16.08.2017.
- */
-
 public class DBRssSourceRepository implements RssSourceRepository {
 
     private DaoSession mDaoSession;
@@ -30,11 +26,19 @@ public class DBRssSourceRepository implements RssSourceRepository {
     }
 
     @Override
+    public void initDefaultSource(RssSource source) {
+        RssSourceDao rssSourceDao = mDaoSession.getRssSourceDao();
+        rssSourceDao.insert(source);
+    }
+
+    @Override
     public void addNewSource(RssSource source) {
         RssSourceDao rssSourceDao = mDaoSession.getRssSourceDao();
+        int positionIndex = (int) (rssSourceDao.queryBuilder().count() + 1);
         if (source.getLink().startsWith("feed")) {
             source.setLink(source.getLink().substring(5));
         }
+        source.setPositionIndex(positionIndex);
         rssSourceDao.insert(source);
     }
 
@@ -44,7 +48,18 @@ public class DBRssSourceRepository implements RssSourceRepository {
             @Override
             public List<RssSource> call() throws Exception {
                 RssSourceDao rssSourceDao = mDaoSession.getRssSourceDao();
-                return rssSourceDao.loadAll();
+                return rssSourceDao.queryBuilder().orderAsc(RssSourceDao.Properties.PositionIndex).list();
+            }
+        });
+    }
+
+    @Override
+    public Observable<List<RssSource>> getOnlyActive() {
+        return Observable.fromCallable(new Callable<List<RssSource>>() {
+            @Override
+            public List<RssSource> call() throws Exception {
+                RssSourceDao rssSourceDao = mDaoSession.getRssSourceDao();
+                return rssSourceDao.queryBuilder().where(RssSourceDao.Properties.IsActive.eq(true)).orderAsc(RssSourceDao.Properties.PositionIndex).list();
             }
         });
     }
@@ -55,24 +70,21 @@ public class DBRssSourceRepository implements RssSourceRepository {
     }
 
     @Override
-    public void updateSources(List<RssSource> sourceList) {
-
-    }
-
-    private Observable<List<RssSource>> getObservable() {
-        return Observable.fromCallable(new Callable<List<RssSource>>() {
-            @Override
-            public List<RssSource> call() throws Exception {
-                return null;
-            }
-        });
-    }
-
-
-    @Override
     public void updateSource(RssSource source) {
         RssSourceDao rssSourceDao = mDaoSession.getRssSourceDao();
         rssSourceDao.update(source);
+    }
+
+    @Override
+    public void swapSources(RssSource from, RssSource to) {
+        RssSourceDao rssSourceDao = mDaoSession.getRssSourceDao();
+        int f = from.getPositionIndex();
+        int t = to.getPositionIndex();
+
+        to.setPositionIndex(f);
+        from.setPositionIndex(t);
+        rssSourceDao.update(from);
+        rssSourceDao.update(to);
     }
 
     @Override

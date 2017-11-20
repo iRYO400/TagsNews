@@ -8,6 +8,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:nestedScrollingEnabled="false" />
+        android:nestedScrollingEnabled="false"
+        android:layout_marginBottom="56dp"/>
 
 </android.support.v4.widget.SwipeRefreshLayout>

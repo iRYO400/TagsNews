@@ -7,10 +7,6 @@ import workshop.akbolatss.tagsnews.repositories.DBRssItemRepository;
 import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
 import workshop.akbolatss.tagsnews.screen.details.DetailsView;
 
-/**
- * Created by AkbolatSS on 10.08.2017.
- */
-
 @Module
 public class DetailsModule {
 

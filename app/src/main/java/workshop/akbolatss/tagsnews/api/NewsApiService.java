@@ -12,15 +12,11 @@ import retrofit2.http.Query;
 import retrofit2.http.Url;
 import workshop.akbolatss.tagsnews.screen.sources.FeedlyResponse;
 
-/**
- * Created by AkbolatSS on 08.08.2017.
- */
-
 public interface NewsApiService {
 
     @GET
     @Xml
-    Observable<RssFeed> getRss(@Url String url);
+    Single<RssFeed> getRss(@Url String url);
 
     @GET("v3/search/feeds")
     @Json

@@ -16,13 +16,11 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import workshop.akbolatss.tagsnews.api.NewsApiService;
 import workshop.akbolatss.tagsnews.api.XmlOrJsonConverterFactory;
+import workshop.akbolatss.tagsnews.di.scope.ActivityScope;
+import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
 import workshop.akbolatss.tagsnews.repositories.source.DaoMaster;
 import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
 
-
-/**
- * Created by AkbolatSS on 08.08.2017.
- */
 @Module
 public class AppModule {
 
@@ -46,6 +44,12 @@ public class AppModule {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, "rss-db");
         Database db = helper.getWritableDb();
         return new DaoMaster(db).newSession();
+    }
+
+    @Singleton
+    @Provides
+    DBRssSourceRepository provideDbRssSourceRepository(DaoSession daoSession, NewsApiService newsApiService) {
+        return new DBRssSourceRepository(daoSession, newsApiService);
     }
 
     @Singleton

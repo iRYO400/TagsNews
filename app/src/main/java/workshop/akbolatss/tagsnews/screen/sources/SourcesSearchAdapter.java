@@ -34,7 +34,7 @@ public class SourcesSearchAdapter extends RecyclerView.Adapter<SourcesSearchAdap
         @Override
         public void onClick(View view) {
             RssSource rssSource = (RssSource) view.getTag();
-            mClickInterface.onItemCheckBoxClick(rssSource, view);
+            mClickInterface.onItemClick(rssSource, view);
         }
     };
 
@@ -65,7 +65,7 @@ public class SourcesSearchAdapter extends RecyclerView.Adapter<SourcesSearchAdap
     public void onAddItems(List<RssSource> rssSources) {
         if (rssSources != null) {
             mNewsList.clear();
-            mNewsList.addAll(rssSources); // TODO throws exception NULL POINTER
+            mNewsList.addAll(rssSources);
             notifyDataSetChanged();
         }
     }
