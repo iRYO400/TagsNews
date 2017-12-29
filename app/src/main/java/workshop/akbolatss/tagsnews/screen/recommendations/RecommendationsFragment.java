@@ -168,7 +168,6 @@ public class RecommendationsFragment extends Fragment implements SourcesView, Re
 
     @Override
     public void onAddNewSource() {
-
     }
 
     @Override

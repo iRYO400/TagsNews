@@ -109,7 +109,7 @@ public class ReminderService extends Service {
                                             builder.setAutoCancel(true)
                                                     .setDefaults(Notification.DEFAULT_ALL)
                                                     .setWhen(System.currentTimeMillis())
-                                                    .setSmallIcon(R.mipmap.ic_main)
+                                                    .setSmallIcon(R.drawable.ic_icon)
                                                     .setContentTitle(getString(R.string.notification_title))
                                                     .setContentText(getString(R.string.notification_text))
                                                     .setStyle(bigTextStyle)
@@ -146,7 +146,7 @@ public class ReminderService extends Service {
     private void onRepeatNotification() {
         AlarmManager amc = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
         Intent myIntent = new Intent(mContext, ReminderReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, mRepeateRequestCode, myIntent, 0);
+
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -159,6 +159,11 @@ public class ReminderService extends Service {
         }
         calendar.set(Calendar.HOUR_OF_DAY, mRepeatHour);
         calendar.set(Calendar.MINUTE, mRepeatMinute);
+
+        myIntent.putExtra(INTENT_REQUEST_CODE, mRepeateRequestCode);
+        myIntent.putExtra(INTENT_HOUR, mRepeatHour);
+        myIntent.putExtra(INTENT_MINUTE, mRepeatMinute);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, mRepeateRequestCode, myIntent, 0);
 
         amc.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 

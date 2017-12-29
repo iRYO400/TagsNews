@@ -52,7 +52,7 @@
 
     <string name="notification_title">Новости к этому часу</string>
     <string name="notification_text">Потяните, чтобы увидеть больше</string>
-    <string name="app_name_fine">Ваши Новости</string>
+    <string name="app_name_icon">Мои Новости</string>
     <string name="night_theme">Ночной</string>
     <string name="day_theme">Обычный</string>
     <string name="view_element">Вид</string>
@@ -66,5 +66,8 @@
     <string name="no_content_search">Ничего не найдено.</string>
     <string name="no_content_news">Не думал что такое возможно, но новостей нету.</string>
     <string name="no_content_rss">Вы не добавили RSS каналы.</string>
+    <string name="tv_no">Нет</string>
+    <string name="tv_add_channel">Добавить канал</string>
+    <string name="tv_yes">Да</string>
 
 </resources>

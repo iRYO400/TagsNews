@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import workshop.akbolatss.tagsnews.base.BasePresenter;
 import workshop.akbolatss.tagsnews.repositories.DBReminderItemRepository;
@@ -54,7 +55,11 @@ public class RemindersPresenter extends BasePresenter<RemindersView> {
         calendar.set(Calendar.HOUR_OF_DAY, rItem.getHour());
         calendar.set(Calendar.MINUTE, rItem.getMinute());
 
-        amc.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            amc.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        } else {
+            amc.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
     }
 
     public void onDeactivateNotification(ReminderItem rItem) {
@@ -87,19 +92,14 @@ public class RemindersPresenter extends BasePresenter<RemindersView> {
         mRepository.onLoadReminders()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<List<ReminderItem>>() {
+                .subscribe(new DisposableSingleObserver<List<ReminderItem>>() {
                     @Override
-                    public void onNext(@NonNull List<ReminderItem> reminderItems) {
+                    public void onSuccess(List<ReminderItem> reminderItems) {
                         getView().onShowReminders(reminderItems);
                     }
 
                     @Override
-                    public void onError(@NonNull Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
+                    public void onError(Throwable e) {
 
                     }
                 });

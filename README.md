@@ -1,27 +1,30 @@
-## TagNews
+## TagNews ##
 Минималистичное приложение для чтения RSS новостей
 
 <p align="center">
-  <img src="showcase/gif_main.gif" align="center">
+  <img src="showcase/ShowcaseGif.gif" align="center">
  </p>
 
 <a name="overview" />
 
-## Обзор
+## Обзор ##
 
-#Разрешения:
+### Разрешения: ###
+
 * Internet
 * Access Network State
 
-#Возможности приложения:
-* Быстрая загрузка RSS новостей
-* Добавление, редактирование и удаление источников
-* Добавление в закладки понравившихся новостей
-* Два режима обозревания новостей
-* Поиск новых источников по ключевым словам
-* Отсутствие рекламы
+### Возможности приложения: ###
 
-#Использованные фреймворки
+* Быстрая загрузка RSS новостей
+* Добавление, редактирование и удаление RSS каналов
+* Добавление в закладки понравившихся новостей
+* Ночной и дневной режим просмотра
+* Поиск новых каналов по ключевым словам
+* Поддержка уведомлений
+
+### Использованные фреймворки ###
+
 * Picasso
 * Dagger 2
 * Retrofit 2
@@ -33,7 +36,8 @@
 <a name="license" />
 
 ## License
-Copyright 2017 Sadvakassov Akbolat
+
+Copyright 2017 Akbolat Sadvakassov 
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

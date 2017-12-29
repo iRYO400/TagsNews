@@ -43,9 +43,6 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
     @BindView(R.id.swipeRefresh)
     protected SwipeRefreshLayout mSwipeRefresh;
 
-    @BindView(R.id.tvNoContent)
-    protected TextView mNoContent;
-
     @BindView(R.id.recyclerView)
     protected RecyclerView mRecyclerView;
     private NewsListAdapter mNewsListAdapter;
@@ -135,13 +132,6 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
 
     @Override
     public void onNoContent(boolean isEmpty) {
-        if (isEmpty) {
-            mRecyclerView.setVisibility(View.GONE);
-            mNoContent.setVisibility(View.VISIBLE);
-        } else {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mNoContent.setVisibility(View.GONE);
-        }
     }
 
     @Override

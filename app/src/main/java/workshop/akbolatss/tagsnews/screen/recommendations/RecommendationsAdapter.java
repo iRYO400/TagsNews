@@ -97,38 +97,35 @@ public class RecommendationsAdapter extends RecyclerView.Adapter<Recommendations
                     .error(R.drawable.ic_rss_feed_24dp)
                     .into(imgIcon);
 
+
             imgAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                    builder.setNegativeButton("Нет", null);
-                    if (isAdded){
-                        builder.setMessage("Удалить канал " + rssSource.getTitle() + " ?");
-                    } else {
-                        builder.setMessage("Добавить канал " + rssSource.getTitle() + " ?");
-                    }
+                    if (!isAdded) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                        builder.setNegativeButton(R.string.tv_no, null);
+                        builder.setMessage(context.getResources().getString(R.string.tv_add_channel) + " " + rssSource.getTitle() + " ?");
 
-                    builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (isAdded) {
-                                rssSource.setIsActive(true);
-                                listener.onSourceClick(rssSource, true);
-                                imgAdd.setImageResource(R.drawable.ic_add_24dp);
-                                isAdded = false;
-                            } else {
+                        builder.setPositiveButton(R.string.tv_yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
                                 rssSource.setIsActive(true);
                                 listener.onSourceClick(rssSource, false);
                                 imgAdd.setImageResource(R.drawable.ic_done_24dp);
                                 isAdded = true;
                             }
-                        }
-                    });
+                        });
 
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+//                  TODO: Instant REMOVE added RSS Channel
+//                  listener.onSourceClick(rssSource, true);
+//                  imgAdd.setImageResource(R.drawable.ic_add_24dp);
+//                  isAdded = false;
                 }
             });
+
         }
     }
 }
