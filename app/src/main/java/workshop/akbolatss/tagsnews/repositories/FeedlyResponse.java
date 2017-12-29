@@ -1,17 +1,14 @@
-package workshop.akbolatss.tagsnews.screen.sources;
+package workshop.akbolatss.tagsnews.repositories;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 import io.reactivex.Observable;
+import workshop.akbolatss.tagsnews.repositories.BaseResponse;
 import workshop.akbolatss.tagsnews.repositories.source.RssSource;
 
-/**
- * Created by AkbolatSS on 17.08.2017.
- */
-
-public class FeedlyResponse {
+public class FeedlyResponse extends BaseResponse {
 
     @SerializedName("results")
     private List<RssSource> rssSourceList;

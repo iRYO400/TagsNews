@@ -50,27 +50,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             rssSource.setPositionIndex(0);
             mRepository.initDefaultSource(rssSource);
 
-            rssSource = new RssSource();
-            rssSource.setIsActive(true);
-            rssSource.setTitle("3DNews.ru");
-            rssSource.setLink("https://3dnews.ru/software-news/rss/");
-            rssSource.setDescription("");
-            rssSource.setPositionIndex(1);
-            mRepository.initDefaultSource(rssSource);
-
-            rssSource = new RssSource();
-            rssSource.setIsActive(true);
-            rssSource.setTitle("Kanobu.ru: статьи");
-            rssSource.setLink("http://kanobu.ru/rss/best/");
-            rssSource.setDescription("Статьи от KANOBU.ru: обзоры, интервью, рецензиии");
-            rssSource.setPositionIndex(2);
-            mRepository.initDefaultSource(rssSource);
-
-            Random random = new Random();
-
             ReminderItem rItem = new ReminderItem();
             rItem.setIsActive(true);
-            rItem.setHour(9);
+            rItem.setHour(12);
             rItem.setMinute(0);
             rItem.setPM_AM("AM");
             rItem.setRequestCode(0);
@@ -80,15 +62,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
             rItem = new ReminderItem();
             rItem.setIsActive(false);
-            rItem.setHour(13);
-            rItem.setMinute(0);
-            rItem.setPM_AM("PM");
-            rItem.setRequestCode(1);
-            mReminderRepository.onAddReminder(rItem);
-
-            rItem = new ReminderItem();
-            rItem.setIsActive(false);
-            rItem.setHour(19);
+            rItem.setHour(18);
             rItem.setMinute(0);
             rItem.setPM_AM("PM");
             rItem.setRequestCode(2);

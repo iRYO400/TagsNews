@@ -5,14 +5,13 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import workshop.akbolatss.tagsnews.repositories.source.RssSource;
-import workshop.akbolatss.tagsnews.screen.sources.FeedlyResponse;
 
 
 public interface RssSourceRepository {
 
-    Observable<List<RssSource>> getAllSources();
+    Single<List<RssSource>> getAllSources();
 
-    Observable<List<RssSource>> getOnlyActive();
+    Single<List<RssSource>> getOnlyActive();
 
     Single<FeedlyResponse> getQueryResult(String query);
 

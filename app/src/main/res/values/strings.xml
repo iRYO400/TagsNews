@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">TagsNews</string>
+    <string name="app_name_fine">Your News Feed</string>
     <string name="app_sign" translatable="false">Tag News App bit.ly/</string>
     <string name="tvReadMore"><u>Read more</u></string>
     <string name="tvReadSource">Read more…</string>
@@ -13,12 +14,23 @@
     <string name="tvEdit">Edit</string>
     <string name="tvCancel">Cancel</string>
 
+    <string-array name="suggestions">
+        <item>Android</item>
+        <item>Science</item>
+        <item>Movie</item>
+        <item>Lifehack</item>
+        <item>TechCrunch</item>
+        <item>Music</item>
+        <item>IGN</item>
+        <item>New York Times</item>
+        <item>Games</item>
+    </string-array>
 
     <string name="tvSave">Save</string>
 
     <string name="fab1">Bookmarks</string>
     <string name="fab2">New source</string>
-    <string name="tvAddToFavorites">Mark</string>
+    <string name="tvAddToFavorites">Reed later</string>
     <string name="tvOptions">Additional</string>
     <string name="tvSearch">Search</string>
     <string name="hint_search">Please, enter a keyword</string>
@@ -27,6 +39,8 @@
     <string name="menuEditDescription">Add description</string>
     <string name="menuRename">Edit title</string>
     <string name="menuReaddress">Edit address</string>
+    <string name="menuReminder">Edit time</string>
+
     <string name="tvDescription">Description</string>
     <string name="tvNewAddress">New feed source</string>
     <string name="tvNewName">New title</string>
@@ -38,9 +52,24 @@
     <string name="fab_sources">Channels</string>
     <string name="tvSelectTheme">Select Theme</string>
 
-    <string name="notification_title">News for now</string>
-    <string name="notification_text">Drag down to see more</string>
-    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-5199160133239078/2831460635</string>
-    <!--<string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>--> //Fake
+    <string name="tvRecommendations">Enter a keyword to search for RSS feeds.</string>
 
+    <string name="notification_title">News by this hour</string>
+    <string name="notification_text">Drag down to see more</string>
+    <string name="night_theme">Night</string>
+    <string name="day_theme">Day</string>
+    <string name="view_element">View</string>
+    <string name="textOnly">Only text</string>
+    <string name="smallBar">Tile</string>
+    <string name="timeout_error">Connection has been timed out. Please try again.</string>
+    <string name="network_error">Network error, please try again.</string>
+    <string name="no_content_rss">You have not added RSS channels.</string>
+    <string name="unknown_error">An unknown error occurred.</string>
+    <string name="suggestions">Examples: Android, Movies, Science, Anime, Lifefly, Netflix, Dota 2...</string>
+    <string name="no_content_search">Nothing found.</string>
+    <string name="no_content_news">I did not think that this is possible, but there is no news.</string>
+    <string name="LargeBar">Large tile</string>
+
+
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>//Fake ADMOB ID
 </resources>

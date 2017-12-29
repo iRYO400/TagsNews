@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorBackground"
     tools:context="workshop.akbolatss.tagsnews.screen.reminders.RemindersActivity">
 
     <android.support.v7.widget.Toolbar
@@ -33,7 +34,7 @@
             android:layout_marginRight="8dp"
             android:src="@drawable/ic_add_24dp"
             app:fab_colorNormal="@color/colorAccent"
-            app:fab_colorPressed="@color/colorAccentDark"
+            app:fab_colorPressed="@color/colorFabPressed"
             app:fab_colorRipple="#99FFFFFF"
             app:fab_hideAnimation="@anim/fab_scale_down"
             app:fab_progress_showBackground="true"

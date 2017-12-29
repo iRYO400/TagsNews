@@ -10,7 +10,7 @@
     android:layout_marginTop="2dp"
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
-    app:cardBackgroundColor="@color/colorPrimary"
+    app:cardBackgroundColor="@color/colorCardBackground"
     app:cardCornerRadius="0dp">
 
     <LinearLayout
@@ -22,14 +22,15 @@
             android:id="@+id/cbInit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp" />
 
         <ImageView
             android:id="@+id/imgIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="8dp"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:src="@drawable/ic_rss_feed_24dp" />
@@ -38,8 +39,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -49,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
                 android:text="DTF.ru"
+                android:textColor="@color/colorTextWhite"
                 android:textSize="@dimen/sourceTitle" />
 
             <TextView
@@ -56,7 +58,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="https://dtf.ru/all/rss"
-                android:textSize="@dimen/sourceUrl"/>
+                android:textColor="@color/colorTextPrimaryDark"
+                android:textSize="@dimen/sourceUrl" />
 
         </LinearLayout>
 

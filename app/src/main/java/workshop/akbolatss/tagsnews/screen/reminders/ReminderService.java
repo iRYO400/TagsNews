@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import java.util.Calendar;
 import java.util.List;
@@ -18,11 +17,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.Observer;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -84,31 +81,25 @@ public class ReminderService extends Service {
         mRepeatHour = intent.getIntExtra(INTENT_HOUR, -1);
         mRepeatMinute = intent.getIntExtra(INTENT_MINUTE, -1);
 
-        Log.d(TAG, "Request Code " + mRepeateRequestCode + " Repeat Hour " + mRepeatHour + ":" + mRepeatMinute);
 
         mRepository.getOnlyActive()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .flatMap(new Function<List<RssSource>, ObservableSource<RssSource>>() {
+                .flatMap(new Function<List<RssSource>, Single<RssSource>>() {
                     @Override
-                    public ObservableSource<RssSource> apply(@NonNull List<RssSource> rssSources) throws Exception {
-                        return Observable.fromIterable(rssSources);
+                    public Single<RssSource> apply(@NonNull List<RssSource> rssSources) throws Exception {
+                        return Single.fromObservable(Observable.fromIterable(rssSources));
                     }
                 })
-                .subscribe(new Observer<RssSource>() {
+                .subscribe(new DisposableSingleObserver<RssSource>() {
                     @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(@NonNull final RssSource rssSource) {
+                    public void onSuccess(final RssSource rssSource) {
                         mNewsApiService.getRss(rssSource.getLink())
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(new DisposableSingleObserver<RssFeed>() {
                                     @Override
-                                    public void onSuccess(@NonNull RssFeed rssFeed) {
+                                    public void onSuccess(RssFeed rssFeed) {
                                         mCount++;
                                         if (mCount <= 4) {
                                             String text = rssSource.getTitle() + " - " + rssFeed.getItems().get(0).getTitle();
@@ -138,23 +129,17 @@ public class ReminderService extends Service {
                                     }
 
                                     @Override
-                                    public void onError(@NonNull Throwable e) {
+                                    public void onError(Throwable t) {
                                         onRepeatNotification();
                                     }
                                 });
                     }
 
                     @Override
-                    public void onError(@NonNull Throwable e) {
+                    public void onError(Throwable e) {
                         onRepeatNotification();
                     }
-
-                    @Override
-                    public void onComplete() {
-                        mContext.stopService(new Intent(mContext, ReminderService.class));
-                    }
                 });
-
         return START_STICKY;
     }
 
@@ -180,10 +165,8 @@ public class ReminderService extends Service {
         mContext.stopService(new Intent(mContext, ReminderService.class));
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
-
 }

@@ -1,10 +1,14 @@
 package workshop.akbolatss.tagsnews.screen.news;
 
+import android.util.Log;
+
+import java.io.IOException;
+import java.net.SocketTimeoutException;
+
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import me.toptas.rssconverter.RssFeed;
@@ -33,17 +37,9 @@ public class NewsPresenter extends BasePresenter<NewsView> {
     public void onLoadNews() {
         getView().onShowLoading();
 
-
         mApiService.getRss(getUrl())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doAfterSuccess(new Consumer<RssFeed>() {
-                    @Override
-                    public void accept(RssFeed rssFeed) throws Exception {
-//                        Reservoir.putUsingObservable("ASD", rssFeed);
-//                        Log.d("TAG", "doAfterSuccess " + Reservoir.contains("ASD"));
-                    }
-                })
                 .subscribe(new DisposableSingleObserver<RssFeed>() {
                     @Override
                     public void onSuccess(@NonNull RssFeed rssFeed) {
@@ -53,10 +49,15 @@ public class NewsPresenter extends BasePresenter<NewsView> {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        if (e instanceof SocketTimeoutException) {
+                            getView().onTimeout();
+                        } else if (e instanceof IOException) {
+                            getView().onNetworkError();
+                        } else {
+                            getView().onUnknownError(e.getMessage());
+                        }
                         getView().onHideLoading();
-                        getView().onShowError();
                     }
                 });
-
     }
 }

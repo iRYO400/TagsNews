@@ -2,28 +2,31 @@
 <resources>
     <color name="colorPrimary">#607D8B</color>
     <color name="colorPrimaryDark">#455A64</color>
-    <color name="colorPrimarySelected">#F1F8E9</color>
-    <color name="colorPrimarySecondary">#F1F8E9</color>
     <color name="colorAccent">#8BC34A</color>
-    <!--//#FF5252-->
-    <color name="colorAccentDark">#F1F8E9</color>
+
     <color name="colorBackground">#FFFFFF</color>
 
-    <color name="colorLightPrimary">#CFD8DC</color>
 
     <color name="colorTextPrimary">#212121</color>
     <color name="colorTextSecondary">#757575</color>
+    <color name="colorTextGreyLight">#CFD8DC</color>
+    <color name="colorTextPrimaryDark">#374248</color>
+    <color name="colorTextWhite">#FFFFFF</color>
 
-    <color name="colorTextPrimary2">#FFFFFF</color>
-    <color name="colorLightSecondary2">#CFD8DC</color>
+    <color name="colorFabPressed">#8BC34A</color>
 
-    <color name="colorWhite">#FFFFFF</color>
-    <color name="colorTransBack">#608BC34A</color>
-    <color name="colorTransparent">#00000000</color>
-    <color name="colorOverlay">#78ffffff</color>
-    <color name="colorGreyTransparent">#30000000</color>
+    <color name="colorCardBackground">#78909C</color>
+    <color name="colorCardNewsBackground">#e6e6e6</color>
+    <color name="colorCardDragged">#F1F8E9</color>
 
     <color name="color_twitter">#1dcaff</color>
     <color name="color_facebook">#3b5998</color>
     <color name="color_vk">#45668e</color>
+
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorTransBack">#608BC34A</color>
+    <color name="colorTransBack2">#60AAAAAA</color>
+    <color name="colorTransparent">#00000000</color>
+    <color name="colorOverlay">#78ffffff</color>
+    <color name="colorGreyTransparent">#30000000</color>
 </resources>

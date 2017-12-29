@@ -9,4 +9,6 @@ import workshop.akbolatss.tagsnews.repositories.source.RssSource;
 public interface BoardView extends BaseView {
 
     void onInitSources(List<RssSource> rssSources);
+
+    void onUpdateSources(List<RssSource> rssSources);
 }

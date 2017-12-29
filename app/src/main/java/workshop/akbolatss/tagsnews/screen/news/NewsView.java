@@ -2,18 +2,11 @@ package workshop.akbolatss.tagsnews.screen.news;
 
 import me.toptas.rssconverter.RssFeed;
 import workshop.akbolatss.tagsnews.base.BaseView;
+import workshop.akbolatss.tagsnews.base.ErrorView;
+import workshop.akbolatss.tagsnews.base.LoadingView;
 
-/**
- * Created by AkbolatSS on 08.08.2017.
- */
 
-public interface NewsView extends BaseView {
-
-    public void onShowLoading();
-
-    public void onHideLoading();
-
-    public void onShowError();
+public interface NewsView extends BaseView, LoadingView, ErrorView {
 
     public void onLoadNews(RssFeed rssFeed);
 

@@ -8,10 +8,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.orhanobut.hawk.Hawk;
@@ -31,9 +31,9 @@ import workshop.akbolatss.tagsnews.screen.board.BoardActivity;
 import workshop.akbolatss.tagsnews.util.Constants;
 
 public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayout.OnRefreshListener,
-        NewsListAdapter.OnRssClickInterface {
+        NewsListAdapter.OnRssClickListener {
 
-    private static final String TAG = "TAG";
+    private static final String TAG = "NewsFragment";
     @Inject
     protected NewsPresenter mPresenter;
 
@@ -42,6 +42,9 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
 
     @BindView(R.id.swipeRefresh)
     protected SwipeRefreshLayout mSwipeRefresh;
+
+    @BindView(R.id.tvNoContent)
+    protected TextView mNoContent;
 
     @BindView(R.id.recyclerView)
     protected RecyclerView mRecyclerView;
@@ -58,16 +61,27 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_news, container, false);
         ButterKnife.bind(this, rootView);
+        initDagger();
+        initDefault();
+        return rootView;
+    }
 
+    protected void initDagger() {
         DaggerNewsComponent.builder()
                 .appComponent(getAppComponent())
                 .newsListModule(new NewsListModule(this))
                 .build()
                 .inject(this);
+    }
 
+    private AppComponent getAppComponent() {
+        return ((App) getContext().getApplicationContext()).getAppComponent();
+    }
+
+    protected void initDefault() {
         Bundle bundle = getArguments();
         if (bundle != null) {
             for (int i = 0; i < 10; i++) {
@@ -77,7 +91,6 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
                 mUrl = bundle.getString(mName);
             }
         }
-        return rootView;
     }
 
     @Override
@@ -121,8 +134,14 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
     }
 
     @Override
-    public void onShowError() {
-        Toast.makeText(mContext, "Oops! Let's try again...", Toast.LENGTH_SHORT).show();
+    public void onNoContent(boolean isEmpty) {
+        if (isEmpty) {
+            mRecyclerView.setVisibility(View.GONE);
+            mNoContent.setVisibility(View.VISIBLE);
+        } else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mNoContent.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -135,7 +154,18 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
         ((BoardActivity) getActivity()).onOpenItemDetails(rssItem, mName);
     }
 
-    public AppComponent getAppComponent() {
-        return ((App) getContext().getApplicationContext()).getAppComponent();
+    @Override
+    public void onUnknownError(String errorMessage) {
+        Toast.makeText(mContext, R.string.unknown_error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onTimeout() {
+        Toast.makeText(mContext, R.string.timeout_error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onNetworkError() {
+        Toast.makeText(mContext, R.string.network_error, Toast.LENGTH_LONG).show();
     }
 }

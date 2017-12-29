@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -19,29 +20,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.toptas.rssconverter.RssItem;
 import workshop.akbolatss.tagsnews.R;
-import workshop.akbolatss.tagsnews.screen.favorites.FavoritesActivity;
 
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHolder> {
-
 
     private List<RssItem> mNewsList;
     private int mViewItemMode;
 
-    private final OnRssClickInterface mClickInterface;
+    private final OnRssClickListener mClickListener;
 
-    public NewsListAdapter(OnRssClickInterface mClickInterface, int mViewItemMode) {
+    public NewsListAdapter(OnRssClickListener mClickListener, int mViewItemMode) {
         mNewsList = new ArrayList<>();
         this.mViewItemMode = mViewItemMode;
-        this.mClickInterface = mClickInterface;
+        this.mClickListener = mClickListener;
     }
-
-    private final View.OnClickListener mInternalListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            RssItem rssItem = (RssItem) view.getTag();
-            mClickInterface.OnItemClick(rssItem);
-        }
-    };
 
     @Override
     public NewsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -65,11 +56,8 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
     @Override
     public void onBindViewHolder(NewsHolder holder, int position) {
         RssItem rssItem = mNewsList.get(position);
-        holder.bind(rssItem, mViewItemMode == 0);
+        holder.bind(rssItem, mViewItemMode == 0, mClickListener);
 
-
-        holder.mFrameLayout.setOnClickListener(mInternalListener);
-        holder.mFrameLayout.setTag(rssItem);
     }
 
     @Override
@@ -82,13 +70,12 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
 
     public void onAddItems(List<RssItem> rssItems) {
         if (rssItems != null) {
-            mNewsList.addAll(rssItems); // TODO throws exception NULL POINTER
+            mNewsList.addAll(rssItems);
             notifyDataSetChanged();
         }
     }
 
-    public interface OnRssClickInterface {
-
+    public interface OnRssClickListener {
         public void OnItemClick(RssItem rssItem);
     }
 
@@ -110,12 +97,18 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
             super(itemView);
             mContext = itemView.getContext();
             ButterKnife.bind(this, itemView);
-
         }
 
-        public void bind(RssItem rssItem, boolean isTextOnly) {
+        public void bind(final RssItem rssItem, boolean isTextOnly, final OnRssClickListener listener) {
             mTitle.setText(rssItem.getTitle());
             mTimestamp.setText(rssItem.getPublishDate());
+
+            mFrameLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.OnItemClick(rssItem);
+                }
+            });
 
             if (!isTextOnly) {
                 mDescription.setText(rssItem.getDescription());
@@ -124,6 +117,8 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
                     mImage.setVisibility(View.VISIBLE);
                     Picasso.with(mContext)
                             .load(rssItem.getImage())
+                            .memoryPolicy(MemoryPolicy.NO_CACHE)
+//                            .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
                             .placeholder(R.drawable.placeholder)
                             .into(mImage);
                 } else {

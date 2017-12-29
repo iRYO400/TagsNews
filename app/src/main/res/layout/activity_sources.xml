@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
+    android:background="@color/colorBackground"
     tools:context="workshop.akbolatss.tagsnews.screen.board.BoardActivity">
 
     <android.support.v7.widget.Toolbar
@@ -29,16 +30,19 @@
             android:layout_marginBottom="8dp"
             android:visibility="gone" />
 
+        <TextView
+            android:id="@+id/tvNoContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/no_content_rss"
+            android:visibility="gone" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewSearch"
-            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/btnFabAdd"
@@ -49,7 +53,7 @@
             android:layout_marginRight="8dp"
             android:src="@drawable/ic_add_24dp"
             app:fab_colorNormal="@color/colorAccent"
-            app:fab_colorPressed="@color/colorAccentDark"
+            app:fab_colorPressed="@color/colorFabPressed"
             app:fab_colorRipple="#99FFFFFF"
             app:fab_hideAnimation="@anim/fab_scale_down"
             app:fab_progress_showBackground="true"
@@ -61,6 +65,4 @@
             app:fab_showShadow="true"
             app:fab_size="normal" />
     </FrameLayout>
-
-
 </LinearLayout>
