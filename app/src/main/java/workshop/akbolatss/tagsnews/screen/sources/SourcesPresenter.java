@@ -1,18 +1,17 @@
 package workshop.akbolatss.tagsnews.screen.sources;
 
+import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.observers.DisposableObserver;
+import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import workshop.akbolatss.tagsnews.base.BasePresenter;
 import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
+import workshop.akbolatss.tagsnews.repositories.FeedlyResponse;
 import workshop.akbolatss.tagsnews.repositories.source.RssSource;
 
 public class SourcesPresenter extends BasePresenter<SourcesView> {
@@ -28,21 +27,28 @@ public class SourcesPresenter extends BasePresenter<SourcesView> {
         mRepository.getAllSources()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<List<RssSource>>() {
+                .subscribe(new DisposableSingleObserver<List<RssSource>>() {
                     @Override
-                    public void onNext(@NonNull List<RssSource> rssSources) {
-                        getView().onLoadSources(rssSources);
+                    public void onSuccess(List<RssSource> rssSources) {
                         getView().onHideLoading();
+                        if (rssSources.size() > 0) {
+                            getView().onLoadSources(rssSources);
+                            getView().onNoContent(false);
+                        } else {
+                            getView().onNoContent(true);
+                        }
                     }
 
                     @Override
-                    public void onError(@NonNull Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
+                    public void onError(Throwable e) {
+                        if (e instanceof SocketTimeoutException) {
+                            getView().onTimeout();
+                        } else if (e instanceof IOException) {
+                            getView().onNetworkError();
+                        } else {
+                            getView().onUnknownError(e.getMessage());
+                        }
+                        getView().onHideLoading();
                     }
                 });
     }
@@ -52,16 +58,33 @@ public class SourcesPresenter extends BasePresenter<SourcesView> {
         mRepository.getQueryResult(s)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<FeedlyResponse>() {
+                .subscribe(new DisposableSingleObserver<FeedlyResponse>() {
                     @Override
-                    public void accept(FeedlyResponse feedlyResponse) throws Exception {
-                        getView().onLoadSources(feedlyResponse.getRssSourceList());
+                    public void onSuccess(FeedlyResponse feedlyResponse) {
+                        getView().onHideLoading();
+                        if (feedlyResponse.getRssSourceList().size() > 0) {
+                            getView().onLoadSources(feedlyResponse.getRssSourceList());
+                            getView().onNoContent(false);
+                        } else {
+                            getView().onNoContent(true);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (e instanceof SocketTimeoutException) {
+                            getView().onTimeout();
+                        } else if (e instanceof IOException) {
+                            getView().onNetworkError();
+                        } else {
+                            getView().onUnknownError(e.getMessage());
+                        }
                         getView().onHideLoading();
                     }
                 });
     }
 
-    public void onSwapPositions(RssSource from, RssSource to){
+    public void onSwapPositions(RssSource from, RssSource to) {
         mRepository.swapSources(from, to);
     }
 

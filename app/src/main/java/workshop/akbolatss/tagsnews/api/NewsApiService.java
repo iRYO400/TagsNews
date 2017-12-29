@@ -4,13 +4,12 @@ package workshop.akbolatss.tagsnews.api;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import me.toptas.rssconverter.RssFeed;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
-import workshop.akbolatss.tagsnews.screen.sources.FeedlyResponse;
+import workshop.akbolatss.tagsnews.repositories.FeedlyResponse;
 
 public interface NewsApiService {
 

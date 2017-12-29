@@ -5,9 +5,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -16,11 +16,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
@@ -51,6 +49,7 @@ import workshop.akbolatss.tagsnews.screen.details.DetailsPresenter;
 import workshop.akbolatss.tagsnews.screen.details.DetailsView;
 import workshop.akbolatss.tagsnews.screen.favorites.FavoritesActivity;
 import workshop.akbolatss.tagsnews.screen.news.NewsSource;
+import workshop.akbolatss.tagsnews.screen.recommendations.RecommendationsFragment;
 import workshop.akbolatss.tagsnews.screen.reminders.RemindersActivity;
 import workshop.akbolatss.tagsnews.screen.sources.SourcesActivity;
 import workshop.akbolatss.tagsnews.util.FullDrawerLayout;
@@ -62,7 +61,7 @@ import static workshop.akbolatss.tagsnews.util.Constants.TW_PACKAGE_NAME;
 import static workshop.akbolatss.tagsnews.util.Constants.VK_PACKAGE_NAME;
 import static workshop.akbolatss.tagsnews.util.UtilityMethods.isWifiConnected;
 
-public class BoardActivity extends BaseActivity implements BoardView, DetailsView {
+public class BoardActivity extends BaseActivity implements BoardView, DetailsView, RecommendationsFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "TAG";
     @Inject
@@ -126,15 +125,12 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     private String mCurrPageUrl;
     private String mCurrPageTitle;
 
+    @BindView(R.id.adView)
     protected AdView mAdView;
 
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
-
-        mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
 
         DaggerBoardComponent.builder()
                 .appComponent(getAppComponent())
@@ -151,34 +147,43 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
         mProWebView.setActivity(this);
 
         mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
         mFullDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-                if (drawerView.getId() == detailsView.getId()) {
+                if (drawerView.getId() == R.id.drawerDetails) {
                     rootView.setX(slideOffset * -100);
+                    if (slideOffset >= 0.99f) {
+                        rootView.setVisibility(View.GONE);
+                    } else {
+                        rootView.setVisibility(View.VISIBLE);
+                    }
                 }
-                if (drawerView.getId() == R.id.drawerWebView){
+                if (drawerView.getId() == R.id.drawerWebView) {
                     detailsView.setX(slideOffset * -100);
+                    if (slideOffset >= 0.99f) {
+                        detailsView.setVisibility(View.GONE);
+                    } else {
+                        detailsView.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-                mAdView.resume();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                mAdView.pause();
-                mAdView.destroyDrawingCache();
                 if (drawerView.getId() == R.id.drawerDetails) {
                     mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                } else if (drawerView.getId() == R.id.drawerWebView){
+                    onRefreshDrawerDetails();
+                } else if (drawerView.getId() == R.id.drawerWebView) {
                     isUrlStartLoading = false;
-                    mProWebView.clearHistory();
-                    mProWebView.loadUrl("about:blank");
+                    mProWebView.showBlank();
                 }
+                mProWebView.clearCache();
                 mToolbar.getMenu().findItem(R.id.mAdd2Favorites).setIcon(R.drawable.ic_favorite_border_24dp);
             }
 
@@ -187,7 +192,7 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
             }
         });
 
-        mPresenter.onLoadSources();
+        mPresenter.onLoadSources(false);
 
         mProWebView.setProClient(new ProWebView.ProClient() {
             @Override
@@ -196,65 +201,61 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
                 mCurrPageTitle = title;
             }
         });
-    }
 
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        if (isUpdateBoardNeeded) {
-            isUpdateBoardNeeded = false;
-            mPresenter.onLoadSources();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        mAdView.pause();
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        mAdView.destroy();
-        mProWebView.destroy();
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        mProWebView.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mProWebView.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        mProWebView.onRequestPermissionResult(requestCode, permissions, grantResults);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mProWebView.onSavedInstanceState(outState);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
     @Override
     public void onInitSources(List<RssSource> rssSources) {
         List<NewsSource> fragments = new ArrayList<>();
+        fragments.add(new NewsSource("+", null, true));
         for (RssSource rssSource : rssSources) {
-            fragments.add(new NewsSource(rssSource.getTitle(), rssSource.getLink()));
+            fragments.add(new NewsSource(rssSource.getTitle(), rssSource.getLink(), false));
         }
 
         mSectionsAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), fragments);
+        mViewPager.setOffscreenPageLimit(5);
         mViewPager.setAdapter(mSectionsAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    mFabMenu.hideMenu(true);
+                } else {
+                    mFabMenu.showMenu(true);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
         mSectionsAdapter.notifyDataSetChanged();
         mTabLayout.setupWithViewPager(mViewPager);
+        try {
+            mViewPager.setCurrentItem(1);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onUpdateSources(List<RssSource> rssSources) {
+        List<NewsSource> fragments = new ArrayList<>();
+        for (RssSource rssSource : rssSources) {
+            fragments.add(new NewsSource(rssSource.getTitle(), rssSource.getLink(), false));
+        }
+        mSectionsAdapter.onUpdate(fragments);
+    }
+
+    @Override
+    public void onUpdateRSS() {
+        mPresenter.onLoadSources(true);
     }
 
     @Override
@@ -274,42 +275,53 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     }
 
     @Override
-    public void onOpenItemDetails(@NonNull RssItem rssItem, String sourceName) {
+    public void onOpenItemDetails(@NonNull final RssItem rssItem, final String sourceName) {
         mFullDrawerLayout.openDrawer(findViewById(R.id.drawerDetails));
 
         mRssItem = rssItem;
 
-        mTitle.setText(rssItem.getTitle());
-        mTimestamp.setText(rssItem.getPublishDate());
-        mDescription.setText(rssItem.getDescription());
+        mTitle.setText(mRssItem.getTitle());
+        mTimestamp.setText(mRssItem.getPublishDate());
+        mDescription.setText(mRssItem.getDescription());
 
         mSourceName.setText(sourceName);
 
-        Picasso.with(this)
-                .load(rssItem.getImage())
-                .placeholder(R.drawable.placeholder)
-                .into(mImageView);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Picasso.with(BoardActivity.this)
+                        .load(mRssItem.getImage())
+                        .error(R.drawable.placeholder)
+                        .placeholder(R.drawable.placeholder)
+                        .into(mImageView);
 
-        isFavorite = mDetailsPresenter.onCheckFavorites(rssItem.getPublishDate());
-        if (isWifiConnected(mContext)) {
-            mProWebView.loadUrl(rssItem.getLink());
-            isUrlStartLoading = true;
-        }
+                isFavorite = mDetailsPresenter.onCheckFavorites(mRssItem.getPublishDate());
+                if (isWifiConnected(mContext)) {
+                    mProWebView.deleteData();
+                    mProWebView.loadUrl(rssItem.getLink());
+                    isUrlStartLoading = true;
+                }
+            }
+        }, 400);
     }
 
     @OnClick(R.id.btnOpenSource)
     @Override
     public void onOpenSource() {
         mFullDrawerLayout.openDrawer(findViewById(R.id.drawerWebView));
-
         if (!isUrlStartLoading) {
-            mProWebView.loadUrl(mRssItem.getLink());
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mProWebView.loadUrl(mRssItem.getLink());
+                }
+            }, 300);
         }
     }
 
     @OnClick(R.id.btnClose)
     @Override
-    public void onCloseWeb(){
+    public void onCloseWeb() {
         mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerWebView));
     }
 
@@ -335,17 +347,6 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
         mProWebView.reload();
     }
 
-    @OnClick(R.id.btnShareCurrent)
-    @Override
-    public void onShareCurrPage() {
-        String messageSend = mCurrPageTitle + "\n\n" + mCurrPageUrl + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, messageSend);
-        shareIntent.setType("text/plain");
-        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.tvShare)));
-    }
-
     @OnClick(R.id.btnBrowser)
     @Override
     public void onOpenInBrowser() {
@@ -364,7 +365,6 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
         switch (item.getItemId()) {
             case android.R.id.home:
                 mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerDetails));
-                onRefreshDrawerDetails();
                 return true;
             case R.id.mAdd2Favorites:
                 if (isFavorite) {
@@ -379,6 +379,17 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @OnClick(R.id.btnShareCurrent)
+    @Override
+    public void onShareCurrPage() {
+        String messageSend = mCurrPageTitle + "\n\n" + mCurrPageUrl + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, messageSend);
+        shareIntent.setType("text/plain");
+        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.tvShare)));
     }
 
     @Override
@@ -470,14 +481,9 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     @Override
     public void onBackPressed() {
         if (mFullDrawerLayout.isDrawerOpen(findViewById(R.id.drawerWebView))) {
-            if (mProWebView.canGoBack()) {
-                mProWebView.goBack();
-            } else {
-                mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerWebView));
-            }
-        } else if (mFullDrawerLayout.isDrawerOpen(findViewById(R.id.drawerDetails))) {
+            mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerWebView));
+        } else if (mFullDrawerLayout.isDrawerOpen(detailsView)) {
             mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerDetails));
-            onRefreshDrawerDetails();
         } else {
             super.onBackPressed();
         }
@@ -543,9 +549,6 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
             Hawk.put(ITEMS_VIEW_MODE, 0);
             rGroupViewItems.check(rbTextOnly.getId());
         }
-
-
-        builder.setTitle(R.string.tvEnter);
         builder.setView(subView);
         builder.setPositiveButton(R.string.tvSave, new DialogInterface.OnClickListener() {
             @Override
@@ -580,19 +583,42 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            if (mFabMenu.isOpened()) {
-
-                Rect outRect = new Rect();
-                mFabMenu.getGlobalVisibleRect(outRect);
-
-                if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
-                    mFabMenu.close(true);
-                }
-            }
+    protected void onPostResume() {
+        super.onPostResume();
+        if (isUpdateBoardNeeded) {
+            isUpdateBoardNeeded = false;
+            mPresenter.onLoadSources(false);
         }
-        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    protected void onDestroy() {
+        mProWebView.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mProWebView.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mProWebView.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        mProWebView.onRequestPermissionResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mProWebView.onSavedInstanceState(outState);
     }
 
     @Override

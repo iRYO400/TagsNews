@@ -6,6 +6,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.orhanobut.hawk.Hawk;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -34,13 +36,16 @@ import workshop.akbolatss.tagsnews.di.module.DetailsModule;
 import workshop.akbolatss.tagsnews.di.module.FavoritesModule;
 import workshop.akbolatss.tagsnews.screen.details.DetailsPresenter;
 import workshop.akbolatss.tagsnews.screen.details.DetailsView;
+import workshop.akbolatss.tagsnews.screen.news.NewsListAdapter;
+import workshop.akbolatss.tagsnews.util.Constants;
 import workshop.akbolatss.tagsnews.util.FullDrawerLayout;
 
 import static workshop.akbolatss.tagsnews.util.Constants.FB_PACKAGE_NAME;
 import static workshop.akbolatss.tagsnews.util.Constants.TW_PACKAGE_NAME;
 import static workshop.akbolatss.tagsnews.util.Constants.VK_PACKAGE_NAME;
+import static workshop.akbolatss.tagsnews.util.UtilityMethods.isWifiConnected;
 
-public class FavoritesActivity extends BaseActivity implements FavoritesView, DetailsView, FavoritesListAdapter.OnRssClickInterface {
+public class FavoritesActivity extends BaseActivity implements FavoritesView, DetailsView, NewsListAdapter.OnRssClickListener {
 
     @Inject
     protected FavoritesPresenter mPresenter;
@@ -85,6 +90,9 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
     @BindView(R.id.drawerBack)
     protected View rootView;
 
+    @BindView(R.id.drawerDetails)
+    protected View detailsView;
+
     @BindView(R.id.webView)
     protected ProWebView mProWebView;
     private boolean isUrlStartLoading; // For preloading when Wi-Fi is connected
@@ -106,11 +114,29 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
                 .build()
                 .inject(this);
 
+        mProWebView.setActivity(this);
+
         mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
         mFullDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-                rootView.setX(slideOffset * -100);
+                if (drawerView.getId() == R.id.drawerDetails) {
+                    rootView.setX(slideOffset * -100);
+                    if (slideOffset >= 0.99f) {
+                        rootView.setVisibility(View.GONE);
+                    } else {
+                        rootView.setVisibility(View.VISIBLE);
+                    }
+                }
+                if (drawerView.getId() == R.id.drawerWebView) {
+                    detailsView.setX(slideOffset * -100);
+                    if (slideOffset >= 0.99f) {
+                        detailsView.setVisibility(View.GONE);
+                    } else {
+                        detailsView.setVisibility(View.VISIBLE);
+                    }
+                }
             }
 
             @Override
@@ -125,14 +151,13 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
                     mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 } else if (drawerView.getId() == R.id.drawerWebView) {
                     isUrlStartLoading = false;
-                    mProWebView.clearHistory();
                 }
-                mToolbar.getMenu().findItem(R.id.mAdd2Favorites).setIcon(R.drawable.ic_favorite_border_24dp);
+                mProWebView.showBlank();
+                mProWebView.clearCache();
             }
 
             @Override
             public void onDrawerStateChanged(int newState) {
-
             }
         });
 
@@ -160,21 +185,34 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
     }
 
     @Override
-    public void onOpenItemDetails(@NonNull RssItem rssItem, String sourceName) {
+    public void onOpenItemDetails(@NonNull final RssItem rssItem, String sourceName) {
         mFullDrawerLayout.openDrawer(findViewById(R.id.drawerDetails));
+
         mRssItem = rssItem;
+
         mTitle.setText(rssItem.getTitle());
         mTimestamp.setText(rssItem.getPublishDate());
         mDescription.setText(rssItem.getDescription());
 
-        mSourceName.setText("");
+        mSourceName.setText(sourceName);
 
-        Picasso.with(this)
-                .load(rssItem.getImage())
-                .placeholder(R.drawable.placeholder)
-                .into(mImageView);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Picasso.with(FavoritesActivity.this)
+                        .load(mRssItem.getImage())
+                        .error(R.drawable.placeholder)
+                        .placeholder(R.drawable.placeholder)
+                        .into(mImageView);
 
-        isFavorite = mDetailsPresenter.onCheckFavorites(rssItem.getPublishDate());
+                isFavorite = mDetailsPresenter.onCheckFavorites(mRssItem.getPublishDate());
+                if (isWifiConnected(mContext)) {
+                    mProWebView.deleteData();
+                    mProWebView.loadUrl(rssItem.getLink());
+                    isUrlStartLoading = true;
+                }
+            }
+        }, 400);
     }
 
     @OnClick(R.id.btnOpenSource)
@@ -186,11 +224,13 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
         }
     }
 
+    @OnClick(R.id.btnClose)
     @Override
     public void onCloseWeb() {
         mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerWebView));
     }
 
+    @OnClick(R.id.btnBack)
     @Override
     public void onBackWebPage() {
         if (mProWebView.canGoBack()) {
@@ -198,6 +238,7 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
         }
     }
 
+    @OnClick(R.id.btnForward)
     @Override
     public void onForwardWebPage() {
         if (mProWebView.canGoForward()) {
@@ -205,21 +246,13 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
         }
     }
 
+    @OnClick(R.id.btnReload)
     @Override
     public void onRefreshWeb() {
         mProWebView.reload();
     }
 
-    @Override
-    public void onShareCurrPage() {
-        String messageSend = mCurrPageTitle + "\n\n" + mCurrPageUrl + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, messageSend);
-        shareIntent.setType("text/plain");
-        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.tvShare)));
-    }
-
+    @OnClick(R.id.btnBrowser)
     @Override
     public void onOpenInBrowser() {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mCurrPageUrl));
@@ -268,6 +301,16 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onShareCurrPage() {
+        String messageSend = mCurrPageTitle + "\n\n" + mCurrPageUrl + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, messageSend);
+        shareIntent.setType("text/plain");
+        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.tvShare)));
     }
 
     @Override
@@ -360,14 +403,9 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
     @Override
     public void onBackPressed() {
         if (mFullDrawerLayout.isDrawerOpen(findViewById(R.id.drawerWebView))) {
-            if (mProWebView.canGoBack()) {
-                mProWebView.goBack();
-            } else {
-                mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerWebView));
-            }
+            mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerWebView));
         } else if (mFullDrawerLayout.isDrawerOpen(findViewById(R.id.drawerDetails))) {
             mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerDetails));
-            onRefreshDrawerDetails();
         } else {
             super.onBackPressed();
         }
@@ -382,8 +420,37 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
 
-        mListAdapter = new FavoritesListAdapter(this);
+        mListAdapter = new FavoritesListAdapter(this, Hawk.get(Constants.ITEMS_VIEW_MODE, 0));
         mRecyclerView.setAdapter(mListAdapter);
+    }
+
+    protected void onDestroy() {
+        mProWebView.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mProWebView.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mProWebView.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        mProWebView.onRequestPermissionResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mProWebView.onSavedInstanceState(outState);
     }
 
     @Override

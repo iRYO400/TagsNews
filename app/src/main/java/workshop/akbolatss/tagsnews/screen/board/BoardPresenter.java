@@ -8,6 +8,8 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import me.toptas.rssconverter.RssItem;
 import workshop.akbolatss.tagsnews.base.BasePresenter;
@@ -24,28 +26,22 @@ public class BoardPresenter extends BasePresenter<BoardView> {
     public BoardPresenter() {
     }
 
-    public void onLoadSources() {
+    public void onLoadSources(final boolean isUpdating) {
         mRepository.getOnlyActive()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<List<RssSource>>() {
+                .subscribe(new DisposableSingleObserver<List<RssSource>>() {
                     @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
+                    public void onSuccess(List<RssSource> rssSources) {
+                        if (isUpdating) {
+                            getView().onUpdateSources(rssSources);
+                        } else {
+                            getView().onInitSources(rssSources);
+                        }
                     }
 
                     @Override
-                    public void onNext(@NonNull List<RssSource> rssSources) {
-                        getView().onInitSources(rssSources);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
+                    public void onError(Throwable e) {
 
                     }
                 });

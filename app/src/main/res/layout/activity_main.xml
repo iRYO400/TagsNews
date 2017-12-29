@@ -27,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="end"
+        android:fitsSystemWindows="true"
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
@@ -107,12 +108,12 @@
             android:id="@+id/webView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cacheMode="cacheElseNetwork"
+            app:cacheMode="noCache"
             app:javascriptEnabled="true"
             app:locationEnabled="true"
             app:locationMode="modeFine"
-            app:nestedScrollingEnabled="true" />
+            app:nestedScrollingEnabled="true"
+            />
 
     </LinearLayout>
-
 </workshop.akbolatss.tagsnews.util.FullDrawerLayout>

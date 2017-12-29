@@ -36,6 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?android:actionBarSize"
                 android:popupTheme="@style/ToolbarStyle"
+                android:background="@color/colorTransBack2"
                 android:theme="@style/ToolbarStyle" />
 
             <LinearLayout
@@ -56,9 +57,9 @@
                     android:layout_marginBottom="6dp"
                     android:ellipsize="end"
                     android:fontFamily="sans-serif-thin"
-                    android:maxLines="2"
-                    android:text="Growing up in Michigan, I was lucky enough to"
-                    android:textColor="@color/colorTextPrimary2"
+                    android:maxLines="3"
+                    android:text=""
+                    android:textColor="@color/colorTextWhite"
                     android:textSize="@dimen/title" />
 
                 <LinearLayout
@@ -76,8 +77,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="AndroidInsider.ru"
-                        android:textColor="@color/colorTextPrimary2"
+                        android:text=""
+                        android:textColor="@color/colorTextWhite"
                         android:textSize="@dimen/rssSourceName" />
                 </LinearLayout>
 
@@ -86,7 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Sat, 05 Aug 2017 10:22:45"
-                    android:textColor="@color/colorLightSecondary2"
+                    android:textColor="@color/colorTextGreyLight"
                     android:textSize="@dimen/timestamp" />
             </LinearLayout>
         </FrameLayout>
@@ -100,7 +101,7 @@
             android:ellipsize="end"
             android:fontFamily="sans-serif"
             android:maxLines="5"
-            android:text="Growing up in Michigan, I was lucky enough to"
+            android:text=""
             android:textColor="@color/colorTextPrimary"
             android:textSize="@dimen/smDescription" />
 
@@ -112,7 +113,7 @@
             android:layout_marginEnd="12dp"
             android:layout_marginStart="12dp"
             android:background="@drawable/bg_btn"
-            android:textColor="@color/colorTextPrimary2"
+            android:textColor="@color/colorTextWhite"
             android:text="@string/tvReadSource" />
 
         <LinearLayout
@@ -158,9 +159,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="72dp"
             android:layout_marginTop="24dp"
-            ads:adSize="BANNER"
+            ads:adSize="SMART_BANNER"
             ads:adUnitId="@string/banner_ad_unit_id" />
-
 
     </LinearLayout>
 </ScrollView>

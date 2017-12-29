@@ -6,10 +6,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-/**
- * Created by AkbolatSS on 22.08.2017.
- */
-
 public abstract class SmartFragmentStatePagerAdapter<T extends Fragment> extends FragmentStatePagerAdapter {
 
     private SparseArray<T> registeredFragments = new SparseArray<T>();
@@ -31,6 +27,10 @@ public abstract class SmartFragmentStatePagerAdapter<T extends Fragment> extends
     public void destroyItem(ViewGroup container, int position, Object object) {
         registeredFragments.remove(position);
         super.destroyItem(container, position, object);
+    }
+
+    public SparseArray<T> getRegisteredFragments() {
+        return registeredFragments;
     }
 
     // Returns the fragment for the position (if instantiated)

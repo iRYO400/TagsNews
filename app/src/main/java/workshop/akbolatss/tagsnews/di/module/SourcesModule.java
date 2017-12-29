@@ -20,13 +20,13 @@ public class SourcesModule {
 
     @ActivityScope
     @Provides
-    SourcesView provideView(){
+    SourcesView provideView() {
         return mView;
     }
 
     @ActivityScope
     @Provides
-    DBRssSourceRepository provideDbRssSourceRepository(DaoSession daoSession, NewsApiService newsApiService){
+    DBRssSourceRepository provideDbRssSourceRepository(DaoSession daoSession, NewsApiService newsApiService) {
         return new DBRssSourceRepository(daoSession, newsApiService);
     }
 }

@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-
 //apply plugin: 'org.greenrobot.greendao' // only when using greendaogenerator
 
 def androidSupportLibVersion = "26.+"
@@ -12,8 +11,8 @@ android {
         applicationId "workshop.akbolatss.tagsnews"
         minSdkVersion 22
         targetSdkVersion 26
-        versionCode 11
-        versionName "1.7.7"
+        versionCode 12
+        versionName "1.8.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
@@ -43,6 +42,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.android.support:support-v4:26.1.0'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -54,17 +54,9 @@ dependencies {
     compile "com.android.support:design:$androidSupportLibVersion"
     compile "com.android.support:recyclerview-v7:$androidSupportLibVersion"
     compile "com.android.support:cardview-v7:$androidSupportLibVersion"
-    compile 'com.google.firebase:firebase-ads:11.4.2'
-
+    compile 'com.google.firebase:firebase-ads:11.8.0'
     // ProWebView
-    compile 'com.github.vic797:prowebview:1.1'
-
-//    compile 'com.anupcowkur:reservoir:3.1.0'
-//    compile 'org.afinal.simplecache:a-simple-cache:1.0'
-    // Blended Background
-//    compile 'com.github.alxgrk.blendedbackground:blendedbackground:1.0.0'
-    //Internet Connectivity
-//    compile 'com.treebo:internetavailabilitychecker:1.0.1'
+    compile 'com.github.vic797:prowebview:1.2'
 
     //GreenDAO
     compile 'org.greenrobot:greendao:3.2.2'
@@ -90,8 +82,8 @@ dependencies {
     compile 'com.google.dagger:dagger:2.12'
 
     //Butter Knife
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.0'
-    compile 'com.jakewharton:butterknife:8.8.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile 'com.jakewharton:butterknife:8.8.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

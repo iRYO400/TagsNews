@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/tvSelectTheme"
+        android:textColor="@color/colorTextWhite"
         android:textSize="@dimen/r_group_title_text_size" />
 
     <RadioGroup
@@ -27,18 +28,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/r_button_padding"
-            android:text="Night Theme"
-            android:textColor="@color/colorTextPrimary2"
-            android:textSize="@dimen/r_button_text_size"
-            android:visibility="gone" />
+            android:text="@string/night_theme"
+            android:textColor="@color/colorTextGreyLight"
+            android:textSize="@dimen/r_button_text_size" />
 
         <android.support.v7.widget.AppCompatRadioButton
             android:id="@+id/rButtonDay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/r_button_padding"
-            android:text="Day Theme"
-            android:textColor="@color/colorTextPrimary2"
+            android:text="@string/day_theme"
+            android:textColor="@color/colorTextGreyLight"
             android:textSize="@dimen/r_button_text_size" />
     </RadioGroup>
 
@@ -46,7 +46,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="View element"
+        android:text="@string/view_element"
+        android:textColor="@color/colorTextWhite"
         android:textSize="@dimen/r_group_title_text_size" />
 
     <RadioGroup
@@ -62,8 +63,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/r_button_padding"
-            android:text="Только текст"
-            android:textColor="@color/colorTextPrimary2"
+            android:text="@string/textOnly"
+            android:textColor="@color/colorTextGreyLight"
             android:textSize="@dimen/r_button_text_size" />
 
         <android.support.v7.widget.AppCompatRadioButton
@@ -71,8 +72,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/r_button_padding"
-            android:text="Малая плитка"
-            android:textColor="@color/colorTextPrimary2"
+            android:text="@string/smallBar"
+            android:textColor="@color/colorTextGreyLight"
             android:textSize="@dimen/r_button_text_size" />
 
         <android.support.v7.widget.AppCompatRadioButton
@@ -80,8 +81,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/r_button_padding"
-            android:text="Большая плитка"
-            android:textColor="@color/colorTextPrimary2"
+            android:text="@string/LargeBar"
+            android:textColor="@color/colorTextGreyLight"
             android:textSize="@dimen/r_button_text_size" />
     </RadioGroup>
 </LinearLayout>

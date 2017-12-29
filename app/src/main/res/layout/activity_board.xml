@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         app:tabIndicatorColor="@color/colorAccent"
-        app:tabMinWidth="96dp"
+        app:tabMinWidth="20dp"
         app:tabMode="scrollable"
-        app:tabSelectedTextColor="@color/colorTextPrimary2"
-        app:tabTextColor="@color/colorLightPrimary" />
+        app:tabSelectedTextColor="@color/colorTextWhite"
+        app:tabTextColor="@color/colorTextGreyLight" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
             android:layout_marginEnd="8dp"
             android:elevation="6dp"
             fab:menu_colorNormal="@color/colorAccent"
-            fab:menu_colorPressed="@color/colorAccentDark"
+            fab:menu_colorPressed="@color/colorFabPressed"
             fab:menu_colorRipple="#99FFFFFF"
             fab:menu_fab_size="normal"
             fab:menu_icon="@drawable/ic_settings_white_24dp"
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_add_alert_24dp"
                 app:fab_colorNormal="@color/colorAccent"
-                app:fab_colorPressed="@color/colorAccentDark"
+                app:fab_colorPressed="@color/colorFabPressed"
                 app:fab_colorRipple="#99FFFFFF"
                 fab:fab_label="@string/fab_notifications"
                 fab:fab_size="mini" />
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_art_track_white_24dp"
                 app:fab_colorNormal="@color/colorAccent"
-                app:fab_colorPressed="@color/colorAccentDark"
+                app:fab_colorPressed="@color/colorFabPressed"
                 app:fab_colorRipple="#99FFFFFF"
                 fab:fab_label="@string/fab_viewMode"
                 fab:fab_size="mini" />
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_favorite_white_24dp"
                 app:fab_colorNormal="@color/colorAccent"
-                app:fab_colorPressed="@color/colorAccentDark"
+                app:fab_colorPressed="@color/colorFabPressed"
                 app:fab_colorRipple="#99FFFFFF"
                 fab:fab_label="@string/fab_favorites"
                 fab:fab_size="mini" />
@@ -82,12 +82,10 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_rss_feed_24dp"
                 app:fab_colorNormal="@color/colorAccent"
-                app:fab_colorPressed="@color/colorAccentDark"
+                app:fab_colorPressed="@color/colorFabPressed"
                 app:fab_colorRipple="#99FFFFFF"
                 fab:fab_label="@string/fab_sources"
                 fab:fab_size="mini" />
         </com.github.clans.fab.FloatingActionMenu>
     </FrameLayout>
-
-
 </LinearLayout>

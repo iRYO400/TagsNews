@@ -11,19 +11,32 @@
     <string name="tvCancel">Отмена</string>
 
 
+    <string-array name="suggestions">
+        <item>Android</item>
+        <item>Наука</item>
+        <item>Кино</item>
+        <item>Лайфхак</item>
+        <item>TechCrunch</item>
+        <item>Музыка</item>
+        <item>IGN</item>
+        <item>New York Times</item>
+        <item>Игры</item>
+    </string-array>
+
     <string name="tvSave">Сохранить</string>
 
     <string name="fab1">Закладки</string>
     <string name="fab2">Новый источник</string>
-    <string name="tvAddToFavorites">В закладки</string>
+    <string name="tvAddToFavorites">Читать позже</string>
     <string name="tvOptions">Дополнительно</string>
     <string name="tvSearch">Поиск</string>
     <string name="hint_search">Введите ключевое слово</string>
     <string name="tvRename">Изменить название</string>
-    <string name="menuRemove">Удалить источник</string>
+    <string name="menuRemove">Удалить</string>
     <string name="menuEditDescription">Добавить описание</string>
     <string name="menuRename">Изменить название</string>
     <string name="menuReaddress">Изменить адрес</string>
+    <string name="menuReminder">Изменить время</string>
     <string name="tvDescription">Описание</string>
     <string name="tvNewAddress">Новый адрес</string>
     <string name="tvNewName">Новое имя</string>
@@ -35,6 +48,26 @@
     <string name="fab_sources">Каналы</string>
     <string name="tvSelectTheme">Выберите тему</string>
 
+    <string name="tvRecommendations">Введите ключевое слово для поиска RSS каналов.</string>
+
     <string name="notification_title">Новости к этому часу</string>
     <string name="notification_text">Потяните, чтобы увидеть больше</string>
+    <string name="app_name_icon">Мои Новости</string>
+    <string name="night_theme">Ночной</string>
+    <string name="day_theme">Обычный</string>
+    <string name="view_element">Вид</string>
+    <string name="textOnly">Только текст</string>
+    <string name="smallBar">Плитка</string>
+    <string name="LargeBar">Большая плитка</string>
+    <string name="unknown_error">Произошла неизвестная ошибка</string>
+    <string name="timeout_error">Превышено время ожидания. Пожалуйста, повторите.</string>
+    <string name="network_error">Ошибка сети, повторите еще раз.</string>
+    <string name="suggestions">Примеры: Android, Кино, Наука, Аниме, Лайфхак, Netflix, Dota 2...</string>
+    <string name="no_content_search">Ничего не найдено.</string>
+    <string name="no_content_news">Не думал что такое возможно, но новостей нету.</string>
+    <string name="no_content_rss">Вы не добавили RSS каналы.</string>
+    <string name="tv_no">Нет</string>
+    <string name="tv_add_channel">Добавить канал</string>
+    <string name="tv_yes">Да</string>
+
 </resources>

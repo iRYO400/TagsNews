@@ -9,7 +9,6 @@ import workshop.akbolatss.tagsnews.api.NewsApiService;
 import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
 import workshop.akbolatss.tagsnews.repositories.source.RssSource;
 import workshop.akbolatss.tagsnews.repositories.source.RssSourceDao;
-import workshop.akbolatss.tagsnews.screen.sources.FeedlyResponse;
 
 public class DBRssSourceRepository implements RssSourceRepository {
 
@@ -43,8 +42,8 @@ public class DBRssSourceRepository implements RssSourceRepository {
     }
 
     @Override
-    public Observable<List<RssSource>> getAllSources() {
-        return Observable.fromCallable(new Callable<List<RssSource>>() {
+    public Single<List<RssSource>> getAllSources() {
+        return Single.fromCallable(new Callable<List<RssSource>>() {
             @Override
             public List<RssSource> call() throws Exception {
                 RssSourceDao rssSourceDao = mDaoSession.getRssSourceDao();
@@ -54,8 +53,8 @@ public class DBRssSourceRepository implements RssSourceRepository {
     }
 
     @Override
-    public Observable<List<RssSource>> getOnlyActive() {
-        return Observable.fromCallable(new Callable<List<RssSource>>() {
+    public Single<List<RssSource>> getOnlyActive() {
+        return Single.fromCallable(new Callable<List<RssSource>>() {
             @Override
             public List<RssSource> call() throws Exception {
                 RssSourceDao rssSourceDao = mDaoSession.getRssSourceDao();

@@ -3,9 +3,6 @@ package workshop.akbolatss.tagsnews.screen.board;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.SparseArray;
-import android.view.ViewGroup;
 
 import java.util.List;
 
@@ -38,6 +35,15 @@ public class SectionsPagerAdapter extends SmartFragmentStatePagerAdapter<Fragmen
         } else {
             return sections.size();
         }
+    }
+
+
+    public void onUpdate(List<NewsSource> newSections) {
+        for (int i = getCount() - 1; i >= 1; i--) {
+            sections.remove(i);
+        }
+        sections.addAll(newSections);
+        notifyDataSetChanged();
     }
 
     @Override

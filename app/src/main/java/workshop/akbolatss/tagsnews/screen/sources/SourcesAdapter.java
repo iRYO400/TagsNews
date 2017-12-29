@@ -7,8 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,28 +28,11 @@ public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.NewsHold
 
     private List<RssSource> mSourcesList;
 
-    private final OnRssClickInterface mClickInterface;
+    private final OnRssClickListener mClickListener;
 
-    public SourcesAdapter(OnRssClickInterface mClickInterface) {
+    public SourcesAdapter(OnRssClickListener mClickListener) {
         mSourcesList = new ArrayList<>();
-        this.mClickInterface = mClickInterface;
-    }
-
-    private final View.OnClickListener mInternalListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            RssSource rssSource = (RssSource) view.getTag();
-            mClickInterface.onItemClick(rssSource, view);
-        }
-    };
-
-
-
-    public interface OnRssClickInterface {
-
-        public void onItemsSwapped(RssSource from, RssSource to);
-
-        public void onItemClick(RssSource rssSource, View view);
+        this.mClickListener = mClickListener;
     }
 
     @Override
@@ -59,13 +45,8 @@ public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.NewsHold
     @Override
     public void onBindViewHolder(NewsHolder holder, int position) {
         RssSource rssSource = mSourcesList.get(position);
-        holder.bind(rssSource);
+        holder.bind(rssSource, mClickListener);
 
-        holder.mImgOptions.setOnClickListener(mInternalListener);
-        holder.mImgOptions.setTag(rssSource);
-
-        holder.mCheckBox.setOnClickListener(mInternalListener);
-        holder.mCheckBox.setTag(rssSource);
     }
 
     @Override
@@ -85,10 +66,22 @@ public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.NewsHold
     }
 
     public void onAddItem(RssSource rssSource) {
-        if (rssSource != null){
+        if (rssSource != null) {
             mSourcesList.add(rssSource);
             notifyItemInserted(mSourcesList.size() + 1);
         }
+    }
+
+    public void onUpdateItem(RssSource rssSource, int pos) {
+        if (rssSource != null) {
+            mSourcesList.set(pos, rssSource);
+            notifyItemChanged(pos);
+        }
+    }
+
+    public void onRemoveItem(int pos) {
+        mSourcesList.remove(pos);
+        notifyItemRemoved(pos);
     }
 
     @Override
@@ -100,7 +93,16 @@ public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.NewsHold
 
     @Override
     public void onItemsMoved(int fromPosition, int toPosition) {
-        mClickInterface.onItemsSwapped(mSourcesList.get(fromPosition), mSourcesList.get(toPosition));
+        mClickListener.onItemsSwapped(mSourcesList.get(fromPosition), mSourcesList.get(toPosition));
+    }
+
+    public interface OnRssClickListener {
+
+        public void onItemsSwapped(RssSource from, RssSource to);
+
+        public void onSourceOptions(RssSource rssSource, View view, int pos);
+
+        public void onSourceSwitch(RssSource rssSource, boolean isActive, int pos);
     }
 
     public class NewsHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
@@ -111,11 +113,12 @@ public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.NewsHold
         TextView mTitle;
         @BindView(R.id.tvLink)
         TextView mLink;
+        @BindView(R.id.imgIcon)
+        ImageView mImgIcon;
         @BindView(R.id.imgOptions)
         ImageView mImgOptions;
         @BindView(R.id.cbInit)
         CheckBox mCheckBox;
-
         Context context;
 
         public NewsHolder(View itemView) {
@@ -124,15 +127,35 @@ public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.NewsHold
             context = itemView.getContext();
         }
 
-        public void bind(RssSource rssItem) {
-            mTitle.setText(rssItem.getTitle());
-            mLink.setText(rssItem.getLink());
-            mCheckBox.setChecked(rssItem.getIsActive());
+        public void bind(final RssSource rssSource, final OnRssClickListener listener) {
+            mTitle.setText(rssSource.getTitle());
+            mLink.setText(rssSource.getLink());
+            mCheckBox.setChecked(rssSource.getIsActive());
+
+            Picasso.with(context)
+                    .load(rssSource.getVisualUrl())
+                    .placeholder(R.drawable.ic_rss_feed_24dp)
+                    .error(R.drawable.ic_rss_feed_24dp)
+                    .into(mImgIcon);
+
+            mImgOptions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onSourceOptions(rssSource, v, getLayoutPosition());
+                }
+            });
+
+            mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    listener.onSourceSwitch(rssSource, isChecked, getLayoutPosition());
+                }
+            });
         }
 
         @Override
         public void onItemSelected() {
-            cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimarySecondary));
+            cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorCardDragged));
         }
 
         @Override

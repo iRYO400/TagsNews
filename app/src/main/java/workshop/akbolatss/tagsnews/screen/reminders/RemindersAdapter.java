@@ -99,7 +99,7 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.Remi
         }
 
         public void bind(ReminderItem rItem) {
-            mTime.setText(onTimeFixer(rItem.getHour()) + ":" + onTimeFixer(rItem.getMinute()) + " " + rItem.getPM_AM());
+            mTime.setText(onTimeFixer(rItem.getHour()) + ":" + onTimeFixer(rItem.getMinute()));
 
             if (rItem.getIsActive()) {
                 mCb.setChecked(true);

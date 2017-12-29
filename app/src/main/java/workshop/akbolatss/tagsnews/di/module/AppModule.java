@@ -16,7 +16,6 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import workshop.akbolatss.tagsnews.api.NewsApiService;
 import workshop.akbolatss.tagsnews.api.XmlOrJsonConverterFactory;
-import workshop.akbolatss.tagsnews.di.scope.ActivityScope;
 import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
 import workshop.akbolatss.tagsnews.repositories.source.DaoMaster;
 import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
