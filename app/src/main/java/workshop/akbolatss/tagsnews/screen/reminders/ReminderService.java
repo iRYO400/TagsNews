@@ -140,7 +140,7 @@ public class ReminderService extends Service {
                         onRepeatNotification();
                     }
                 });
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
 
     private void onRepeatNotification() {

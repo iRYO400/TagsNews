@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 //apply plugin: 'org.greenrobot.greendao' // only when using greendaogenerator
+apply plugin: 'io.fabric'
 
 def androidSupportLibVersion = "26.+"
 
@@ -11,8 +12,8 @@ android {
         applicationId "workshop.akbolatss.tagsnews"
         minSdkVersion 22
         targetSdkVersion 26
-        versionCode 12
-        versionName "1.8.0"
+        versionCode 15
+        versionName "2.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
@@ -54,9 +55,17 @@ dependencies {
     compile "com.android.support:design:$androidSupportLibVersion"
     compile "com.android.support:recyclerview-v7:$androidSupportLibVersion"
     compile "com.android.support:cardview-v7:$androidSupportLibVersion"
+
+    // Firebase
     compile 'com.google.firebase:firebase-ads:11.8.0'
+    compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+        transitive = true
+    }
+    compile 'com.google.firebase:firebase-core:11.8.0'
+
+
     // ProWebView
-    compile 'com.github.vic797:prowebview:1.2'
+    compile 'com.github.vic797:prowebview:2.0'
 
     //GreenDAO
     compile 'org.greenrobot:greendao:3.2.2'

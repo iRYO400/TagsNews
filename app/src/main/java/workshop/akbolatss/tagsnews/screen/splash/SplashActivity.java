@@ -33,7 +33,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
 
     private void initNewsSources() {
         mPresenter.onInitBaseSources();
-        new CountDownTimer(1000, 1000){
+        new CountDownTimer(300, 1000){
             public void onTick(long millisUntilFinished) {
             }
 
@@ -47,7 +47,6 @@ public class SplashActivity extends BaseActivity implements SplashView {
 
     @Override
     public void onBackPressed() {
-        //
     }
 
     @Override
