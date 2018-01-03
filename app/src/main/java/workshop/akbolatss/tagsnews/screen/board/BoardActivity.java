@@ -16,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -117,6 +118,9 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
 
     @BindView(R.id.drawerDetails)
     protected View detailsView;
+
+    @BindView(R.id.drawerWebView)
+    protected View webView;
 
     @BindView(R.id.webView)
     protected ProWebView mProWebView;
@@ -589,6 +593,18 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
             isUpdateBoardNeeded = false;
             mPresenter.onLoadSources(false);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mProWebView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mProWebView.onPause();
     }
 
     @Override

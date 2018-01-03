@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import com.orhanobut.hawk.Hawk;
 
@@ -54,7 +55,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             ReminderItem rItem = new ReminderItem();
             rItem.setIsActive(true);
             rItem.setHour(12);
-            rItem.setMinute(10);
+            rItem.setMinute(0);
             rItem.setPM_AM("AM");
             rItem.setRequestCode(0);
             mReminderRepository.onAddReminder(rItem);
@@ -79,7 +80,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         myIntent.putExtra(INTENT_MINUTE, rItem.getMinute());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, rItem.getRequestCode(), myIntent, 0);
 
-        // Set the alarm to start at 9:00 AM
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, rItem.getHour());
@@ -92,11 +92,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
     }
 
-    public boolean isFirstInit() {
-        if (Hawk.contains(Constants.FIRST_START)){
+    private boolean isFirstInit() {
+        if (Hawk.get(Constants.FIRST_START, false)){
             return true;
         } else {
-            Hawk.put(Constants.FIRST_START, 1);
+            Hawk.put(Constants.FIRST_START, true);
             return false;
         }
     }
