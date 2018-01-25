@@ -38,6 +38,7 @@ import static workshop.akbolatss.tagsnews.util.Constants.INTENT_REQUEST_CODE;
 public class ReminderService extends Service {
 
     public static final String TAG = "TAG";
+    public static final int NOTIFICATION_ID = 99999;
     public static final String NOTIFICATION_CHANNEL_ID = "workshop.akbolatss.tagsnews.channel";
     public static final String NOTIFICATION_CHANNEL_NAME = "Tags News";
     public static final String NOTIFICATION_CHANNEL_DESCRIPTION = "Description of Tags News";
@@ -55,6 +56,7 @@ public class ReminderService extends Service {
 
     private NotificationCompat.Builder builder;
     private NotificationCompat.BigTextStyle bigTextStyle;
+    private NotificationCompat.InboxStyle inboxStyle;
     private String bigText;
 
     //Buffer Data
@@ -77,6 +79,7 @@ public class ReminderService extends Service {
 
         builder = new NotificationCompat.Builder(mContext, getResources().getString(R.string.app_name));
         bigTextStyle = new NotificationCompat.BigTextStyle();
+        inboxStyle = new NotificationCompat.InboxStyle();
     }
 
     @Override
@@ -101,16 +104,14 @@ public class ReminderService extends Service {
                                         @Override
                                         public void onSuccess(RssFeed rssFeed) {
                                             String text = rssSource.getTitle() + " - " + rssFeed.getItems().get(0).getTitle();
-
-                                            bigText = text + bigText;
-                                            bigTextStyle.bigText(bigText);
+                                            inboxStyle.addLine(text);
 
                                             builder.setSmallIcon(R.drawable.ic_icon)
                                                     .setContentTitle(getString(R.string.notification_title))
                                                     .setContentText(getString(R.string.notification_text))
                                                     .setAutoCancel(true)
                                                     .setWhen(System.currentTimeMillis())
-                                                    .setStyle(bigTextStyle)
+                                                    .setStyle(inboxStyle)
                                                     .setChannelId(NOTIFICATION_CHANNEL_ID)
                                                     .setContentIntent(PendingIntent.getActivity(mContext, 0,
                                                             new Intent(mContext, SplashActivity.class), 0))
@@ -140,9 +141,8 @@ public class ReminderService extends Service {
                                                 }
                                             }
 
-                                            notificationManager.notify(rssSource.getId().intValue(), builder.build());
+                                            notificationManager.notify(NOTIFICATION_ID, builder.build());
                                         }
-
 
                                         @Override
                                         public void onError(Throwable e) {

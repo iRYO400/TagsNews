@@ -2,17 +2,17 @@ apply plugin: 'com.android.application'
 //apply plugin: 'org.greenrobot.greendao' // only when using greendaogenerator
 apply plugin: 'io.fabric'
 
-def androidSupportLibVersion = "26.+"
+def androidSupportLibVersion = "27.0.2"
 
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.3"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "workshop.akbolatss.tagsnews"
         minSdkVersion 22
-        targetSdkVersion 26
-        versionCode 19
+        targetSdkVersion 27
+        versionCode 20
         versionName "2.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -43,7 +43,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:support-v4:26.1.0'
+    implementation 'com.android.support:support-v4:27.0.2'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

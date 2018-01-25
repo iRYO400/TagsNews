@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TagsNews</string>
+    <string name="app_name">PaperFeed</string>
+    <string name="app_name_icon">PaperFeed - Мои Новости</string>
     <string name="tvReadMore"><u>Читать далее</u></string>
     <string name="tvReadSource">Читать подробности…</string>
 
@@ -52,7 +53,7 @@
 
     <string name="notification_title">Новости к этому часу</string>
     <string name="notification_text">Потяните, чтобы увидеть больше</string>
-    <string name="app_name_icon">Мои Новости</string>
+
     <string name="night_theme">Ночной</string>
     <string name="day_theme">Обычный</string>
     <string name="view_element">Вид</string>

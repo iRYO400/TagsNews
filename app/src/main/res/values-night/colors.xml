@@ -16,7 +16,7 @@
 
     <color name="colorCardBackground">#242b35</color>
     <color name="colorCardNewsBackground">#242b35</color>
-    <color name="colorCardDragged">#F1F8E9</color>
+    <color name="colorCardDragged">#8024CCCD</color>
 
     <color name="color_twitter">#1dcaff</color>
     <color name="color_facebook">#3b5998</color>

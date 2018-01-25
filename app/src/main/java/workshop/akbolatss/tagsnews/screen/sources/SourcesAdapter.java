@@ -160,7 +160,7 @@ public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.NewsHold
 
         @Override
         public void onItemClear() {
-            cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
+            cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorCardBackground));
         }
     }
 }
