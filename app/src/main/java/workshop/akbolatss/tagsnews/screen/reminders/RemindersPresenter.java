@@ -48,18 +48,14 @@ public class RemindersPresenter extends BasePresenter<RemindersView> {
         myIntent.putExtra(INTENT_REQUEST_CODE, rItem.getRequestCode());
         myIntent.putExtra(INTENT_HOUR, rItem.getHour());
         myIntent.putExtra(INTENT_MINUTE, rItem.getMinute());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, rItem.getRequestCode(), myIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, rItem.getRequestCode(), myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, rItem.getHour());
         calendar.set(Calendar.MINUTE, rItem.getMinute());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            amc.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        } else {
-            amc.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        }
+        amc.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     public void onDeactivateNotification(ReminderItem rItem) {
@@ -67,8 +63,9 @@ public class RemindersPresenter extends BasePresenter<RemindersView> {
 
         AlarmManager amc = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
         Intent myIntent = new Intent(mContext, ReminderReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, rItem.getRequestCode(), myIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, rItem.getRequestCode(), myIntent, PendingIntent.FLAG_NO_CREATE);
         amc.cancel(pendingIntent);
+        pendingIntent.cancel();
     }
 
     public void onAddReminder(ReminderItem rItem){

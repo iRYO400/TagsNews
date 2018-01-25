@@ -94,7 +94,7 @@ public class RemindersActivity extends BaseActivity implements RemindersView, Re
                             builder.setPositiveButton(R.string.tvAdd, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    ReminderItem rItem = new ReminderItem();
+//                                    ReminderItem rItem = new ReminderItem();
                                     Random random = new Random();
                                     rItem.setRequestCode(random.nextInt());
                                     if (Build.VERSION.SDK_INT >= 23) {

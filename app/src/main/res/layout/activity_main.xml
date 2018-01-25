@@ -20,7 +20,8 @@
         layout="@layout/activity_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="end" />
+        android:layout_gravity="end"
+        android:fitsSystemWindows="true" />
 
     <LinearLayout
         android:id="@+id/drawerWebView"
@@ -102,7 +103,16 @@
                     android:scaleType="center"
                     android:src="@drawable/ic_open_in_browser_24dp" />
             </LinearLayout>
+
         </android.support.v7.widget.Toolbar>
+
+        <ProgressBar
+            android:id="@+id/pageProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:max="100"
+            android:visibility="gone" />
 
         <vcm.github.webkit.proview.ProWebView
             android:id="@+id/webView"
@@ -112,8 +122,8 @@
             app:javascriptEnabled="true"
             app:locationEnabled="true"
             app:locationMode="modeFine"
-            app:nestedScrollingEnabled="true"
-            />
+            app:nestedScrollingEnabled="true" />
 
     </LinearLayout>
+
 </workshop.akbolatss.tagsnews.util.FullDrawerLayout>
