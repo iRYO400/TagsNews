@@ -58,7 +58,7 @@ public class DBRssSourceRepository implements RssSourceRepository {
             @Override
             public List<RssSource> call() throws Exception {
                 RssSourceDao rssSourceDao = mDaoSession.getRssSourceDao();
-                return rssSourceDao.queryBuilder().where(RssSourceDao.Properties.IsActive.eq(true)).orderAsc(RssSourceDao.Properties.PositionIndex).list();
+                return rssSourceDao.queryBuilder().where(RssSourceDao.Properties.IsActive.eq(true)).orderAsc(RssSourceDao.Properties.PositionIndex).limit(5).list();
             }
         });
     }

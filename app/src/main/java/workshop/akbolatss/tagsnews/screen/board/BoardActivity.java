@@ -16,12 +16,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -75,7 +75,7 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     protected DetailsPresenter mDetailsPresenter;
 
     @BindView(R.id.fullDrawer)
-    protected FullDrawerLayout mFullDrawerLayout;
+    protected FullDrawerLayout mDrawerLayout;
 
     @BindView(R.id.viewPager)
     protected ViewPager mViewPager;
@@ -114,13 +114,16 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     private RssItem mRssItem;
 
     @BindView(R.id.drawerBack)
-    protected View rootView;
+    protected View drawerBackground;
 
     @BindView(R.id.drawerDetails)
-    protected View detailsView;
+    protected View drawerDetails;
 
     @BindView(R.id.drawerWebView)
-    protected View webView;
+    protected View drawerWeb;
+
+    @BindView(R.id.pageProgress)
+    protected ProgressBar mPageProgress;
 
     @BindView(R.id.webView)
     protected ProWebView mProWebView;
@@ -150,44 +153,46 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
 
         mProWebView.setActivity(this);
 
-        mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        mProWebView.getSettings().setDomStorageEnabled(true);
+        mProWebView.setThirdPartyCookiesEnabled(true);
 
-        mFullDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, drawerDetails);
+        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 if (drawerView.getId() == R.id.drawerDetails) {
-                    rootView.setX(slideOffset * -100);
-                    if (slideOffset >= 0.99f) {
-                        rootView.setVisibility(View.GONE);
+                    drawerBackground.setX(slideOffset * -100);
+                    if (slideOffset >= 0.998f) {
+                        drawerBackground.setVisibility(View.GONE);
                     } else {
-                        rootView.setVisibility(View.VISIBLE);
+                        drawerBackground.setVisibility(View.VISIBLE);
                     }
                 }
                 if (drawerView.getId() == R.id.drawerWebView) {
-                    detailsView.setX(slideOffset * -100);
-                    if (slideOffset >= 0.99f) {
-                        detailsView.setVisibility(View.GONE);
+                    drawerDetails.setX(slideOffset * -100);
+                    if (slideOffset >= 0.998f) {
+                        drawerDetails.setVisibility(View.GONE);
                     } else {
-                        detailsView.setVisibility(View.VISIBLE);
+                        drawerDetails.setVisibility(View.VISIBLE);
                     }
                 }
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                if (drawerView.getId() == R.id.drawerDetails) {
-                    mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                if (drawerView == drawerDetails) {
+                    mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                     onRefreshDrawerDetails();
-                } else if (drawerView.getId() == R.id.drawerWebView) {
+                } else if (drawerView == drawerWeb) {
                     isUrlStartLoading = false;
-                    mProWebView.showBlank();
                 }
-                mProWebView.clearCache();
+                mProWebView.clearHistory();
+                mProWebView.showBlank();
                 mToolbar.getMenu().findItem(R.id.mAdd2Favorites).setIcon(R.drawable.ic_favorite_border_24dp);
             }
 
@@ -203,6 +208,10 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
             public void onInformationReceived(ProWebView webView, String url, String title, Bitmap favicon) {
                 mCurrPageUrl = url;
                 mCurrPageTitle = title;
+            }
+
+            @Override
+            public void onProgressChanged(ProWebView webView, int progress) {
             }
         });
 
@@ -280,7 +289,7 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
 
     @Override
     public void onOpenItemDetails(@NonNull final RssItem rssItem, final String sourceName) {
-        mFullDrawerLayout.openDrawer(findViewById(R.id.drawerDetails));
+        mDrawerLayout.openDrawer(drawerDetails);
 
         mRssItem = rssItem;
 
@@ -312,7 +321,7 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     @OnClick(R.id.btnOpenSource)
     @Override
     public void onOpenSource() {
-        mFullDrawerLayout.openDrawer(findViewById(R.id.drawerWebView));
+        mDrawerLayout.openDrawer(drawerWeb);
         if (!isUrlStartLoading) {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -326,23 +335,19 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     @OnClick(R.id.btnClose)
     @Override
     public void onCloseWeb() {
-        mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerWebView));
+        mDrawerLayout.closeDrawer(drawerWeb);
     }
 
     @OnClick(R.id.btnBack)
     @Override
     public void onBackWebPage() {
-        if (mProWebView.canGoBack()) {
-            mProWebView.goBack();
-        }
+        mProWebView.tryGoBack();
     }
 
     @OnClick(R.id.btnForward)
     @Override
     public void onForwardWebPage() {
-        if (mProWebView.canGoForward()) {
-            mProWebView.goForward();
-        }
+        mProWebView.tryGoForward();
     }
 
     @OnClick(R.id.btnReload)
@@ -368,7 +373,7 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerDetails));
+                mDrawerLayout.closeDrawer(drawerDetails);
                 return true;
             case R.id.mAdd2Favorites:
                 if (isFavorite) {
@@ -484,10 +489,10 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
 
     @Override
     public void onBackPressed() {
-        if (mFullDrawerLayout.isDrawerOpen(findViewById(R.id.drawerWebView))) {
-            mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerWebView));
-        } else if (mFullDrawerLayout.isDrawerOpen(detailsView)) {
-            mFullDrawerLayout.closeDrawer(findViewById(R.id.drawerDetails));
+        if (mDrawerLayout.isDrawerOpen(drawerWeb)) {
+            mDrawerLayout.closeDrawer(drawerWeb);
+        } else if (mDrawerLayout.isDrawerOpen(drawerDetails)) {
+            mDrawerLayout.closeDrawer(drawerDetails);
         } else {
             super.onBackPressed();
         }

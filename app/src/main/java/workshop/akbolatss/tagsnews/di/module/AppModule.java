@@ -45,6 +45,8 @@ public class AppModule {
         return new DaoMaster(db).newSession();
     }
 
+
+    // TODO: Здесь и в SourcesModule одинаковые репозитории. Чекни и убери лишний
     @Singleton
     @Provides
     DBRssSourceRepository provideDbRssSourceRepository(DaoSession daoSession, NewsApiService newsApiService) {
