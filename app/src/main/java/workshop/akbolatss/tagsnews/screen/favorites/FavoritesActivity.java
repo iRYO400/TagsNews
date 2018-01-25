@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -37,6 +36,7 @@ import workshop.akbolatss.tagsnews.di.module.FavoritesModule;
 import workshop.akbolatss.tagsnews.screen.details.DetailsPresenter;
 import workshop.akbolatss.tagsnews.screen.details.DetailsView;
 import workshop.akbolatss.tagsnews.screen.news.NewsListAdapter;
+import workshop.akbolatss.tagsnews.util.AdvancedDrawerLayout;
 import workshop.akbolatss.tagsnews.util.Constants;
 import workshop.akbolatss.tagsnews.util.FullDrawerLayout;
 
@@ -116,9 +116,9 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
 
         mProWebView.setActivity(this);
 
-        mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        mFullDrawerLayout.setDrawerLockMode(AdvancedDrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-        mFullDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+        mFullDrawerLayout.addDrawerListener(new AdvancedDrawerLayout.AdvancedDrawerLayoutListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 if (drawerView.getId() == R.id.drawerDetails) {
@@ -141,14 +141,14 @@ public class FavoritesActivity extends BaseActivity implements FavoritesView, De
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                mFullDrawerLayout.setDrawerLockMode(AdvancedDrawerLayout.LOCK_MODE_UNLOCKED);
                 mToolbar.getMenu().findItem(R.id.mAdd2Favorites).setIcon(R.drawable.ic_favorite_24dp);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 if (drawerView.getId() == R.id.drawerDetails) {
-                    mFullDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                    mFullDrawerLayout.setDrawerLockMode(AdvancedDrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 } else if (drawerView.getId() == R.id.drawerWebView) {
                     isUrlStartLoading = false;
                 }

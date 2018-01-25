@@ -463,12 +463,12 @@ public class AdvancedDrawerLayout extends ViewGroup {
      * @param listener Listener to notify when drawer events occur.
      * @see #removeDrawerListener(AdvancedDrawerLayoutListener)
      */
-    public void addDrawerListener(@NonNull AdvancedDrawerLayout.AdvancedDrawerLayoutListener listener) {
+    public void addDrawerListener(@NonNull AdvancedDrawerLayoutListener listener) {
         if (listener == null) {
             return;
         }
         if (mListeners == null) {
-            mListeners = new ArrayList<AdvancedDrawerLayoutListener>();
+            mListeners = new ArrayList<>();
         }
         mListeners.add(listener);
     }
@@ -504,7 +504,7 @@ public class AdvancedDrawerLayout extends ViewGroup {
      * @param lockMode The new lock mode for the given drawer. One of {@link #LOCK_MODE_UNLOCKED},
      *                 {@link #LOCK_MODE_LOCKED_CLOSED} or {@link #LOCK_MODE_LOCKED_OPEN}.
      */
-    public void setDrawerLockMode(@AdvancedDrawerLayout.LockMode int lockMode) {
+    public void setDrawerLockMode(@LockMode int lockMode) {
         setDrawerLockMode(lockMode, Gravity.LEFT);
         setDrawerLockMode(lockMode, Gravity.RIGHT);
     }
@@ -528,7 +528,7 @@ public class AdvancedDrawerLayout extends ViewGroup {
      * @see #LOCK_MODE_LOCKED_CLOSED
      * @see #LOCK_MODE_LOCKED_OPEN
      */
-    public void setDrawerLockMode(@AdvancedDrawerLayout.LockMode int lockMode, @AdvancedDrawerLayout.EdgeGravity int edgeGravity) {
+    public void setDrawerLockMode(@LockMode int lockMode, @EdgeGravity int edgeGravity) {
         final int absGravity = GravityCompat.getAbsoluteGravity(edgeGravity,
                 ViewCompat.getLayoutDirection(this));
 
@@ -587,7 +587,7 @@ public class AdvancedDrawerLayout extends ViewGroup {
      * @see #LOCK_MODE_LOCKED_CLOSED
      * @see #LOCK_MODE_LOCKED_OPEN
      */
-    public void setDrawerLockMode(@AdvancedDrawerLayout.LockMode int lockMode, View drawerView) {
+    public void setDrawerLockMode(@LockMode int lockMode, View drawerView) {
         if (!isDrawerView(drawerView)) {
             throw new IllegalArgumentException("View " + drawerView + " is not a "
                     + "drawer with appropriate layout_gravity");
@@ -603,8 +603,8 @@ public class AdvancedDrawerLayout extends ViewGroup {
      * @return one of {@link #LOCK_MODE_UNLOCKED}, {@link #LOCK_MODE_LOCKED_CLOSED} or
      *         {@link #LOCK_MODE_LOCKED_OPEN}.
      */
-    @AdvancedDrawerLayout.LockMode
-    public int getDrawerLockMode(@AdvancedDrawerLayout.EdgeGravity int edgeGravity) {
+    @LockMode
+    public int getDrawerLockMode(@EdgeGravity int edgeGravity) {
         int layoutDirection = ViewCompat.getLayoutDirection(this);
 
         switch (edgeGravity) {
@@ -660,7 +660,7 @@ public class AdvancedDrawerLayout extends ViewGroup {
      * @return one of {@link #LOCK_MODE_UNLOCKED}, {@link #LOCK_MODE_LOCKED_CLOSED} or
      *         {@link #LOCK_MODE_LOCKED_OPEN}.
      */
-    @AdvancedDrawerLayout.LockMode
+    @LockMode
     public int getDrawerLockMode(View drawerView) {
         if (!isDrawerView(drawerView)) {
             throw new IllegalArgumentException("View " + drawerView + " is not a drawer");
@@ -679,7 +679,7 @@ public class AdvancedDrawerLayout extends ViewGroup {
      *            drawer to set the title for.
      * @param title The title for the drawer.
      */
-    public void setDrawerTitle(@AdvancedDrawerLayout.EdgeGravity int edgeGravity, CharSequence title) {
+    public void setDrawerTitle(@EdgeGravity int edgeGravity, CharSequence title) {
         final int absGravity = GravityCompat.getAbsoluteGravity(
                 edgeGravity, ViewCompat.getLayoutDirection(this));
         if (absGravity == Gravity.LEFT) {
@@ -698,7 +698,7 @@ public class AdvancedDrawerLayout extends ViewGroup {
      * @see #setDrawerTitle(int, CharSequence)
      */
     @Nullable
-    public CharSequence getDrawerTitle(@AdvancedDrawerLayout.EdgeGravity int edgeGravity) {
+    public CharSequence getDrawerTitle(@EdgeGravity int edgeGravity) {
         final int absGravity = GravityCompat.getAbsoluteGravity(
                 edgeGravity, ViewCompat.getLayoutDirection(this));
         if (absGravity == Gravity.LEFT) {
@@ -974,7 +974,7 @@ public class AdvancedDrawerLayout extends ViewGroup {
                 continue;
             }
 
-            final AdvancedDrawerLayout.LayoutParams lp = (AdvancedDrawerLayout.LayoutParams) child.getLayoutParams();
+            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
 
             if (applyInsets) {
                 final int cgrav = GravityCompat.getAbsoluteGravity(lp.gravity, layoutDirection);
@@ -1127,7 +1127,7 @@ public class AdvancedDrawerLayout extends ViewGroup {
                 continue;
             }
 
-            final AdvancedDrawerLayout.LayoutParams lp = (AdvancedDrawerLayout.LayoutParams) child.getLayoutParams();
+            final LayoutParams lp = (LayoutParams) child.getLayoutParams();
 
             if (isContentView(child)) {
                 child.layout(lp.leftMargin, lp.topMargin,

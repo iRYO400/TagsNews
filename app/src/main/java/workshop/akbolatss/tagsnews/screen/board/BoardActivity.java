@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatRadioButton;
@@ -53,6 +52,7 @@ import workshop.akbolatss.tagsnews.screen.news.NewsSource;
 import workshop.akbolatss.tagsnews.screen.recommendations.RecommendationsFragment;
 import workshop.akbolatss.tagsnews.screen.reminders.RemindersActivity;
 import workshop.akbolatss.tagsnews.screen.sources.SourcesActivity;
+import workshop.akbolatss.tagsnews.util.AdvancedDrawerLayout;
 import workshop.akbolatss.tagsnews.util.FullDrawerLayout;
 
 import static workshop.akbolatss.tagsnews.util.Constants.FB_PACKAGE_NAME;
@@ -156,8 +156,8 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
         mProWebView.getSettings().setDomStorageEnabled(true);
         mProWebView.setThirdPartyCookiesEnabled(true);
 
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, drawerDetails);
-        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+        mDrawerLayout.setDrawerLockMode(AdvancedDrawerLayout.LOCK_MODE_LOCKED_CLOSED, drawerDetails);
+        mDrawerLayout.addDrawerListener(new AdvancedDrawerLayout.AdvancedDrawerLayoutListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 if (drawerView.getId() == R.id.drawerDetails) {
@@ -180,13 +180,13 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+                mDrawerLayout.setDrawerLockMode(AdvancedDrawerLayout.LOCK_MODE_UNLOCKED);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 if (drawerView == drawerDetails) {
-                    mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                    mDrawerLayout.setDrawerLockMode(AdvancedDrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                     onRefreshDrawerDetails();
                 } else if (drawerView == drawerWeb) {
                     isUrlStartLoading = false;

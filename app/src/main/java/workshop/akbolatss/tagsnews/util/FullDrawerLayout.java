@@ -14,8 +14,7 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FullDrawerLayout extends DrawerLayout {
-
+public class FullDrawerLayout extends AdvancedDrawerLayout {
 
     private List<View> childViews;
     private static final int MIN_DRAWER_MARGIN = 0; // dp
@@ -61,12 +60,11 @@ public class FullDrawerLayout extends DrawerLayout {
         setLayoutParams(params);
 
         // Gravity value for each drawer we've seen. Only one of each permitted.
-        int foundDrawers = 0;
+//        int foundDrawers = 0;
         final int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
             View child = getChildAt(i);
 
-//            Log.d("TAG", "Name of view " + getResources().getResourceEntryName(child.getId()));
             if (child.getVisibility() == GONE) {
                 continue;
             }
@@ -83,11 +81,11 @@ public class FullDrawerLayout extends DrawerLayout {
             } else if (isDrawerView(child)) {
                 final int childGravity =
                         getDrawerViewGravity(child) & Gravity.HORIZONTAL_GRAVITY_MASK;
-                if ((foundDrawers & childGravity) != 0) {
-                    throw new IllegalStateException("Child drawer has absolute gravity " +
-                            gravityToString(childGravity) + " but this already has a " +
-                            "drawer view along that edge");
-                }
+//                if ((foundDrawers & childGravity) != 0) {
+//                    throw new IllegalStateException("Child drawer has absolute gravity " +
+//                            gravityToString(childGravity) + " but this already has a " +
+//                            "drawer view along that edge");
+//                }
                 final int drawerWidthSpec = getChildMeasureSpec(widthMeasureSpec,
                         MIN_DRAWER_MARGIN + lp.leftMargin + lp.rightMargin,
                         lp.width);
