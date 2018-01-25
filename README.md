@@ -5,6 +5,9 @@
   <img src="showcase/ShowcaseGif.gif" align="center">
  </p>
 
+### Google Play ###
+https://play.google.com/store/apps/details?id=workshop.akbolatss.tagsnews
+
 <a name="overview" />
 
 ## Обзор ##
