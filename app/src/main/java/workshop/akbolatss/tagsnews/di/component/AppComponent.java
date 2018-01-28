@@ -20,5 +20,4 @@ public interface AppComponent {
 
     DaoSession exposeDaoSession();
 
-    void inject(ReminderService reminderService);
 }

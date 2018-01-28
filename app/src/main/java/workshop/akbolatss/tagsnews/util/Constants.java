@@ -2,6 +2,7 @@ package workshop.akbolatss.tagsnews.util;
 
 public class Constants {
 
+    public static final String DB_NAME = "tagnews.db";
     public static final String FB_PACKAGE_NAME = "com.facebook.katana";
     public static final String VK_PACKAGE_NAME = "com.vkontakte.android";
     public static final String TW_PACKAGE_NAME = "com.twitter.android";

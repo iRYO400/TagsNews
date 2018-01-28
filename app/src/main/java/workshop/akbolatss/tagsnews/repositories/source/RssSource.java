@@ -36,7 +36,7 @@ public class RssSource {
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 
-    @Generated
+    @Generated(hash = 1330183901)
     public RssSource() {
     }
 
@@ -44,17 +44,17 @@ public class RssSource {
         this.id = id;
     }
 
-    @Generated
-    public RssSource(Long id, Integer positionIndex, Boolean isActive, String title, String link, String description, String website, String visualUrl, Integer subscribers) {
+    @Generated(hash = 812238265)
+    public RssSource(Long id, Integer positionIndex, Boolean isActive, String title, String link, String description, int subscribers, String website, String visualUrl) {
         this.id = id;
         this.positionIndex = positionIndex;
         this.isActive = isActive;
         this.title = title;
         this.link = link;
         this.description = description;
+        this.subscribers = subscribers;
         this.website = website;
         this.visualUrl = visualUrl;
-        this.subscribers = subscribers;
     }
 
     public Long getId() {
@@ -126,6 +126,10 @@ public class RssSource {
     }
 
     public void setSubscribers(Integer subscribers) {
+        this.subscribers = subscribers;
+    }
+
+    public void setSubscribers(int subscribers) {
         this.subscribers = subscribers;
     }
 

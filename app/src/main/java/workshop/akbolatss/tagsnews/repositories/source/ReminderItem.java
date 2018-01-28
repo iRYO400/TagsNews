@@ -24,7 +24,7 @@ public class ReminderItem {
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 
-    @Generated
+    @Generated(hash = 499086432)
     public ReminderItem() {
     }
 
@@ -32,7 +32,7 @@ public class ReminderItem {
         this.id = id;
     }
 
-    @Generated
+    @Generated(hash = 399403805)
     public ReminderItem(Long id, Integer requestCode, Boolean isActive, Integer hour, Integer minute, String PM_AM) {
         this.id = id;
         this.requestCode = requestCode;

@@ -1,9 +1,8 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'org.greenrobot.greendao' // only when using greendaogenerator
+apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'io.fabric'
 
 def androidSupportLibVersion = "27.0.2"
-
 
 android {
     compileSdkVersion 27
@@ -42,8 +41,12 @@ android {
     packagingOptions { exclude 'META-INF/rxjava.properties' }
 }
 
+greendao {
+    targetGenDir 'src/main/java'
+    schemaVersion 1 //TODO: REMEMBER to Change when you UPGRADE TABLES
+}
+
 dependencies {
-    implementation 'com.android.support:support-v4:27.0.2'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -63,13 +66,12 @@ dependencies {
     }
     compile 'com.google.firebase:firebase-core:11.8.0'
 
-
     // ProWebView
     compile 'com.github.vic797:prowebview:2.0'
 
     //GreenDAO
     compile 'org.greenrobot:greendao:3.2.2'
-//    compile 'org.greenrobot:greendao-generator:3.2.2'
+
     //Floating Action Menu
     compile 'com.github.clans:fab:1.6.4'
     //Picasso

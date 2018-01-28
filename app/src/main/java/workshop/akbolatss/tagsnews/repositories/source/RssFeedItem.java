@@ -26,23 +26,23 @@ public class RssFeedItem {
     private Long rssSourceId;
 
     /** Used to resolve relations */
-    @Generated
+    @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
-
     /** Used for active entity operations. */
-    @Generated
+    @Generated(hash = 1492117674)
     private transient RssFeedItemDao myDao;
-
     @ToOne(joinProperty = "rssSourceId")
     private RssFeedItem rssFeedItem;
 
-    @Generated
+    @Generated(hash = 970271256)
     private transient Long rssFeedItem__resolvedKey;
+
+    
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 
-    @Generated
+    @Generated(hash = 10683631)
     public RssFeedItem() {
     }
 
@@ -50,7 +50,7 @@ public class RssFeedItem {
         this.id = id;
     }
 
-    @Generated
+    @Generated(hash = 1944678236)
     public RssFeedItem(Long id, String title, String link, String pubDate, String image, String description, Long rssSourceId) {
         this.id = id;
         this.title = title;
@@ -62,7 +62,7 @@ public class RssFeedItem {
     }
 
     /** called by internal mechanisms, do not call yourself. */
-    @Generated
+    @Generated(hash = 1027857780)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getRssFeedItemDao() : null;
@@ -125,22 +125,26 @@ public class RssFeedItem {
     }
 
     /** To-one relationship, resolved on first access. */
-    @Generated
+    @Generated(hash = 1712976274)
     public RssFeedItem getRssFeedItem() {
         Long __key = this.rssSourceId;
         if (rssFeedItem__resolvedKey == null || !rssFeedItem__resolvedKey.equals(__key)) {
-            __throwIfDetached();
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
             RssFeedItemDao targetDao = daoSession.getRssFeedItemDao();
             RssFeedItem rssFeedItemNew = targetDao.load(__key);
             synchronized (this) {
                 rssFeedItem = rssFeedItemNew;
-            	rssFeedItem__resolvedKey = __key;
+                rssFeedItem__resolvedKey = __key;
             }
         }
         return rssFeedItem;
     }
 
-    @Generated
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 1420366788)
     public void setRssFeedItem(RssFeedItem rssFeedItem) {
         synchronized (this) {
             this.rssFeedItem = rssFeedItem;
@@ -150,40 +154,39 @@ public class RssFeedItem {
     }
 
     /**
-    * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
-    * Entity must attached to an entity context.
-    */
-    @Generated
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 128553479)
     public void delete() {
-        __throwIfDetached();
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
         myDao.delete(this);
     }
 
     /**
-    * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
-    * Entity must attached to an entity context.
-    */
-    @Generated
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 713229351)
     public void update() {
-        __throwIfDetached();
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
         myDao.update(this);
     }
 
     /**
-    * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
-    * Entity must attached to an entity context.
-    */
-    @Generated
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 1942392019)
     public void refresh() {
-        __throwIfDetached();
-        myDao.refresh(this);
-    }
-
-    @Generated
-    private void __throwIfDetached() {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
         }
+        myDao.refresh(this);
     }
 
     // KEEP METHODS - put your custom methods here

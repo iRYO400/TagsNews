@@ -2,14 +2,19 @@ package workshop.akbolatss.tagsnews.di.module;
 
 import dagger.Module;
 import dagger.Provides;
+import workshop.akbolatss.tagsnews.api.NewsApiService;
 import workshop.akbolatss.tagsnews.di.scope.ActivityScope;
 import workshop.akbolatss.tagsnews.repositories.DBReminderItemRepository;
+import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
 import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
 import workshop.akbolatss.tagsnews.screen.reminders.RemindersView;
 
 @Module
 public class RemindersModule {
     private RemindersView mView;
+
+    public RemindersModule() {
+    }
 
     public RemindersModule(RemindersView mView) {
         this.mView = mView;
@@ -23,7 +28,13 @@ public class RemindersModule {
 
     @ActivityScope
     @Provides
-    DBReminderItemRepository provideDBReminderItemRepository(DaoSession daoSession){
+    DBReminderItemRepository provideDBReminderItemRepository(DaoSession daoSession) {
         return new DBReminderItemRepository(daoSession);
+    }
+
+    @ActivityScope
+    @Provides
+    DBRssSourceRepository provideDbRssSourceRepository(DaoSession daoSession, NewsApiService newsApiService) {
+        return new DBRssSourceRepository(daoSession, newsApiService);
     }
 }

@@ -75,5 +75,6 @@
     <string name="tv_add_channel">Add channel</string>
     <string name="tv_yes">Yes</string>
 
+
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>//Fake ADMOB ID
 </resources>
