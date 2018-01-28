@@ -36,6 +36,12 @@ Compact RSS-feed reader
 * Hawk 2 - fast key-value storage
 * GreenDAO - database
 
+### Setup: ###
+
+Get google-service.json file from Firebase console and put in place TagsNews/app/
+
+Guide : https://firebase.google.com/docs/android/setup
+
 <a name="license" />
 
 ## License
