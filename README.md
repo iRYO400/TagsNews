@@ -1,40 +1,40 @@
 ## PaperFeed ##
-Минималистичное приложение для чтения RSS новостей
+Compact RSS-feed reader
 
 <p align="center">
   <img src="showcase/ShowcaseGif.gif" align="center">
  </p>
 
-### Google Play ###
-https://play.google.com/store/apps/details?id=workshop.akbolatss.tagsnews
+<a href='https://play.google.com/store/apps/details?id=workshop.akbolatss.tagsnews'>
+<img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="200"/></a>
 
 <a name="overview" />
 
-## Обзор ##
+## Overview ##
 
-### Разрешения: ###
+### Permissions: ###
 
 * Internet
 * Access Network State
 
-### Возможности приложения: ###
+### Features: ###
 
-* Быстрая загрузка RSS новостей
-* Добавление, редактирование и удаление RSS каналов
-* Добавление в закладки понравившихся новостей
-* Ночной и дневной режим просмотра
-* Поиск новых каналов по ключевым словам
-* Поддержка уведомлений
+* Fast RSS loading
+* Add, edit and remove RSS-channels
+* Save interesting feed
+* Day and Night modes
+* Search channels by keywords
+* Supports Notifications
 
-### Использованные фреймворки ###
+### Used libraries/frameworks ###
 
-* Picasso
-* Dagger 2
-* Retrofit 2
-* ButterKnife
-* RxJava 2
-* Hawk 2
-* GreenDAO
+* Picasso - image loading
+* Dagger 2 - dependency injection
+* Retrofit 2 - networking
+* ButterKnife - data-binding for views
+* RxJava 2 - multithreading
+* Hawk 2 - fast key-value storage
+* GreenDAO - database
 
 <a name="license" />
 
