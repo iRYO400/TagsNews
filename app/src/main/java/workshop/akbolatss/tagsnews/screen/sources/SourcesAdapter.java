@@ -20,7 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import workshop.akbolatss.tagsnews.R;
-import workshop.akbolatss.tagsnews.repositories.source.RssSource;
+import workshop.akbolatss.tagsnews.model.dao.RssSource;
 import workshop.akbolatss.tagsnews.screen.sources.helper.ItemTouchHelperAdapter;
 import workshop.akbolatss.tagsnews.screen.sources.helper.ItemTouchHelperViewHolder;
 

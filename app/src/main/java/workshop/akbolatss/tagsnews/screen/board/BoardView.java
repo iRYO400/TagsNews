@@ -3,7 +3,7 @@ package workshop.akbolatss.tagsnews.screen.board;
 import java.util.List;
 
 import workshop.akbolatss.tagsnews.base.BaseView;
-import workshop.akbolatss.tagsnews.repositories.source.RssSource;
+import workshop.akbolatss.tagsnews.model.dao.RssSource;
 
 
 public interface BoardView extends BaseView {

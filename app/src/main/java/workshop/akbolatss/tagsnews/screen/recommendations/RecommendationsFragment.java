@@ -36,7 +36,7 @@ import workshop.akbolatss.tagsnews.application.App;
 import workshop.akbolatss.tagsnews.di.component.AppComponent;
 import workshop.akbolatss.tagsnews.di.component.DaggerSourcesComponent;
 import workshop.akbolatss.tagsnews.di.module.SourcesModule;
-import workshop.akbolatss.tagsnews.repositories.source.RssSource;
+import workshop.akbolatss.tagsnews.model.dao.RssSource;
 import workshop.akbolatss.tagsnews.screen.sources.SourcesPresenter;
 import workshop.akbolatss.tagsnews.screen.sources.SourcesView;
 

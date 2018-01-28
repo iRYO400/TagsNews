@@ -1,14 +1,13 @@
-package workshop.akbolatss.tagsnews.repositories;
+package workshop.akbolatss.tagsnews.model;
 
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import workshop.akbolatss.tagsnews.api.NewsApiService;
-import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
-import workshop.akbolatss.tagsnews.repositories.source.RssSource;
-import workshop.akbolatss.tagsnews.repositories.source.RssSourceDao;
+import workshop.akbolatss.tagsnews.model.dao.DaoSession;
+import workshop.akbolatss.tagsnews.model.dao.RssSource;
+import workshop.akbolatss.tagsnews.model.dao.RssSourceDao;
 
 public class DBRssSourceRepository implements RssSourceRepository {
 

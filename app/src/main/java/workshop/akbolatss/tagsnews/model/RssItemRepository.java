@@ -1,4 +1,4 @@
-package workshop.akbolatss.tagsnews.repositories;
+package workshop.akbolatss.tagsnews.model;
 
 import java.util.List;
 

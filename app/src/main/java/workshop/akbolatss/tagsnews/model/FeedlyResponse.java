@@ -1,12 +1,10 @@
-package workshop.akbolatss.tagsnews.repositories;
+package workshop.akbolatss.tagsnews.model;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import io.reactivex.Observable;
-import workshop.akbolatss.tagsnews.repositories.BaseResponse;
-import workshop.akbolatss.tagsnews.repositories.source.RssSource;
+import workshop.akbolatss.tagsnews.model.dao.RssSource;
 
 public class FeedlyResponse extends BaseResponse {
 

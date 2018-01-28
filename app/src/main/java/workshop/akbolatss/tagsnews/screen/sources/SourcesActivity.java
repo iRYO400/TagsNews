@@ -30,7 +30,7 @@ import workshop.akbolatss.tagsnews.R;
 import workshop.akbolatss.tagsnews.base.BaseActivity;
 import workshop.akbolatss.tagsnews.di.component.DaggerSourcesComponent;
 import workshop.akbolatss.tagsnews.di.module.SourcesModule;
-import workshop.akbolatss.tagsnews.repositories.source.RssSource;
+import workshop.akbolatss.tagsnews.model.dao.RssSource;
 import workshop.akbolatss.tagsnews.screen.sources.helper.SimpleItemTouchHelperCallback;
 
 public class SourcesActivity extends BaseActivity implements SourcesView, SourcesAdapter.OnRssClickListener {

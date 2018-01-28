@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +26,7 @@ import workshop.akbolatss.tagsnews.R;
 import workshop.akbolatss.tagsnews.base.BaseActivity;
 import workshop.akbolatss.tagsnews.di.component.DaggerRemindersComponent;
 import workshop.akbolatss.tagsnews.di.module.RemindersModule;
-import workshop.akbolatss.tagsnews.repositories.source.ReminderItem;
+import workshop.akbolatss.tagsnews.model.dao.ReminderItem;
 
 public class RemindersActivity extends BaseActivity implements RemindersView, RemindersAdapter.OnReminderClickInterface {
 

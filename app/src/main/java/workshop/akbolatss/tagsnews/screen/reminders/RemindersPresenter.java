@@ -4,8 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.util.Log;
 
 import java.util.Calendar;
 import java.util.List;
@@ -13,13 +11,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import workshop.akbolatss.tagsnews.base.BasePresenter;
-import workshop.akbolatss.tagsnews.repositories.DBReminderItemRepository;
-import workshop.akbolatss.tagsnews.repositories.source.ReminderItem;
+import workshop.akbolatss.tagsnews.model.DBReminderItemRepository;
+import workshop.akbolatss.tagsnews.model.dao.ReminderItem;
 
 import static android.content.Context.ALARM_SERVICE;
 import static workshop.akbolatss.tagsnews.util.Constants.INTENT_HOUR;
@@ -61,11 +57,14 @@ public class RemindersPresenter extends BasePresenter<RemindersView> {
     public void onDeactivateNotification(ReminderItem rItem) {
         mRepository.onDeactivateReminder(rItem);
 
-        AlarmManager amc = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
         Intent myIntent = new Intent(mContext, ReminderReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, rItem.getRequestCode(), myIntent, PendingIntent.FLAG_NO_CREATE);
-        amc.cancel(pendingIntent);
-        pendingIntent.cancel();
+
+        if (pendingIntent != null){
+            AlarmManager amc = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
+            amc.cancel(pendingIntent);
+            pendingIntent.cancel();
+        }
     }
 
     public void onAddReminder(ReminderItem rItem){

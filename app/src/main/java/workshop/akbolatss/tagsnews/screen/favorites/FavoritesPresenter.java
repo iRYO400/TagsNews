@@ -11,7 +11,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import me.toptas.rssconverter.RssItem;
 import workshop.akbolatss.tagsnews.base.BasePresenter;
-import workshop.akbolatss.tagsnews.repositories.DBRssItemRepository;
+import workshop.akbolatss.tagsnews.model.DBRssItemRepository;
 
 /**
  * Created by AkbolatSS on 14.08.2017.

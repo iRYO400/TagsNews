@@ -1,4 +1,4 @@
-package workshop.akbolatss.tagsnews.repositories.source;
+package workshop.akbolatss.tagsnews.model.dao;
 
 import org.greenrobot.greendao.annotation.*;
 

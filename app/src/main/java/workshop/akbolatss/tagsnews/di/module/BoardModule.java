@@ -4,11 +4,9 @@ import dagger.Module;
 import dagger.Provides;
 import workshop.akbolatss.tagsnews.api.NewsApiService;
 import workshop.akbolatss.tagsnews.di.scope.ActivityScope;
-import workshop.akbolatss.tagsnews.repositories.DBRssItemRepository;
-import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
-import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
+import workshop.akbolatss.tagsnews.model.DBRssSourceRepository;
+import workshop.akbolatss.tagsnews.model.dao.DaoSession;
 import workshop.akbolatss.tagsnews.screen.board.BoardView;
-import workshop.akbolatss.tagsnews.screen.sources.SourcesView;
 
 @Module
 public class BoardModule {

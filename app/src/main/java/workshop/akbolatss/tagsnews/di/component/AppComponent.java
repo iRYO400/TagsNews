@@ -7,8 +7,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 import workshop.akbolatss.tagsnews.api.NewsApiService;
 import workshop.akbolatss.tagsnews.di.module.AppModule;
-import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
-import workshop.akbolatss.tagsnews.screen.reminders.ReminderService;
+import workshop.akbolatss.tagsnews.model.dao.DaoSession;
 
 @Singleton
 @Component(modules = AppModule.class)

@@ -9,7 +9,7 @@ import me.toptas.rssconverter.RssFeed;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
-import workshop.akbolatss.tagsnews.repositories.FeedlyResponse;
+import workshop.akbolatss.tagsnews.model.FeedlyResponse;
 
 public interface NewsApiService {
 

@@ -16,10 +16,9 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import workshop.akbolatss.tagsnews.api.NewsApiService;
 import workshop.akbolatss.tagsnews.api.XmlOrJsonConverterFactory;
-import workshop.akbolatss.tagsnews.repositories.DBOpenHelper;
-import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
-import workshop.akbolatss.tagsnews.repositories.source.DaoMaster;
-import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
+import workshop.akbolatss.tagsnews.model.DBOpenHelper;
+import workshop.akbolatss.tagsnews.model.dao.DaoMaster;
+import workshop.akbolatss.tagsnews.model.dao.DaoSession;
 
 import static workshop.akbolatss.tagsnews.util.Constants.DB_NAME;
 
