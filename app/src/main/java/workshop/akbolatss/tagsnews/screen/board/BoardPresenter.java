@@ -4,18 +4,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
-import me.toptas.rssconverter.RssItem;
 import workshop.akbolatss.tagsnews.base.BasePresenter;
-import workshop.akbolatss.tagsnews.repositories.DBRssItemRepository;
-import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
-import workshop.akbolatss.tagsnews.repositories.source.RssSource;
+import workshop.akbolatss.tagsnews.model.DBRssSourceRepository;
+import workshop.akbolatss.tagsnews.model.dao.RssSource;
 
 public class BoardPresenter extends BasePresenter<BoardView> {
 

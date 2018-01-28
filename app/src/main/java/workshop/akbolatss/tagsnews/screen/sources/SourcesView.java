@@ -5,7 +5,7 @@ import java.util.List;
 import workshop.akbolatss.tagsnews.base.BaseView;
 import workshop.akbolatss.tagsnews.base.ErrorView;
 import workshop.akbolatss.tagsnews.base.LoadingView;
-import workshop.akbolatss.tagsnews.repositories.source.RssSource;
+import workshop.akbolatss.tagsnews.model.dao.RssSource;
 
 public interface SourcesView extends BaseView, LoadingView, ErrorView {
 

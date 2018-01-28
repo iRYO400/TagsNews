@@ -44,7 +44,7 @@ import workshop.akbolatss.tagsnews.base.BaseActivity;
 import workshop.akbolatss.tagsnews.di.component.DaggerBoardComponent;
 import workshop.akbolatss.tagsnews.di.module.BoardModule;
 import workshop.akbolatss.tagsnews.di.module.DetailsModule;
-import workshop.akbolatss.tagsnews.repositories.source.RssSource;
+import workshop.akbolatss.tagsnews.model.dao.RssSource;
 import workshop.akbolatss.tagsnews.screen.details.DetailsPresenter;
 import workshop.akbolatss.tagsnews.screen.details.DetailsView;
 import workshop.akbolatss.tagsnews.screen.favorites.FavoritesActivity;

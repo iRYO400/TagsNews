@@ -10,9 +10,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import workshop.akbolatss.tagsnews.base.BasePresenter;
-import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
-import workshop.akbolatss.tagsnews.repositories.FeedlyResponse;
-import workshop.akbolatss.tagsnews.repositories.source.RssSource;
+import workshop.akbolatss.tagsnews.model.DBRssSourceRepository;
+import workshop.akbolatss.tagsnews.model.FeedlyResponse;
+import workshop.akbolatss.tagsnews.model.dao.RssSource;
 
 public class SourcesPresenter extends BasePresenter<SourcesView> {
 

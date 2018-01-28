@@ -1,4 +1,4 @@
-package workshop.akbolatss.tagsnews.repositories;
+package workshop.akbolatss.tagsnews.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +7,9 @@ import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
 import me.toptas.rssconverter.RssItem;
-import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
-import workshop.akbolatss.tagsnews.repositories.source.RssFeedItem;
-import workshop.akbolatss.tagsnews.repositories.source.RssFeedItemDao;
+import workshop.akbolatss.tagsnews.model.dao.DaoSession;
+import workshop.akbolatss.tagsnews.model.dao.RssFeedItem;
+import workshop.akbolatss.tagsnews.model.dao.RssFeedItemDao;
 
 
 public class DBRssItemRepository implements RssItemRepository {

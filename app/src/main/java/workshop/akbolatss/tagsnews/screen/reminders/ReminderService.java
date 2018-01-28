@@ -29,8 +29,8 @@ import workshop.akbolatss.tagsnews.api.NewsApiService;
 import workshop.akbolatss.tagsnews.application.App;
 import workshop.akbolatss.tagsnews.di.component.DaggerRemindersComponent;
 import workshop.akbolatss.tagsnews.di.module.RemindersModule;
-import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
-import workshop.akbolatss.tagsnews.repositories.source.RssSource;
+import workshop.akbolatss.tagsnews.model.DBRssSourceRepository;
+import workshop.akbolatss.tagsnews.model.dao.RssSource;
 import workshop.akbolatss.tagsnews.screen.splash.SplashActivity;
 
 import static workshop.akbolatss.tagsnews.util.Constants.INTENT_HOUR;

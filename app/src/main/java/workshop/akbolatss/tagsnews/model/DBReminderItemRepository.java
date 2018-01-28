@@ -1,15 +1,13 @@
-package workshop.akbolatss.tagsnews.repositories;
+package workshop.akbolatss.tagsnews.model;
 
 
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.Callable;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
-import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
-import workshop.akbolatss.tagsnews.repositories.source.ReminderItem;
-import workshop.akbolatss.tagsnews.repositories.source.ReminderItemDao;
+import workshop.akbolatss.tagsnews.model.dao.DaoSession;
+import workshop.akbolatss.tagsnews.model.dao.ReminderItem;
+import workshop.akbolatss.tagsnews.model.dao.ReminderItemDao;
 
 public class DBReminderItemRepository implements ReminderItemRepository {
 

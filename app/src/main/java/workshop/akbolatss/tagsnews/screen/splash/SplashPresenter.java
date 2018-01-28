@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 
 import com.orhanobut.hawk.Hawk;
 
@@ -14,10 +13,10 @@ import java.util.Calendar;
 import javax.inject.Inject;
 
 import workshop.akbolatss.tagsnews.base.BasePresenter;
-import workshop.akbolatss.tagsnews.repositories.DBReminderItemRepository;
-import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
-import workshop.akbolatss.tagsnews.repositories.source.ReminderItem;
-import workshop.akbolatss.tagsnews.repositories.source.RssSource;
+import workshop.akbolatss.tagsnews.model.DBReminderItemRepository;
+import workshop.akbolatss.tagsnews.model.DBRssSourceRepository;
+import workshop.akbolatss.tagsnews.model.dao.ReminderItem;
+import workshop.akbolatss.tagsnews.model.dao.RssSource;
 import workshop.akbolatss.tagsnews.screen.reminders.ReminderReceiver;
 import workshop.akbolatss.tagsnews.util.Constants;
 

@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import workshop.akbolatss.tagsnews.R;
-import workshop.akbolatss.tagsnews.repositories.source.ReminderItem;
+import workshop.akbolatss.tagsnews.model.dao.ReminderItem;
 
 public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.RemindersVH> {
 

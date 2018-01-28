@@ -1,10 +1,10 @@
-package workshop.akbolatss.tagsnews.repositories;
+package workshop.akbolatss.tagsnews.model;
 
 import android.content.Context;
 
 import org.greenrobot.greendao.database.Database;
 
-import workshop.akbolatss.tagsnews.repositories.source.DaoMaster;
+import workshop.akbolatss.tagsnews.model.dao.DaoMaster;
 
 /**
  * Author: Akbolat Sadvakassov
