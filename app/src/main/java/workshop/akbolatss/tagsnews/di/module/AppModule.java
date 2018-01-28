@@ -16,9 +16,12 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import workshop.akbolatss.tagsnews.api.NewsApiService;
 import workshop.akbolatss.tagsnews.api.XmlOrJsonConverterFactory;
+import workshop.akbolatss.tagsnews.repositories.DBOpenHelper;
 import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
 import workshop.akbolatss.tagsnews.repositories.source.DaoMaster;
 import workshop.akbolatss.tagsnews.repositories.source.DaoSession;
+
+import static workshop.akbolatss.tagsnews.util.Constants.DB_NAME;
 
 @Module
 public class AppModule {
@@ -40,17 +43,9 @@ public class AppModule {
     @Singleton
     @Provides
     DaoSession provideDaoSession(Context context) {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, "rss-db");
+        DBOpenHelper helper = new DBOpenHelper(context, DB_NAME);
         Database db = helper.getWritableDb();
         return new DaoMaster(db).newSession();
-    }
-
-
-    // TODO: Здесь и в SourcesModule одинаковые репозитории. Чекни и убери лишний
-    @Singleton
-    @Provides
-    DBRssSourceRepository provideDbRssSourceRepository(DaoSession daoSession, NewsApiService newsApiService) {
-        return new DBRssSourceRepository(daoSession, newsApiService);
     }
 
     @Singleton

@@ -27,6 +27,8 @@ import me.toptas.rssconverter.RssFeed;
 import workshop.akbolatss.tagsnews.R;
 import workshop.akbolatss.tagsnews.api.NewsApiService;
 import workshop.akbolatss.tagsnews.application.App;
+import workshop.akbolatss.tagsnews.di.component.DaggerRemindersComponent;
+import workshop.akbolatss.tagsnews.di.module.RemindersModule;
 import workshop.akbolatss.tagsnews.repositories.DBRssSourceRepository;
 import workshop.akbolatss.tagsnews.repositories.source.RssSource;
 import workshop.akbolatss.tagsnews.screen.splash.SplashActivity;
@@ -55,9 +57,8 @@ public class ReminderService extends Service {
     private CompositeDisposable mCompositeDisposable;
 
     private NotificationCompat.Builder builder;
-    private NotificationCompat.BigTextStyle bigTextStyle;
     private NotificationCompat.InboxStyle inboxStyle;
-    private String bigText;
+
 
     //Buffer Data
     private int mRepeateRequestCode;
@@ -73,18 +74,21 @@ public class ReminderService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        ((App) getApplicationContext()).getAppComponent().inject(this);
+        DaggerRemindersComponent.builder()
+                .appComponent(((App )getApplication()).getAppComponent())
+                .remindersModule(new RemindersModule())
+                .build()
+                .inject(this);
 
         mCompositeDisposable = new CompositeDisposable();
 
         builder = new NotificationCompat.Builder(mContext, getResources().getString(R.string.app_name));
-        bigTextStyle = new NotificationCompat.BigTextStyle();
         inboxStyle = new NotificationCompat.InboxStyle();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        bigText = "";
+
         mRepeateRequestCode = intent.getIntExtra(INTENT_REQUEST_CODE, -1);
         mRepeatHour = intent.getIntExtra(INTENT_HOUR, -1);
         mRepeatMinute = intent.getIntExtra(INTENT_MINUTE, -1);
