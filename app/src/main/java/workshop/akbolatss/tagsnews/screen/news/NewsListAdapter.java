@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +77,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
     }
 
     public interface OnRssClickListener {
-        public void OnItemClick(RssItem rssItem);
+        void OnItemClick(RssItem rssItem);
     }
 
     public class NewsHolder extends RecyclerView.ViewHolder {
@@ -99,7 +100,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(final RssItem rssItem, boolean isTextOnly, final OnRssClickListener listener) {
+        void bind(final RssItem rssItem, boolean isTextOnly, final OnRssClickListener listener) {
             mTitle.setText(rssItem.getTitle());
             mTimestamp.setText(rssItem.getPublishDate());
 
@@ -126,5 +127,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsHo
                 }
             }
         }
+
+//        private String getTimestamp(String time){
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("")
+//        }
     }
 }

@@ -59,7 +59,6 @@ public class ReminderService extends Service {
     private NotificationCompat.Builder builder;
     private NotificationCompat.InboxStyle inboxStyle;
 
-
     //Buffer Data
     private int mRepeateRequestCode;
     private int mRepeatHour;
@@ -150,7 +149,6 @@ public class ReminderService extends Service {
 
                                         @Override
                                         public void onError(Throwable e) {
-//                                            Log.d(TAG, "onError 2 " + e.getLocalizedMessage());
                                             onRepeatNotification();
                                         }
                                     }));
@@ -159,7 +157,6 @@ public class ReminderService extends Service {
 
                     @Override
                     public void onError(Throwable e) {
-//                        Log.d(TAG, "onError 1 " + e.getLocalizedMessage());
                         onRepeatNotification();
                     }
                 });

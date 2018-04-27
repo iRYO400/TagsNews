@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 
 import com.orhanobut.hawk.Hawk;
 
@@ -19,6 +18,7 @@ import workshop.akbolatss.tagsnews.model.dao.ReminderItem;
 import workshop.akbolatss.tagsnews.model.dao.RssSource;
 import workshop.akbolatss.tagsnews.screen.reminders.ReminderReceiver;
 import workshop.akbolatss.tagsnews.util.Constants;
+import workshop.akbolatss.tagsnews.util.Logger;
 
 import static android.content.Context.ALARM_SERVICE;
 import static workshop.akbolatss.tagsnews.util.Constants.INTENT_HOUR;
@@ -53,10 +53,10 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
             ReminderItem rItem = new ReminderItem();
             rItem.setIsActive(true);
-            rItem.setHour(12);
-            rItem.setMinute(0);
+            rItem.setHour(14);
+            rItem.setMinute(46);
             rItem.setPM_AM("AM");
-            rItem.setRequestCode(0);
+            rItem.setRequestCode(-100);
             mReminderRepository.onAddReminder(rItem);
 
             onActivateNotification(rItem);
@@ -66,12 +66,12 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             rItem.setHour(18);
             rItem.setMinute(0);
             rItem.setPM_AM("PM");
-            rItem.setRequestCode(1);
+            rItem.setRequestCode(-200);
             mReminderRepository.onAddReminder(rItem);
         }
     }
 
-    private void onActivateNotification(ReminderItem rItem){
+    private void onActivateNotification(ReminderItem rItem) {
         AlarmManager amc = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
         Intent myIntent = new Intent(mContext, ReminderReceiver.class);
         myIntent.putExtra(INTENT_REQUEST_CODE, rItem.getRequestCode());
@@ -83,16 +83,15 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, rItem.getHour());
         calendar.set(Calendar.MINUTE, rItem.getMinute());
+        calendar.set(Calendar.SECOND, 0);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            amc.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        } else {
-            amc.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        }
+        Logger.Companion.i("TAG", "Calendar " + calendar.getTimeInMillis());
+
+        amc.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
     }
 
     private boolean isFirstInit() {
-        if (Hawk.get(Constants.FIRST_START, false)){
+        if (Hawk.get(Constants.FIRST_START, false)) {
             return true;
         } else {
             Hawk.put(Constants.FIRST_START, true);

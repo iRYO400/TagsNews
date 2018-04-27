@@ -111,7 +111,7 @@ public class NewsFragment extends Fragment implements NewsView, SwipeRefreshLayo
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setNestedScrollingEnabled(false);
 
-        mNewsListAdapter = new NewsListAdapter(this, Hawk.get(Constants.ITEMS_VIEW_MODE, 0));
+    mNewsListAdapter = new NewsListAdapter(this, Hawk.get(Constants.ITEMS_VIEW_MODE, 0));
         mRecyclerView.setAdapter(mNewsListAdapter);
     }
 

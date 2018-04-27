@@ -62,7 +62,7 @@
                 android:layout_marginEnd="12dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="6dp"
-                android:text="Timestamp"
+                android:text=""
                 android:textColor="@color/colorTextSecondary"
                 android:textSize="@dimen/smTimestamp" />
 

@@ -1,8 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'io.fabric'
 
-def androidSupportLibVersion = "27.0.2"
+def androidSupportLibVersion = "27.1.0"
 
 android {
     compileSdkVersion 27
@@ -67,10 +68,15 @@ dependencies {
     compile 'com.google.firebase:firebase-core:11.8.0'
 
     // ProWebView
-    compile 'com.github.vic797:prowebview:2.0'
+    compile 'com.github.vic797:prowebview:2.1'
 
     //GreenDAO
     compile 'org.greenrobot:greendao:3.2.2'
+
+    //ImageViewer
+    implementation 'com.facebook.fresco:fresco:1.5.0'
+    implementation 'com.github.stfalcon:frescoimageviewer:0.5.0'
+    implementation 'com.romandanylyk:pageindicatorview:1.0.0@aar'
 
     //Floating Action Menu
     compile 'com.github.clans:fab:1.6.4'
@@ -79,22 +85,27 @@ dependencies {
     //Hawk
     compile 'com.orhanobut:hawk:2.0.1'
     //RxJava 2, RxAndroid 2
-    compile 'io.reactivex.rxjava2:rxjava:2.1.2'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'io.reactivex.rxjava2:rxjava:2.1.10'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.2'
     //Retrofit 2
     compile 'com.squareup.retrofit2:retrofit:2.+'
     compile 'com.squareup.retrofit2:converter-gson:2.+'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.+'
 
-    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.9.1'
     //Dagger 2
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.12'
-    provided 'com.google.dagger:dagger-compiler:2.12'
-    compile 'com.google.dagger:dagger:2.12'
+    provided 'com.google.dagger:dagger-compiler:2.14.1'
+    compile 'com.google.dagger:dagger:2.14.1'
 
     //Butter Knife
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.jakewharton:butterknife:8.8.1'
+    //Kotlin
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 apply plugin: 'com.google.gms.google-services'
+repositories {
+    mavenCentral()
+}

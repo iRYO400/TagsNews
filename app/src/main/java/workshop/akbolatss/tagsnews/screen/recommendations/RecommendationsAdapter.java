@@ -97,7 +97,6 @@ public class RecommendationsAdapter extends RecyclerView.Adapter<Recommendations
                     .error(R.drawable.ic_rss_feed_24dp)
                     .into(imgIcon);
 
-
             imgAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

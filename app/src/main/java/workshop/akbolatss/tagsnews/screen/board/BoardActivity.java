@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -212,6 +213,13 @@ public class BoardActivity extends BaseActivity implements BoardView, DetailsVie
 
             @Override
             public void onProgressChanged(ProWebView webView, int progress) {
+                Log.d(TAG, "Progress... " + progress);
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(ProWebView webView, String url) {
+                Log.d(TAG, "URL " + url);
+                return true;
             }
         });
 
