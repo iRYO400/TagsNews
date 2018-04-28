@@ -20,8 +20,6 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.OnClick;
 import workshop.akbolatss.tagsnews.R;
 import workshop.akbolatss.tagsnews.base.BaseActivity;
 import workshop.akbolatss.tagsnews.di.component.DaggerRemindersComponent;
@@ -30,20 +28,18 @@ import workshop.akbolatss.tagsnews.model.dao.ReminderItem;
 
 public class RemindersActivity extends BaseActivity implements RemindersView, RemindersAdapter.OnReminderClickInterface {
 
-
-    @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
 
     @Inject
     protected RemindersPresenter mPresenter;
 
-    @BindView(R.id.recyclerView)
     protected RecyclerView mRecyclerView;
     private RemindersAdapter mAdapter;
 
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -54,6 +50,7 @@ public class RemindersActivity extends BaseActivity implements RemindersView, Re
                 .build()
                 .inject(this);
 
+        mRecyclerView = findViewById(R.id.recyclerView);
         initRV();
         mPresenter.onLoadReminders();
     }
@@ -142,7 +139,6 @@ public class RemindersActivity extends BaseActivity implements RemindersView, Re
         mPresenter.onLoadReminders();
     }
 
-    @OnClick(R.id.btnFabAdd)
     @Override
     public void onAddReminder() {
         LayoutInflater layoutInflater = LayoutInflater.from(RemindersActivity.this);

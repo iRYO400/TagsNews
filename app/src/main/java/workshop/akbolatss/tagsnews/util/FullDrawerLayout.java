@@ -14,7 +14,7 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FullDrawerLayout extends AdvancedDrawerLayout {
+public class FullDrawerLayout extends DrawerLayout {
 
     private List<View> childViews;
     private static final int MIN_DRAWER_MARGIN = 0; // dp

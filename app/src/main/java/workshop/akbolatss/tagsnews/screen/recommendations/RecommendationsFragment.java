@@ -23,11 +23,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnFocusChange;
-import butterknife.OnTextChanged;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.BehaviorSubject;
@@ -50,20 +45,15 @@ public class RecommendationsFragment extends Fragment implements SourcesView, Re
     @Inject
     protected SourcesPresenter mPresenter;
 
-    @BindView(R.id.tvNoContent)
     protected TextView tvNoContent;
 
-    @BindView(R.id.recyclerView)
     protected RecyclerView mRecyclerV;
     private RecommendationsAdapter mAdapter;
 
-    @BindView(R.id.btnSearch)
     protected ImageButton mBtnSearch;
 
-    @BindView(R.id.progressBar)
     protected ProgressBar mProgress;
 
-    @BindView(R.id.edit_query)
     protected EditText mEditText;
 
     private OnFragmentInteractionListener mListener;
@@ -78,7 +68,11 @@ public class RecommendationsFragment extends Fragment implements SourcesView, Re
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_recommendations, container, false);
-        ButterKnife.bind(this, rootView);
+        tvNoContent = rootView.findViewById(R.id.tvNoContent);
+        mRecyclerV = rootView.findViewById(R.id.recyclerView);
+        mBtnSearch = rootView.findViewById(R.id.btnSearch);
+        mProgress = rootView.findViewById(R.id.progressBar);
+        mEditText = rootView.findViewById(R.id.edit_query);
         initDagger();
         return rootView;
     }
@@ -94,7 +88,7 @@ public class RecommendationsFragment extends Fragment implements SourcesView, Re
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+
         initRV();
         initEditText();
     }
@@ -130,14 +124,12 @@ public class RecommendationsFragment extends Fragment implements SourcesView, Re
         onSubmitQuery();
     }
 
-    @OnClick(R.id.btnSearch)
     protected void onSubmitQuery() {
         if (mEditText.getText().toString().trim().length() > 0) {
             mPresenter.onSearchSources(mEditText.getText().toString().trim());
         }
     }
 
-    @OnFocusChange(R.id.edit_query)
     protected void onFocusChanged(View view, boolean isFocused) {
         if (view.getId() == R.id.edit_query) {
             if (isFocused) {
@@ -157,7 +149,6 @@ public class RecommendationsFragment extends Fragment implements SourcesView, Re
         }
     }
 
-    @OnTextChanged(R.id.edit_query)
     protected void onEtCurrencyChanged(CharSequence charSequence, int i, int i1, int i2) {
         if (!charSequence.toString().isEmpty()) {
             searchSubject.onNext(charSequence.toString());

@@ -13,10 +13,10 @@ import workshop.akbolatss.tagsnews.model.dao.DaoSession;
 @Component(modules = AppModule.class)
 public interface AppComponent {
 
-    NewsApiService exposeApi();
+    NewsApiService injectApi();
 
-    Context exposeContext();
+    Context injectService();
 
-    DaoSession exposeDaoSession();
+    DaoSession injectDaoSession();
 
 }

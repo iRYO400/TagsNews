@@ -1,24 +1,17 @@
 package workshop.akbolatss.tagsnews.screen.sources;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import workshop.akbolatss.tagsnews.R;
 import workshop.akbolatss.tagsnews.model.dao.RssSource;
 import workshop.akbolatss.tagsnews.screen.sources.helper.ItemTouchHelperAdapter;
@@ -107,43 +100,42 @@ public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.NewsHold
 
     public class NewsHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
 
-        @BindView(R.id.cardView)
-        CardView cardView;
-        @BindView(R.id.tvTitle)
-        TextView mTitle;
-        @BindView(R.id.tvLink)
-        TextView mLink;
-        @BindView(R.id.imgIcon)
-        ImageView mImgIcon;
-        @BindView(R.id.imgOptions)
-        ImageView mImgOptions;
-        @BindView(R.id.cbInit)
+//        @BindView(R.id.cardView)
+//        CardView cardView;
+//        @BindView(R.id.tvTitle)
+//        TextView mTitle;
+//        @BindView(R.id.tvLink)
+//        TextView mLink;
+//        @BindView(R.id.imgIcon)
+//        ImageView mImgIcon;
+//        @BindView(R.id.imgOptions)
+//        ImageView mImgOptions;
+//        @BindView(R.id.cbInit)
         CheckBox mCheckBox;
         Context context;
 
         public NewsHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
             context = itemView.getContext();
         }
 
         public void bind(final RssSource rssSource, final OnRssClickListener listener) {
-            mTitle.setText(rssSource.getTitle());
-            mLink.setText(rssSource.getLink());
-            mCheckBox.setChecked(rssSource.getIsActive());
-
-            Picasso.with(context)
-                    .load(rssSource.getVisualUrl())
-                    .placeholder(R.drawable.ic_rss_feed_24dp)
-                    .error(R.drawable.ic_rss_feed_24dp)
-                    .into(mImgIcon);
-
-            mImgOptions.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onSourceOptions(rssSource, v, getLayoutPosition());
-                }
-            });
+//            mTitle.setText(rssSource.getTitle());
+//            mLink.setText(rssSource.getLink());
+//            mCheckBox.setChecked(rssSource.getIsActive());
+//
+//            Picasso.with(context)
+//                    .load(rssSource.getVisualUrl())
+//                    .placeholder(R.drawable.ic_rss_feed_24dp)
+//                    .error(R.drawable.ic_rss_feed_24dp)
+//                    .into(mImgIcon);
+//
+//            mImgOptions.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    listener.onSourceOptions(rssSource, v, getLayoutPosition());
+//                }
+//            });
 
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -155,12 +147,12 @@ public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.NewsHold
 
         @Override
         public void onItemSelected() {
-            cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorCardDragged));
+//            cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorCardDragged));
         }
 
         @Override
         public void onItemClear() {
-            cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorCardBackground));
+//            cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorCardBackground));
         }
     }
 }

@@ -24,8 +24,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.OnClick;
 import workshop.akbolatss.tagsnews.R;
 import workshop.akbolatss.tagsnews.base.BaseActivity;
 import workshop.akbolatss.tagsnews.di.component.DaggerSourcesComponent;
@@ -41,28 +39,29 @@ public class SourcesActivity extends BaseActivity implements SourcesView, Source
     @Inject
     protected SourcesPresenter mPresenter;
 
-    @BindView(R.id.btnFabAdd)
     protected FloatingActionButton btnFabAdd;
 
-    @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
 
-    @BindView(R.id.tvNoContent)
     protected TextView mNoContent;
 
-    @BindView(R.id.progressBar)
     protected ProgressBar mProgressBar;
 
-    @BindView(R.id.recyclerView)
     protected RecyclerView mRecyclerView;
     private SourcesAdapter mSourcesAdapter;
 
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        btnFabAdd = findViewById(R.id.btnFabAdd);
+        mNoContent = findViewById(R.id.tvNoContent);
+        mProgressBar = findViewById(R.id.progressBar);
+        mRecyclerView = findViewById(R.id.recyclerView);
 
         DaggerSourcesComponent.builder()
                 .appComponent(getAppComponent())
@@ -88,7 +87,6 @@ public class SourcesActivity extends BaseActivity implements SourcesView, Source
         touchHelper.attachToRecyclerView(mRecyclerView);
     }
 
-    @OnClick(R.id.btnFabAdd)
     @Override
     public void onAddNewSource() {
         LayoutInflater layoutInflater = LayoutInflater.from(SourcesActivity.this);

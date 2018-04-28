@@ -5,16 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import workshop.akbolatss.tagsnews.R;
 import workshop.akbolatss.tagsnews.model.dao.ReminderItem;
 
@@ -54,11 +49,11 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.Remi
         ReminderItem rItem = mList.get(position);
         holder.bind(rItem);
 
-        holder.mImgButton.setOnClickListener(mInternalListener);
-        holder.mImgButton.setTag(rItem);
-
-        holder.mCb.setOnClickListener(mInternalListener);
-        holder.mCb.setTag(rItem);
+//        holder.mImgButton.setOnClickListener(mInternalListener);
+//        holder.mImgButton.setTag(rItem);
+//
+//        holder.mCb.setOnClickListener(mInternalListener);
+//        holder.mCb.setTag(rItem);
     }
 
     public void onAddItems(List<ReminderItem> rItems) {
@@ -86,26 +81,25 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.Remi
 
     public class RemindersVH extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.cbActivate)
-        CheckBox mCb;
-        @BindView(R.id.tvTime)
-        TextView mTime;
-        @BindView(R.id.imgOptions)
-        ImageView mImgButton;
+//        @BindView(R.id.cbActivate)
+//        CheckBox mCb;
+//        @BindView(R.id.tvTime)
+//        TextView mTime;
+//        @BindView(R.id.imgOptions)
+//        ImageView mImgButton;
 
         public RemindersVH(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
         }
 
         public void bind(ReminderItem rItem) {
-            mTime.setText(onTimeFixer(rItem.getHour()) + ":" + onTimeFixer(rItem.getMinute()));
-
-            if (rItem.getIsActive()) {
-                mCb.setChecked(true);
-            } else {
-                mCb.setChecked(false);
-            }
+//            mTime.setText(onTimeFixer(rItem.getHour()) + ":" + onTimeFixer(rItem.getMinute()));
+//
+//            if (rItem.getIsActive()) {
+//                mCb.setChecked(true);
+//            } else {
+//                mCb.setChecked(false);
+//            }
         }
 
         private String onTimeFixer(int time) {
