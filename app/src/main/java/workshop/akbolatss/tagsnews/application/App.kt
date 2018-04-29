@@ -2,12 +2,14 @@ package workshop.akbolatss.tagsnews.application
 
 import android.app.Application
 import android.support.v7.app.AppCompatDelegate
+import com.facebook.drawee.backends.pipeline.Fresco
 
 import com.orhanobut.hawk.Hawk
 
 import workshop.akbolatss.tagsnews.di.component.AppComponent
 import workshop.akbolatss.tagsnews.di.component.DaggerAppComponent
 import workshop.akbolatss.tagsnews.di.module.AppModule
+import workshop.akbolatss.tagsnews.util.Constants.BASE_URL
 
 import workshop.akbolatss.tagsnews.util.Constants.SELECTED_THEME
 
@@ -31,11 +33,6 @@ class App : Application() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
 
-        //        Fresco.initialize(getApplicationContext());
-    }
-
-    companion object {
-
-        private const val BASE_URL = "http://cloud.feedly.com/"
+        Fresco.initialize(applicationContext)
     }
 }

@@ -1,54 +1,22 @@
 package workshop.akbolatss.tagsnews.screen.favorites;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.orhanobut.hawk.Hawk;
-import com.squareup.picasso.Picasso;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
-import me.toptas.rssconverter.RssItem;
-import vcm.github.webkit.proview.ProWebView;
-import workshop.akbolatss.tagsnews.R;
-import workshop.akbolatss.tagsnews.base.BaseActivity;
-import workshop.akbolatss.tagsnews.di.component.DaggerFavoritesComponent;
-import workshop.akbolatss.tagsnews.di.module.DetailsModule;
-import workshop.akbolatss.tagsnews.di.module.FavoritesModule;
-import workshop.akbolatss.tagsnews.screen.details.DetailsPresenter;
-import workshop.akbolatss.tagsnews.screen.details.DetailsView;
-import workshop.akbolatss.tagsnews.screen.news.NewsListAdapter;
-import workshop.akbolatss.tagsnews.util.AdvancedDrawerLayout;
-import workshop.akbolatss.tagsnews.util.Constants;
-import workshop.akbolatss.tagsnews.util.FullDrawerLayout;
-
-import static workshop.akbolatss.tagsnews.util.Constants.FB_PACKAGE_NAME;
-import static workshop.akbolatss.tagsnews.util.Constants.TW_PACKAGE_NAME;
-import static workshop.akbolatss.tagsnews.util.Constants.VK_PACKAGE_NAME;
-import static workshop.akbolatss.tagsnews.util.UtilityMethods.isWifiConnected;
 
 public class FavoritesActivity extends AppCompatActivity
-//        implements FavoritesView, DetailsView, NewsListAdapter.OnRssClickListener
+//        implements FavoritesView, DetailsView, NewsAdapter.OnRssClickListener
 {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
 
-//    @Inject
+        boolean isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
+    }
+
+    //    @Inject
 //    protected FavoritesPresenter mPresenter;
 //
 //    @Inject
@@ -293,7 +261,7 @@ public class FavoritesActivity extends AppCompatActivity
 //                if (isFavorite) {
 //                    mDetailsPresenter.OnRemoveFromFavorites(mRssItem.getPublishDate());
 //                } else {
-//                    mDetailsPresenter.OnAddToFavorites(mRssItem);
+//                    mDetailsPresenter.onAddToFavorites(mRssItem);
 //                }
 //                return true;
 //            case R.id.mShare:

@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:name=".application.App"
         android:allowBackup="true"
@@ -17,34 +19,29 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity
-            android:name=".screen.board.BoardActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".screen.board.BoardActivity" />
         <activity
             android:name=".screen.splash.SplashActivity"
-            android:label="@string/app_name_icon"
-            android:screenOrientation="portrait">
+            android:label="@string/app_name_icon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".screen.favorites.FavoritesActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".screen.sources.SourcesActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".screen.reminders.RemindersActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".screen.favorites.FavoritesActivity" />
+        <activity android:name=".screen.sources.SourcesActivity" />
+        <activity android:name=".screen.reminders.RemindersActivity" />
         <activity
             android:name=".screen.details.DetailsActivity"
-            android:screenOrientation="portrait" />
+            android:theme="@style/SwipeTheme" />
 
         <receiver android:name=".screen.reminders.ReminderReceiver" />
-        <service android:name=".screen.reminders.ReminderService" />
+
+        <service
+            android:name=".screen.reminders.ReminderService"
+            android:label="@string/app_name_icon"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>

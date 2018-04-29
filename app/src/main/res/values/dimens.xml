@@ -8,13 +8,13 @@
     <dimen name="smTimestamp">11sp</dimen>
 
 
-    <dimen name="sourceTitle">17sp</dimen>
-    <dimen name="sourceUrl">14sp</dimen>
+    <dimen name="sourceTitle">16sp</dimen>
+    <dimen name="sourceUrl">12sp</dimen>
 
 
     <dimen name="rssSourceName">14sp</dimen>
 
-    <dimen name="largeImageHeight">292dp</dimen>
+    <dimen name="largeImageHeight">240dp</dimen>
 
     <dimen name="toTitle">16sp</dimen>
 

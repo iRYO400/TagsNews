@@ -11,16 +11,16 @@ import java.util.List;
 
 import me.toptas.rssconverter.RssItem;
 import workshop.akbolatss.tagsnews.R;
-import workshop.akbolatss.tagsnews.screen.news.NewsListAdapter;
+import workshop.akbolatss.tagsnews.screen.news.NewsAdapter;
 
 public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdapter.NewsHolder> {
 
     private List<RssItem> mNewsList;
     private int mViewItemMode;
 
-    private final NewsListAdapter.OnRssClickListener mClickListener;
+    private final NewsAdapter.NewsListener mClickListener;
 
-    public FavoritesListAdapter(NewsListAdapter.OnRssClickListener clickListener, int mViewItemMode) {
+    public FavoritesListAdapter(NewsAdapter.NewsListener clickListener, int mViewItemMode) {
         mNewsList = new ArrayList<>();
         this.mClickListener = clickListener;
         this.mViewItemMode = mViewItemMode;
@@ -87,7 +87,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesListAdap
 
         }
 
-        public void bind(final RssItem rssItem, final NewsListAdapter.OnRssClickListener mClickListener) {
+        public void bind(final RssItem rssItem, final NewsAdapter.NewsListener mClickListener) {
 //            mTitle.setText(rssItem.getTitle());
 //            mTimestamp.setText(rssItem.getPublishDate());
 //
