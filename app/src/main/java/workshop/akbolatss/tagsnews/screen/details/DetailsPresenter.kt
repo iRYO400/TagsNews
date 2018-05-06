@@ -18,10 +18,10 @@ constructor() : BasePresenter<DetailsView>() {
 
     fun onAddToFavorites() {
         if (!isFavorite) {
-            mDbRssItemRepository.addRssItem(mRssItem)
+            mDbRssItemRepository.addRssItem(mRssItem!!)
             view.onRefreshToolbar(true)
         } else {
-            mDbRssItemRepository.removeRssItem(mRssItem?.publishDate)
+            mDbRssItemRepository.removeRssItem(mRssItem!!.publishDate)
             view.onRefreshToolbar(false)
         }
     }

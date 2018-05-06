@@ -16,12 +16,6 @@ import android.view.View
 import android.view.View.SYSTEM_UI_FLAG_FULLSCREEN
 import android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
-
-/**
- * Author: Akbolat Sadvakassov
- * Date: 27.04.2018
- */
-
 class DetailsActivity : BaseActivity() {
 
     private var mSectionsAdapter: SectionsPagerAdapter? = null
@@ -60,15 +54,15 @@ class DetailsActivity : BaseActivity() {
         })
     }
 
-    public fun onOpenSource() {
+    fun onOpenSource() {
         viewPager.setCurrentItem(1, true)
     }
 
-    public fun onOpenDetails() {
+    fun onOpenDetails() {
         viewPager.setCurrentItem(0, true)
     }
 
-    fun toggleHideBar(immersiveOff: Boolean) {
+    private fun toggleHideBar(immersiveOff: Boolean) {
 
         // BEGIN_INCLUDE (get_current_ui_flags)
         // The UI options currently enabled are represented by a bitfield.
@@ -88,22 +82,6 @@ class DetailsActivity : BaseActivity() {
             newUiOptions = newUiOptions or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         }
         window.decorView.systemUiVisibility = newUiOptions
-
-//        // Navigation bar hiding:  Backwards compatible to ICS.
-//        newUiOptions = newUiOptions xor View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//        // Status bar hiding: Backwards compatible to Jellybean
-//        newUiOptions = newUiOptions xor View.SYSTEM_UI_FLAG_FULLSCREEN
-//
-//        // Immersive mode: Backward compatible to KitKat.
-//        // Note that this flag doesn't do anything by itself, it only augments the behavior
-//        // of HIDE_NAVIGATION and FLAG_FULLSCREEN.  For the purposes of this sample
-//        // all three flags are being toggled together.
-//        // Note that there are two immersive mode UI flags, one of which is referred to as "sticky".
-//        // Sticky immersive mode differs in that it makes the navigation and status bars
-//        // semi-transparent, and the UI flag does not get cleared when the user interacts with
-//        // the screen.
-//        newUiOptions = newUiOptions xor View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-//        window.decorView.systemUiVisibility = newUiOptions
     }
 
     override fun getContentView(): Int {

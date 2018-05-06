@@ -20,7 +20,6 @@ object Constants {
     const val NOTIFICATION_CHANNEL_DESCRIPTION = "PaperFeed - RSS Newsletter"
 
     const val SELECTED_THEME = "VIEW_THEME" // False = Day, True = Night
-    const val ITEMS_VIEW_MODE = "ItemsViewMode"
 
     const val EMPTY_ITEM = -100
     const val ITEM_VIEW_HEAD = 0

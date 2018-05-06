@@ -7,7 +7,6 @@ import android.os.CountDownTimer
 import javax.inject.Inject
 
 import workshop.akbolatss.tagsnews.R
-import workshop.akbolatss.tagsnews.application.App
 import workshop.akbolatss.tagsnews.base.BaseActivity
 import workshop.akbolatss.tagsnews.di.component.DaggerSplashComponent
 import workshop.akbolatss.tagsnews.di.module.SplashModule
@@ -42,7 +41,9 @@ class SplashActivity : BaseActivity(), SplashView {
         }.start()
     }
 
-    override fun onBackPressed() {}
+    override fun onBackPressed() {
+//        super.onBackPressed()
+    }
 
     override fun getContentView(): Int {
         return R.layout.activity_splash

@@ -20,7 +20,7 @@ constructor() : BasePresenter<NewsView>() {
     fun onLoadNews() {
         view.onShowLoading()
 
-        mApiService.getRss(url)
+        mApiService.getRss(url!!)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ rssFeed ->
@@ -32,7 +32,7 @@ constructor() : BasePresenter<NewsView>() {
                     } else if (e is IOException) {
                         view.onNetworkError()
                     } else {
-                        view.onUnknownError(e.message)
+                        view.onUnknownError(e.message!!)
                     }
                     view.onHideLoading()
                 })

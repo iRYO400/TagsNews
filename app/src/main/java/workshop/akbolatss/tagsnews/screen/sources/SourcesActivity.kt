@@ -38,23 +38,16 @@ class SourcesActivity : BaseActivity(), SourcesView, SourcesAdapter.SourceListen
 
     override fun onViewReady(savedInstanceState: Bundle?, intent: Intent) {
         super.onViewReady(savedInstanceState, intent)
-
-        setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
-        initDagger()
+        initToolbar()
         initRV()
         initListeners()
         mPresenter.onLoadSources()
     }
 
-    private fun initDagger() {
-        DaggerSourcesComponent.builder()
-                .appComponent(appComponent)
-                .sourcesModule(SourcesModule(this))
-                .build()
-                .inject(this)
+    private fun initToolbar(){
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun initListeners() {
@@ -182,6 +175,14 @@ class SourcesActivity : BaseActivity(), SourcesView, SourcesAdapter.SourceListen
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onInitDagger() {
+        DaggerSourcesComponent.builder()
+                .appComponent(appComponent)
+                .sourcesModule(SourcesModule(this))
+                .build()
+                .inject(this)
     }
 
     override fun getContentView(): Int {

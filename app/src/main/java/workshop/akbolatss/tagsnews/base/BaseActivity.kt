@@ -7,6 +7,7 @@ import me.yokeyword.swipebackfragment.SwipeBackActivity
 import workshop.akbolatss.tagsnews.R
 import workshop.akbolatss.tagsnews.application.App
 import workshop.akbolatss.tagsnews.di.component.AppComponent
+import workshop.akbolatss.tagsnews.screen.splash.SplashActivity
 
 abstract class BaseActivity : SwipeBackActivity() {
 
@@ -18,8 +19,12 @@ abstract class BaseActivity : SwipeBackActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getContentView())
-//        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
+
+        if (this !is SplashActivity) {
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
+        }
+
+        onInitDagger()
         onViewReady(savedInstanceState, intent)
     }
 
@@ -27,6 +32,9 @@ abstract class BaseActivity : SwipeBackActivity() {
         super.onBackPressed()
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
     }
+
+    protected open fun onInitDagger() {}
+
 
     @CallSuper
     protected open fun onViewReady(savedInstanceState: Bundle?, intent: Intent) {

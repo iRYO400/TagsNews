@@ -50,7 +50,6 @@ object UtilityMethods {
         try {
             val date = mDataFormat.parse(timestamp)
             val niceDateStr = DateUtils.getRelativeTimeSpanString(date.time, Calendar.getInstance().timeInMillis, DateUtils.MINUTE_IN_MILLIS)
-            Log.d("TAG", "niceData $niceDateStr and date " + date.time)
             return niceDateStr.toString()
         } catch (e: ParseException) {
             Log.e("ParseException", "CYKA BLYAT! Unparseable date " + e.message)

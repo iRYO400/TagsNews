@@ -12,4 +12,5 @@
         android:nestedScrollingEnabled="false"
         android:paddingBottom="2dp"
         android:paddingTop="2dp" />
+
 </android.support.v4.widget.SwipeRefreshLayout>

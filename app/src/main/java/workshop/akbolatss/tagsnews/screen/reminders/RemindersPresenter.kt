@@ -11,8 +11,6 @@ import io.reactivex.schedulers.Schedulers
 import workshop.akbolatss.tagsnews.base.BasePresenter
 import workshop.akbolatss.tagsnews.model.DBReminderItemRepository
 import workshop.akbolatss.tagsnews.model.dao.ReminderItem
-import workshop.akbolatss.tagsnews.util.Constants.INTENT_HOUR
-import workshop.akbolatss.tagsnews.util.Constants.INTENT_MINUTE
 import workshop.akbolatss.tagsnews.util.Constants.INTENT_REQUEST_CODE
 import workshop.akbolatss.tagsnews.util.UtilityMethods
 import java.util.*
@@ -28,7 +26,7 @@ class RemindersPresenter @Inject constructor() : BasePresenter<RemindersView>() 
 
     fun onActivateNotification(rItem: ReminderItem, isNewAdded: Boolean) {
         if (!isNewAdded) {
-            mRepository.onActivateReminder(rItem)
+            mRepository.activateReminder(rItem)
         }
 
         val amc = mContext.getSystemService(ALARM_SERVICE) as AlarmManager
@@ -44,7 +42,7 @@ class RemindersPresenter @Inject constructor() : BasePresenter<RemindersView>() 
     }
 
     fun onDeactivateNotification(rItem: ReminderItem) {
-        mRepository.onDeactivateReminder(rItem)
+        mRepository.deactivateReminder(rItem)
 
         UtilityMethods.scheduleOffJob(mContext, rItem.requestCode)//Immediately cancel from JobScheduler
 
@@ -60,23 +58,23 @@ class RemindersPresenter @Inject constructor() : BasePresenter<RemindersView>() 
 
     fun onAddReminder(rItem: ReminderItem) {
         onActivateNotification(rItem, true)
-        mRepository.onAddReminder(rItem)
+        mRepository.addReminder(rItem)
         view.onUpdateReminders()
     }
 
     fun onUpdate(rItem: ReminderItem) {
-        mRepository.onUpdateReminder(rItem)
+        mRepository.updateReminder(rItem)
         view.onUpdateReminders()
     }
 
     fun onRemoveReminder(rItem: ReminderItem) {
         onDeactivateNotification(rItem)
-        mRepository.onRemoveReminder(rItem)
+        mRepository.removeReminder(rItem)
         view.onUpdateReminders()
     }
 
     fun onLoadReminders() {
-        mRepository.onLoadReminders()
+        mRepository.loadReminders()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : DisposableSingleObserver<List<ReminderItem>>() {

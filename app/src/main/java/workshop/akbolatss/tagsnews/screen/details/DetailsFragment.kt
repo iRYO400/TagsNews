@@ -22,10 +22,6 @@ import workshop.akbolatss.tagsnews.util.Constants.VK_PACKAGE_NAME
 import workshop.akbolatss.tagsnews.util.UtilityMethods
 import javax.inject.Inject
 
-/**
- * Author: Akbolat Sadvakassov
- * Date: 28.04.2018
- */
 class DetailsFragment : Fragment(), DetailsView {
 
     @Inject

@@ -10,74 +10,107 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.Toolbar
+        <tk.wasdennnoch.progresstoolbar.ProgressToolbar
+            android:id="@+id/pageProgress"
+            style="@style/CustomProgressBarHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="56dp"
             android:background="@color/colorPrimary"
+            android:max="1000"
             app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp"
-            app:layout_scrollFlags="scroll|enterAlways">
+            app:layout_scrollFlags="enterAlwaysCollapsed">
 
-            <LinearLayout
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_height="match_parent">
+
+                <ProgressBar
+                    android:id="@+id/loadProgress"
+                    style="@style/CustomProgressBarHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:max="1000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/btnClose"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:focusable="true"
                     android:scaleType="center"
-                    android:src="@drawable/ic_arrow_back_24dp" />
+                    android:src="@drawable/ic_arrow_back_24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/btnBack"
                     android:layout_width="32dp"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:scaleType="center"
-                    android:src="@drawable/ic_chevron_left_24dp" />
+                    android:src="@drawable/ic_chevron_left_24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btnClose"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/btnForward"
                     android:layout_width="32dp"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:scaleType="center"
-                    android:src="@drawable/ic_chevron_right_24dp" />
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:src="@drawable/ic_chevron_right_24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btnBack"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/btnReload"
                     android:layout_width="48dp"
                     android:layout_height="56dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:scaleType="center"
-                    android:src="@drawable/ic_refresh_24dp" />
+                    android:src="@drawable/ic_refresh_24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btnShareCurrent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/btnShareCurrent"
                     android:layout_width="48dp"
                     android:layout_height="56dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:scaleType="center"
-                    android:src="@drawable/ic_share_24dp" />
+                    android:src="@drawable/ic_share_24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btnBrowser"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/btnBrowser"
@@ -87,18 +120,14 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:scaleType="center"
-                    android:src="@drawable/ic_open_in_browser_24dp" />
-            </LinearLayout>
+                    android:src="@drawable/ic_open_in_browser_24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </android.support.constraint.ConstraintLayout>
 
-        </android.support.v7.widget.Toolbar>
+        </tk.wasdennnoch.progresstoolbar.ProgressToolbar>
 
-        <ProgressBar
-            android:id="@+id/pageProgress"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:max="100"
-            android:visibility="visible" />
     </android.support.design.widget.AppBarLayout>
 
 

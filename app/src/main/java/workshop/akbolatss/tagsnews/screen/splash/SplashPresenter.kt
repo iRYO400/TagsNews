@@ -18,13 +18,9 @@ import workshop.akbolatss.tagsnews.model.dao.ReminderItem
 import workshop.akbolatss.tagsnews.model.dao.RssSource
 import workshop.akbolatss.tagsnews.screen.reminders.ReminderReceiver
 import workshop.akbolatss.tagsnews.util.Constants
-import workshop.akbolatss.tagsnews.util.Logger
 
 import android.content.Context.ALARM_SERVICE
-import workshop.akbolatss.tagsnews.util.Constants.INTENT_HOUR
-import workshop.akbolatss.tagsnews.util.Constants.INTENT_MINUTE
 import workshop.akbolatss.tagsnews.util.Constants.INTENT_REQUEST_CODE
-import workshop.akbolatss.tagsnews.util.UtilityMethods
 
 class SplashPresenter @Inject
 constructor() : BasePresenter<SplashView>() {
@@ -65,7 +61,7 @@ constructor() : BasePresenter<SplashView>() {
             rItem.minute = 46
             rItem.pM_AM = "AM"
             rItem.requestCode = -100
-            mReminderRepository.onAddReminder(rItem)
+            mReminderRepository.addReminder(rItem)
 
             onActivateNotification(rItem)
 
@@ -75,7 +71,7 @@ constructor() : BasePresenter<SplashView>() {
             rItem.minute = 0
             rItem.pM_AM = "PM"
             rItem.requestCode = -200
-            mReminderRepository.onAddReminder(rItem)
+            mReminderRepository.addReminder(rItem)
         }
     }
 

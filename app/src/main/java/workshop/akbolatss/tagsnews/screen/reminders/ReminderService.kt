@@ -56,11 +56,6 @@ class ReminderService : JobService() {
 
     private var inboxStyle: NotificationCompat.InboxStyle? = null
 
-    //Buffer Data
-//    private var mRepeatRequestCode: Int = 0
-//    private var mRepeatHour: Int = 0
-//    private var mRepeatMinute: Int = 0
-
     override fun onCreate() {
         super.onCreate()
         DaggerRemindersComponent.builder()
@@ -83,32 +78,32 @@ class ReminderService : JobService() {
 //        mRepeatHour = intent.getIntExtra(INTENT_HOUR, -1)
 //        mRepeatMinute = intent.getIntExtra(INTENT_MINUTE, -1)
 
-        mRepository.onlyActive
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(object : DisposableSingleObserver<List<RssSource>>() {
-                    override fun onSuccess(rssSources: List<RssSource>) {
-                        for (i in rssSources.indices) {
-                            val rssSource = rssSources[i]
-                            mCompositeDisposable!!.add(mNewsApiService.getRss(rssSource.link)
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribeOn(Schedulers.io())
-                                    .subscribe({ rssFeed: RssFeed ->
-                                        pushNotification(rssSource, rssFeed)
-
-                                        onStopJob(params)
-                                    }, {
-//                                        onRepeatNotification()
-                                        onStopJob(params)
-                                    }))
-                        }
-
-                    }
-
-                    override fun onError(e: Throwable) {
-//                        onRepeatNotification()
-                    }
-                })
+//        mRepository.onlyActive
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(object : DisposableSingleObserver<List<RssSource>>() {
+//                    override fun onSuccess(rssSources: List<RssSource>) {
+//                        for (i in rssSources.indices) {
+//                            val rssSource = rssSources[i]
+//                            mCompositeDisposable!!.add(mNewsApiService.getRss(rssSource.link)
+//                                    .observeOn(AndroidSchedulers.mainThread())
+//                                    .subscribeOn(Schedulers.io())
+//                                    .subscribe({ rssFeed: RssFeed ->
+//                                        pushNotification(rssSource, rssFeed)
+//
+//                                        onStopJob(params)
+//                                    }, {
+////                                        onRepeatNotification()
+//                                        onStopJob(params)
+//                                    }))
+//                        }
+//
+//                    }
+//
+//                    override fun onError(e: Throwable) {
+////                        onRepeatNotification()
+//                    }
+//                })
         return true
     }
 
@@ -152,35 +147,6 @@ class ReminderService : JobService() {
         val m = random.nextInt(9999 - 1000) + 1000
         notificationManager.notify(m, notificationBuilder.build())
     }
-
-//    private fun onRepeatNotification() {
-//        val amc = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        val myIntent = Intent(mContext, ReminderReceiver::class.java)
-//
-//        val calendar = Calendar.getInstance()
-//        calendar.timeInMillis = System.currentTimeMillis()
-//
-//        val buffMinute = mRepeatMinute + 30
-//        if (buffMinute >= 60) {
-//            mRepeatHour++
-//            mRepeatMinute = buffMinute - 60
-//            if (mRepeatHour >= 24) {
-//                mRepeatHour = 0
-//            }
-//        } else {
-//            mRepeatMinute = buffMinute
-//        }
-//
-//        calendar.set(Calendar.HOUR_OF_DAY, mRepeatHour)
-//        calendar.set(Calendar.MINUTE, mRepeatMinute)
-//
-//        myIntent.putExtra(INTENT_REQUEST_CODE, mRepeatRequestCode)
-//        myIntent.putExtra(INTENT_HOUR, mRepeatHour)
-//        myIntent.putExtra(INTENT_MINUTE, mRepeatMinute)
-//        val pendingIntent = PendingIntent.getBroadcast(mContext, mRepeatRequestCode, myIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-//
-//        amc.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
-//    }
 
     override fun onDestroy() {
         mCompositeDisposable!!.clear()

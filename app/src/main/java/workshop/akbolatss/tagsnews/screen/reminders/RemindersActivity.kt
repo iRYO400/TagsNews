@@ -31,28 +31,31 @@ class RemindersActivity : BaseActivity(), RemindersView, RemindersAdapter.Remind
 
     override fun onViewReady(savedInstanceState: Bundle?, intent: Intent) {
         super.onViewReady(savedInstanceState, intent)
-        setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        initDagger()
+        initToolbar()
         initRV()
         initListeners()
         mPresenter.onLoadReminders()
+    }
+
+    private fun initToolbar(){
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+    }
+
+    private fun initRV() {
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        mAdapter = RemindersAdapter(this)
+        recyclerView.adapter = mAdapter
     }
 
     private fun initListeners() {
         fabAdd.setOnClickListener {
             onAddReminder()
         }
-    }
-
-    private fun initDagger() {
-        DaggerRemindersComponent.builder()
-                .appComponent(appComponent)
-                .remindersModule(RemindersModule(this))
-                .build()
-                .inject(this)
     }
 
     override fun onReminderOptions(rItem: ReminderItem, view: View, position: Int) {
@@ -169,14 +172,6 @@ class RemindersActivity : BaseActivity(), RemindersView, RemindersAdapter.Remind
         mAdapter!!.onAddItems(reminderItems)
     }
 
-    private fun initRV() {
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
-        mAdapter = RemindersAdapter(this)
-        recyclerView.adapter = mAdapter
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -185,6 +180,14 @@ class RemindersActivity : BaseActivity(), RemindersView, RemindersAdapter.Remind
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onInitDagger() {
+        DaggerRemindersComponent.builder()
+                .appComponent(appComponent)
+                .remindersModule(RemindersModule(this))
+                .build()
+                .inject(this)
     }
 
     override fun getContentView(): Int {
