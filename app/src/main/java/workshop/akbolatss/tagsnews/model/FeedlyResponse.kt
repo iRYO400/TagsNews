@@ -4,8 +4,14 @@ import com.google.gson.annotations.SerializedName
 
 import workshop.akbolatss.tagsnews.model.dao.RssSource
 
+/**
+ * Entity for API response
+ */
 class FeedlyResponse {
 
+    /**
+     * List of Rss sources
+     */
     @SerializedName("results")
     val rssSourceList: List<RssSource>? = null
 

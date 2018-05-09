@@ -3,19 +3,19 @@ package workshop.akbolatss.tagsnews.screen.details
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.view.ViewPager
-import kotlinx.android.synthetic.main.activity_details.*
-import me.toptas.rssconverter.RssItem
-import workshop.akbolatss.tagsnews.R
-import workshop.akbolatss.tagsnews.base.BaseActivity
-import workshop.akbolatss.tagsnews.screen.browser.BrowserFragment
-import android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-import android.os.Build
-import android.support.v4.app.FragmentActivity
 import android.util.Log
 import android.view.View
-import android.view.View.SYSTEM_UI_FLAG_FULLSCREEN
-import android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+import kotlinx.android.synthetic.main.activity_details.*
+import workshop.akbolatss.tagsnews.R
+import workshop.akbolatss.tagsnews.base.BaseActivity
+import workshop.akbolatss.tagsnews.model.dao.RssFeedItem
+import workshop.akbolatss.tagsnews.util.Constants.INTENT_RSS_FEED_ITEM
 
+/**
+ * Activity that stores #DetailsFragment and #BrowserFragment
+ * @see DetailsFragment
+ * @see BrowserFragment
+ */
 class DetailsActivity : BaseActivity() {
 
     private var mSectionsAdapter: SectionsPagerAdapter? = null
@@ -31,7 +31,10 @@ class DetailsActivity : BaseActivity() {
      * Init TabLayout Fragments
      */
     private fun onInitSources() {
-        mSectionsAdapter = SectionsPagerAdapter(supportFragmentManager, intent.getSerializableExtra("RssItem") as RssItem)
+
+        mSectionsAdapter = SectionsPagerAdapter(supportFragmentManager,
+                intent.getParcelableExtra(INTENT_RSS_FEED_ITEM) as RssFeedItem)
+
         viewPager.adapter = mSectionsAdapter
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
@@ -54,19 +57,24 @@ class DetailsActivity : BaseActivity() {
         })
     }
 
+    /**
+     * Slide to #BrowserFragment.
+     */
     fun onOpenSource() {
         viewPager.setCurrentItem(1, true)
     }
 
+    /**
+     * Slide to #DetailsFragment
+     */
     fun onOpenDetails() {
         viewPager.setCurrentItem(0, true)
     }
 
+    /**
+     * Toogle Fullscreen mode on/off (e.g. Immersive mode)
+     */
     private fun toggleHideBar(immersiveOff: Boolean) {
-
-        // BEGIN_INCLUDE (get_current_ui_flags)
-        // The UI options currently enabled are represented by a bitfield.
-        // getSystemUiVisibility() gives us that bitfield.
         val uiOptions = window.decorView.systemUiVisibility
         var newUiOptions = uiOptions
 

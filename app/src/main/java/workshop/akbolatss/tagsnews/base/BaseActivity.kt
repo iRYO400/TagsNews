@@ -9,6 +9,9 @@ import workshop.akbolatss.tagsnews.application.App
 import workshop.akbolatss.tagsnews.di.component.AppComponent
 import workshop.akbolatss.tagsnews.screen.splash.SplashActivity
 
+/**
+ * Base class for Activities in project. Extends by #SwipeBackActivity to handle Swipe to close gesture
+ */
 abstract class BaseActivity : SwipeBackActivity() {
 
     protected val appComponent: AppComponent
@@ -20,19 +23,25 @@ abstract class BaseActivity : SwipeBackActivity() {
         super.onCreate(savedInstanceState)
         setContentView(getContentView())
 
-        if (this !is SplashActivity) {
+        //Exclusion for SplashActivity
+        if (this !is SplashActivity)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
-        }
 
         onInitDagger()
         onViewReady(savedInstanceState, intent)
     }
 
+    /**
+     * Same transition animation for child Activities
+     */
     override fun onBackPressed() {
         super.onBackPressed()
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right)
     }
 
+    /**
+     * Instantiate Dagger2
+     */
     protected open fun onInitDagger() {}
 
 

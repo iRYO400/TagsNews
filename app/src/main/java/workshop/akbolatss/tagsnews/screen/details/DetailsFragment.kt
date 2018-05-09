@@ -11,17 +11,22 @@ import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import com.stfalcon.frescoimageviewer.ImageViewer
 import kotlinx.android.synthetic.main.fragment_details.*
-import me.toptas.rssconverter.RssItem
 import workshop.akbolatss.tagsnews.R
 import workshop.akbolatss.tagsnews.application.App
 import workshop.akbolatss.tagsnews.di.component.DaggerDetailsComponent
 import workshop.akbolatss.tagsnews.di.module.DetailsModule
+import workshop.akbolatss.tagsnews.model.dao.RssFeedItem
+import workshop.akbolatss.tagsnews.model.dao.RssSource
 import workshop.akbolatss.tagsnews.util.Constants.FB_PACKAGE_NAME
+import workshop.akbolatss.tagsnews.util.Constants.SHARE_INFO
 import workshop.akbolatss.tagsnews.util.Constants.TW_PACKAGE_NAME
 import workshop.akbolatss.tagsnews.util.Constants.VK_PACKAGE_NAME
 import workshop.akbolatss.tagsnews.util.UtilityMethods
 import javax.inject.Inject
 
+/**
+ * Details for RSS Feed Item
+ */
 class DetailsFragment : Fragment(), DetailsView {
 
     @Inject
@@ -29,12 +34,12 @@ class DetailsFragment : Fragment(), DetailsView {
 
     companion object {
 
-        private const val PARAM_TYPE = "RssItemFragment"
+        private const val PARAM_RSS_ITEM = "RssItemFragment"
 
-        fun newInstance(rssItem: RssItem): DetailsFragment {
+        fun newInstance(rssItem: RssFeedItem): DetailsFragment {
             val fragment = DetailsFragment()
             val args = Bundle()
-            args.putSerializable(PARAM_TYPE, rssItem)
+            args.putParcelable(PARAM_RSS_ITEM, rssItem)
             fragment.arguments = args
             return fragment
         }
@@ -46,32 +51,40 @@ class DetailsFragment : Fragment(), DetailsView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initDagger()
 
-        DaggerDetailsComponent.builder()
-                .appComponent((context!!.applicationContext as App).appComponent)
-                .detailsModule(DetailsModule(this))
-                .build()
-                .inject(this)
-
-        mPresenter.mRssItem = arguments!!.getSerializable(PARAM_TYPE) as RssItem
+        mPresenter.mRssFeedItem = arguments!!.getParcelable(PARAM_RSS_ITEM) as RssFeedItem
 
         initView()
         initListeners()
     }
 
+    private fun initDagger() {
+        DaggerDetailsComponent.builder()
+                .appComponent((context!!.applicationContext as App).appComponent)
+                .detailsModule(DetailsModule(this))
+                .build()
+                .inject(this)
+    }
+
+    /**
+     * Init text values, images for View
+     */
     private fun initView() {
-        tvTitle.text = mPresenter.mRssItem!!.title
-        if (mPresenter.mRssItem!!.publishDate != null && mPresenter.mRssItem!!.publishDate.isNotEmpty())
-            tvTimestamp.text = UtilityMethods.convertTime(mPresenter.mRssItem!!.publishDate)
-        tvDescription.text = mPresenter.mRssItem!!.description
+        tvTitle.text = mPresenter.mRssFeedItem!!.title
+        if (mPresenter.mRssFeedItem!!.pubDate != null && mPresenter.mRssFeedItem!!.pubDate.isNotEmpty())
+            tvTimestamp.text = UtilityMethods.convertTime(mPresenter.mRssFeedItem!!.pubDate)
+        tvDescription.text = mPresenter.mRssFeedItem!!.description
+
+        mPresenter.getRssSource()
 
         Picasso.with(activity)
-                .load(mPresenter.mRssItem!!.image)
+                .load(mPresenter.mRssFeedItem!!.image)
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(imgView)
 
-        if (mPresenter.onCheckFavorites(mPresenter.mRssItem!!.publishDate)) {
+        if (mPresenter.checkInFavorites()) {
             btnFavorite.setImageResource(R.drawable.ic_favorite_24dp)
         } else {
             btnFavorite.setImageResource(R.drawable.ic_favorite_border_24dp)
@@ -80,9 +93,19 @@ class DetailsFragment : Fragment(), DetailsView {
 //        adView.loadAd(adRequest)
     }
 
+    /**
+     * RSS source details
+     */
+    override fun loadRssSource(rssSource: RssSource?) {
+        tvSourceName.text = rssSource?.title
+    }
+
+    /**
+     * Init listeners for buttons
+     */
     private fun initListeners() {
         flImage.setOnClickListener {
-            ImageViewer.Builder(activity, arrayListOf(mPresenter.mRssItem!!.image))
+            ImageViewer.Builder(activity, arrayListOf(mPresenter.mRssFeedItem!!.image))
                     .setStartPosition(0)
                     .show()
         }
@@ -111,16 +134,22 @@ class DetailsFragment : Fragment(), DetailsView {
         }
     }
 
+    /**
+     * Share current RSS feed using any acceptable app
+     */
     override fun onShare() {
-        val messageSend = mPresenter.mRssItem!!.title + "\n\n" + mPresenter.mRssItem!!.getLink() + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
+        val messageSend = mPresenter.mRssFeedItem!!.title + "\n\n" + mPresenter.mRssFeedItem!!.getLink() + " \n\n---\n" + SHARE_INFO
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_TEXT, messageSend)
         startActivity(intent)
     }
 
+    /**
+     * Share directly, if exists on VK.com app or open Play Market
+     */
     override fun onShareVk() {
-        val messageSend = mPresenter.mRssItem!!.title + "\n\n" + mPresenter.mRssItem!!.link + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp"
+        val messageSend = mPresenter.mRssFeedItem!!.title + "\n\n" + mPresenter.mRssFeedItem!!.link + " \n\n---\n" + SHARE_INFO
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_TEXT, messageSend)
@@ -141,8 +170,11 @@ class DetailsFragment : Fragment(), DetailsView {
         }
     }
 
+    /**
+     * Share directly, if exists on Facebook app or open Play Market
+     */
     override fun onShareFb() {
-        val messageSend = mPresenter.mRssItem!!.getTitle() + "\n\n" + mPresenter.mRssItem!!.getLink() + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
+        val messageSend = mPresenter.mRssFeedItem!!.title + "\n\n" + mPresenter.mRssFeedItem!!.link + " \n\n---\n" + SHARE_INFO
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_TEXT, messageSend)
@@ -162,8 +194,11 @@ class DetailsFragment : Fragment(), DetailsView {
         }
     }
 
+    /**
+     * Share directly, if exists on Twitter app or open Play Market
+     */
     override fun onShareTw() {
-        val messageSend = mPresenter.mRssItem!!.title + "\n\n" + mPresenter.mRssItem!!.getLink() + " \n\n---\n" + "Tag News (Beta) bit.ly/TagNewsApp";
+        val messageSend = mPresenter.mRssFeedItem!!.title + "\n\n" + mPresenter.mRssFeedItem!!.link + " \n\n---\n" + SHARE_INFO
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_TEXT, messageSend)
@@ -183,16 +218,25 @@ class DetailsFragment : Fragment(), DetailsView {
         }
     }
 
+    /**
+     * Helper to open Play Market
+     */
     override fun onShareWithWebIntent(socialNetworkId: String) {
         val shareUrl = "market://details?id=$socialNetworkId"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(shareUrl))
         startActivity(intent)
     }
 
+    /**
+     * Open #BrowserFragment
+     */
     override fun onOpenSource() {
         (activity as DetailsActivity).onOpenSource()
     }
 
+    /**
+     * Update Toolbar state
+     */
     override fun onRefreshToolbar(isFavorite: Boolean) {
         if (isFavorite) {
             btnFavorite.setImageResource(R.drawable.ic_favorite_24dp)

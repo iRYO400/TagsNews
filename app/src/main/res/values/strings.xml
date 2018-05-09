@@ -63,9 +63,12 @@
     <string name="smallBar">Tile</string>
     <string name="timeout_error">Connection has been timed out. Please try again.</string>
     <string name="network_error">Network error, please try again.</string>
-    <string name="no_content_rss">You have not added RSS channels.</string>
+    <string name="rss_exists">RSS channel already exists.</string>
+    <string name="no_content_rss">You have not added any RSS channel.</string>
+    <string name="no_content_reminder">You removed all reminders :(</string>
+    <string name="no_content_favorites">Your bookmarks are empty.</string>
     <string name="unknown_error">An unknown error occurred.</string>
-    <string name="suggestions">Examples: Android, Movies, Science, Anime, Lifefly, Netflix, Dota 2...</string>
+    <string name="suggestions">Examples: Android, Movies, Science, Anime, Lifefly, Netflix, Dota 2…</string>
     <string name="no_content_search">Nothing found.</string>
     <string name="no_content_news">I did not think that this is possible, but there is no news.</string>
     <string name="LargeBar">Large tile</string>
@@ -73,6 +76,7 @@
 
     <string name="tv_no">No</string>
     <string name="tv_add_channel">Add channel</string>
+    <string name="tv_remove_channel">Channel already exists, Delete it?</string>
     <string name="tv_yes">Yes</string>
 
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-5199160133239078/2831460635</string>

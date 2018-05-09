@@ -13,18 +13,18 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
-
 import kotlinx.android.synthetic.main.activity_sources.*
-
-import javax.inject.Inject
-
 import workshop.akbolatss.tagsnews.R
 import workshop.akbolatss.tagsnews.base.BaseActivity
 import workshop.akbolatss.tagsnews.di.component.DaggerSourcesComponent
 import workshop.akbolatss.tagsnews.di.module.SourcesModule
 import workshop.akbolatss.tagsnews.model.dao.RssSource
 import workshop.akbolatss.tagsnews.screen.sources.helper.SimpleItemTouchHelperCallback
+import javax.inject.Inject
 
+/**
+ * Activity for managing RSS sources, e.g. add, edit, remove
+ */
 class SourcesActivity : BaseActivity(), SourcesView, SourcesAdapter.SourceListener {
 
     @Inject
@@ -41,10 +41,10 @@ class SourcesActivity : BaseActivity(), SourcesView, SourcesAdapter.SourceListen
         initToolbar()
         initRV()
         initListeners()
-        mPresenter.onLoadSources()
+        mPresenter.loadSources()
     }
 
-    private fun initToolbar(){
+    private fun initToolbar() {
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -59,7 +59,6 @@ class SourcesActivity : BaseActivity(), SourcesView, SourcesAdapter.SourceListen
     private fun initRV() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-        recyclerView.isNestedScrollingEnabled = false
 
         mSourcesAdapter = SourcesAdapter(this)
         recyclerView.adapter = mSourcesAdapter
@@ -73,6 +72,9 @@ class SourcesActivity : BaseActivity(), SourcesView, SourcesAdapter.SourceListen
         mItemTouchHelper!!.startDrag(viewHolder)
     }
 
+    /**
+     * Add manually new RSS source
+     */
     override fun onAddNewSource() {
         val layoutInflater = LayoutInflater.from(this@SourcesActivity)
         val subView = layoutInflater.inflate(R.layout.dialog_new_source, null)
@@ -85,25 +87,38 @@ class SourcesActivity : BaseActivity(), SourcesView, SourcesAdapter.SourceListen
         builder.setPositiveButton(R.string.tvAdd) { dialogInterface, i ->
             val rssSource = RssSource()
             rssSource.isActive = true
-            rssSource.title = etLink.text.toString()
-            rssSource.link = etLink.text.toString()
-            mPresenter.onAddNewSource(rssSource)
+            rssSource.title = etLink.text.toString().trim()
+            rssSource.link = etLink.text.toString().trim()
+            if (mPresenter.checkInSources(rssSource)) {
+                Toast.makeText(this, resources.getString(R.string.rss_exists), Toast.LENGTH_LONG).show()
+            } else {
+                mPresenter.addNewSource(rssSource)
 
-            mSourcesAdapter!!.onAddItem(rssSource)
+                mSourcesAdapter!!.onAddItem(rssSource)
+            }
             dialogInterface.dismiss()
         }
         builder.setNegativeButton(R.string.tvCancel) { dialogInterface, i -> dialogInterface.cancel() }
         builder.show()
     }
 
+    /**
+     * Load list of all RSS sources to Adapter
+     */
     override fun onLoadSources(rssSourceList: List<RssSource>) {
         mSourcesAdapter!!.onAddItems(rssSourceList)
     }
 
+    /**
+     * Swap RSS items
+     */
     override fun onItemsSwapped(from: RssSource, to: RssSource) {
-        mPresenter.onSwapPositions(from, to)
+        mPresenter.swapPositions(from, to)
     }
 
+    /**
+     * RSS source options. Edit name, edit link and remove
+     */
     override fun onSourceOptions(rssSource: RssSource, view: View, pos: Int) {
         val popupMenu = PopupMenu(this, view)
         popupMenu.inflate(R.menu.menu_popup_source)
@@ -122,7 +137,7 @@ class SourcesActivity : BaseActivity(), SourcesView, SourcesAdapter.SourceListen
                     builder.setView(subView)
                     builder.setPositiveButton(R.string.tvEdit) { dialogInterface, i ->
                         rssSource.title = etLink.text.toString()
-                        mPresenter.onUpdateSource(rssSource)
+                        mPresenter.updateSource(rssSource)
                         mSourcesAdapter!!.onUpdateItem(rssSource, pos)
                         dialogInterface.dismiss()
                     }
@@ -143,7 +158,7 @@ class SourcesActivity : BaseActivity(), SourcesView, SourcesAdapter.SourceListen
                     builder2.setView(subView2)
                     builder2.setPositiveButton(R.string.tvEdit) { dialogInterface, i ->
                         rssSource.link = etLink2.text.toString()
-                        mPresenter.onUpdateSource(rssSource)
+                        mPresenter.updateSource(rssSource)
                         mSourcesAdapter!!.onUpdateItem(rssSource, pos)
                         dialogInterface.dismiss()
                     }
@@ -152,7 +167,7 @@ class SourcesActivity : BaseActivity(), SourcesView, SourcesAdapter.SourceListen
                     return@OnMenuItemClickListener true
                 }
                 R.id.mRemove -> {
-                    mPresenter.onRemoveSource(rssSource)
+                    mPresenter.removeSource(rssSource)
                     mSourcesAdapter!!.onRemoveItem(pos)
                     return@OnMenuItemClickListener true
                 }
@@ -162,9 +177,42 @@ class SourcesActivity : BaseActivity(), SourcesView, SourcesAdapter.SourceListen
         popupMenu.show()
     }
 
+    /**
+     * Activate/deactivate RSS source in #BoardActivity
+     * @see BoardActivity
+     */
     override fun onSourceSwitch(rssSource: RssSource, isActive: Boolean, pos: Int) {
         rssSource.isActive = isActive
-        mPresenter.onUpdateSource(rssSource)
+        mPresenter.updateSource(rssSource)
+    }
+
+    /**
+     * Show loading state
+     */
+    override fun onShowLoading() {
+        recyclerView.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
+    }
+
+    /**
+     * Hide loading state
+     */
+    override fun onHideLoading() {
+        recyclerView.visibility = View.VISIBLE
+        progressBar.visibility = View.GONE
+    }
+
+    /**
+     * Show if there no content and vice-versa
+     */
+    override fun onNoContent(isEmpty: Boolean) {
+        if (isEmpty) {
+            recyclerView.visibility = View.GONE
+            tvNoContent.visibility = View.VISIBLE
+        } else {
+            recyclerView.visibility = View.VISIBLE
+            tvNoContent.visibility = View.GONE
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -187,26 +235,6 @@ class SourcesActivity : BaseActivity(), SourcesView, SourcesAdapter.SourceListen
 
     override fun getContentView(): Int {
         return R.layout.activity_sources
-    }
-
-    override fun onShowLoading() {
-        recyclerView.visibility = View.GONE
-        progressBar.visibility = View.VISIBLE
-    }
-
-    override fun onHideLoading() {
-        recyclerView.visibility = View.VISIBLE
-        progressBar.visibility = View.GONE
-    }
-
-    override fun onNoContent(isEmpty: Boolean) {
-        if (isEmpty) {
-            recyclerView.visibility = View.GONE
-            tvNoContent.visibility = View.VISIBLE
-        } else {
-            recyclerView.visibility = View.VISIBLE
-            tvNoContent.visibility = View.GONE
-        }
     }
 
     override fun onUnknownError(errorMessage: String) {

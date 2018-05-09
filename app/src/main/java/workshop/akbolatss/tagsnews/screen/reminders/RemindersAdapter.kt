@@ -6,12 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.rv_reminder_item.view.*
-
-import java.util.ArrayList
-import java.util.regex.Pattern
-
 import workshop.akbolatss.tagsnews.R
 import workshop.akbolatss.tagsnews.model.dao.ReminderItem
+import java.util.*
+import java.util.regex.Pattern
 
 class RemindersAdapter(private val mListener: ReminderListener) : RecyclerView.Adapter<RemindersAdapter.RemindersVH>() {
 
@@ -39,12 +37,26 @@ class RemindersAdapter(private val mListener: ReminderListener) : RecyclerView.A
     fun onAddItem(rItem: ReminderItem?) {
         if (rItem != null) {
             mList.add(rItem)
-            notifyDataSetChanged()
+            notifyItemInserted(mList.size - 1)
         }
     }
 
     override fun getItemCount(): Int {
         return mList.size
+    }
+
+    fun updateItem(rItem: ReminderItem, pos: Int) {
+        if (rItem != null) {
+            mList[pos] = rItem
+            notifyItemChanged(pos)
+        }
+    }
+
+    fun removeItem(rItem: ReminderItem, pos: Int) {
+        if (rItem != null) {
+            mList.removeAt(pos)
+            notifyItemRemoved(pos)
+        }
     }
 
     interface ReminderListener {
@@ -64,7 +76,7 @@ class RemindersAdapter(private val mListener: ReminderListener) : RecyclerView.A
                 iconState(rItem.isActive)
             }
             itemView.imgOptions.setOnClickListener {
-                mListener.onReminderOptions(rItem, it,  adapterPosition)
+                mListener.onReminderOptions(rItem, it, adapterPosition)
             }
         }
 

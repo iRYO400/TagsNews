@@ -9,27 +9,29 @@ import workshop.akbolatss.tagsnews.base.BasePresenter
 import workshop.akbolatss.tagsnews.model.DBRssSourceRepository
 import workshop.akbolatss.tagsnews.model.dao.RssSource
 
-class BoardPresenter @Inject public constructor() : BasePresenter<BoardView>() {
+/**
+ * MVP Presenter for #BoardActivity
+ * @see BoardActivity
+ */
+class BoardPresenter @Inject constructor() : BasePresenter<BoardView>() {
 
     @Inject
     lateinit var mRepository: DBRssSourceRepository
 
+    /**
+     * Load list of active RSS sources from DB
+     */
     fun onLoadSources(isUpdating: Boolean) {
         mRepository.onlyActive
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(object : DisposableSingleObserver<List<RssSource>>() {
-                    override fun onSuccess(rssSources: List<RssSource>) {
-                        if (isUpdating) {
-                            view.onUpdateSources(rssSources)
-                        } else {
-                            view.onInitSources(rssSources)
-                        }
+                .subscribe({ rssSources ->
+                    if (isUpdating) {
+                        view.onUpdateSources(rssSources)
+                    } else {
+                        view.onInitSources(rssSources)
                     }
-
-                    override fun onError(e: Throwable) {
-
-                    }
+                }, {
                 })
     }
 }

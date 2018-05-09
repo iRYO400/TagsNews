@@ -9,15 +9,16 @@
 
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="cardViewStyle">@style/CardView</item>
         <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
+        <!--<item name="android:windowTranslucentNavigation">true</item>-->
 
         <!--<item name="android:fitsSystemWindows">true</item>-->
     </style>
 
     <style name="SwipeTheme" parent="AppTheme">
         <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowTranslucentNavigation">false</item>
+        <!--<item name="android:windowTranslucentNavigation">false</item>-->
     </style>
 
     <style name="CustomProgressBarHorizontal" parent="android:Widget.ProgressBar.Horizontal">
@@ -36,11 +37,18 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="TimePickerDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <!-- Used for the buttons -->
         <item name="colorAccent">@color/colorAccent</item>
         <!-- Used for the title and text -->
         <item name="android:textColorPrimary">#FFFFFF</item>
+        <!-- Used for the background -->
+        <item name="android:background">@color/colorWhite</item>
+    </style>
+
+    <style name="Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- Used for the buttons -->
+        <item name="colorAccent">@color/colorAccent</item>
         <!-- Used for the background -->
         <item name="android:background">@color/colorWhite</item>
     </style>

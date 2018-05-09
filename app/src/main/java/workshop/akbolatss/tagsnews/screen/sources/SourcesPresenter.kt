@@ -11,13 +11,20 @@ import java.io.IOException
 import java.net.SocketTimeoutException
 import javax.inject.Inject
 
+/**
+ * MVP Presenter for #SourcesActivity
+ * @see SourcesActivity
+ */
 class SourcesPresenter @Inject
 constructor() : BasePresenter<SourcesView>() {
 
     @Inject
     lateinit var mRepository: DBRssSourceRepository
 
-    fun onLoadSources() {
+    /**
+     * Load all existing RSS sources from DB
+     */
+    fun loadSources() {
         mRepository.allSources
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -45,9 +52,13 @@ constructor() : BasePresenter<SourcesView>() {
                 })
     }
 
-    fun onSearchSources(s: String) {
+    /**
+     * Look for RSS source by #query
+     * @param query submitted query
+     */
+    fun searchSources(query: String) {
         view.onShowLoading()
-        mRepository.getQueryResult(s)
+        mRepository.getQueryResult(query)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : DisposableSingleObserver<FeedlyResponse>() {
@@ -74,19 +85,45 @@ constructor() : BasePresenter<SourcesView>() {
                 })
     }
 
-    fun onSwapPositions(from: RssSource, to: RssSource) {
+    /**
+     * Swap RSS source positions
+     */
+    fun swapPositions(from: RssSource, to: RssSource) {
         mRepository.swapSources(from, to)
     }
 
-    fun onAddNewSource(rssSource: RssSource) {
+    /**
+     * Add new RSS source
+     */
+    fun addNewSource(rssSource: RssSource) {
         mRepository.addNewSource(rssSource)
     }
 
-    fun onUpdateSource(rssSource: RssSource) {
+    /**
+     * Update RSS source
+     */
+    fun updateSource(rssSource: RssSource) {
         mRepository.updateSource(rssSource)
     }
 
-    fun onRemoveSource(rssSource: RssSource) {
+    /**
+     * Remove RSS source from DB by ID
+     */
+    fun removeSource(rssSource: RssSource) {
         mRepository.deleteSource(rssSource)
+    }
+
+    /**
+     * Remove RSS source from DB by Url link
+     */
+    fun removeSourceByLink(rssSource: RssSource) {
+        mRepository.deleteSourceByLink(rssSource)
+    }
+
+    /**
+     * Check if RSS source exists in DB
+     */
+    fun checkInSources(rssSource: RssSource): Boolean {
+        return mRepository.checkIfExists(rssSource)
     }
 }

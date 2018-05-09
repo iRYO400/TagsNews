@@ -8,48 +8,40 @@ import workshop.akbolatss.tagsnews.model.DBRssSourceRepository
 import workshop.akbolatss.tagsnews.model.dao.DaoSession
 import workshop.akbolatss.tagsnews.screen.splash.SplashView
 
+/**
+ * Dagger2 module for SplashComponent
+ * @see workshop.akbolatss.tagsnews.di.component.SplashComponent
+ */
 @Module
 class SplashModule(private val mView: SplashView) {
 
+    /**
+     * MVP View Provider
+     * @see SplashView
+     */
     @ActivityScope
     @Provides
     internal fun provideView(): SplashView {
         return mView
     }
 
+    /**
+     * DB Repository provider for Rss sources
+     * @see DBRssSourceRepository
+     */
     @ActivityScope
     @Provides
     internal fun provideDbRssSourceRepository(daoSession: DaoSession): DBRssSourceRepository {
         return DBRssSourceRepository(daoSession)
     }
 
+    /**
+     * DB Repository provider for Reminder
+     * @see DBReminderItemRepository
+     */
     @ActivityScope
     @Provides
     internal fun provideDbRemindersRepository(daoSession: DaoSession): DBReminderItemRepository {
         return DBReminderItemRepository(daoSession)
     }
 }
-
-//    private SplashView mView;
-//
-//    public SplashModule(SplashView mView) {
-//        this.mView = mView;
-//    }
-//
-//    @ActivityScope
-//    @Provides
-//    SplashView provideView() {
-//        return mView;
-//    }
-//
-//    @ActivityScope
-//    @Provides
-//    DBRssSourceRepository provideDbRssSourceRepository(DaoSession daoSession){
-//        return new DBRssSourceRepository(daoSession);
-//    }
-//
-//    @ActivityScope
-//    @Provides
-//    DBReminderItemRepository provideDbRemindersRepository(DaoSession daoSession){
-//        return new DBReminderItemRepository(daoSession);
-//    }

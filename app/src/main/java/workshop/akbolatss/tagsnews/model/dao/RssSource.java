@@ -5,26 +5,51 @@ import com.google.gson.annotations.SerializedName;
 import org.greenrobot.greendao.annotation.*;
 
 /**
- * Entity mapped to table "RSS_SOURCE".
+ * Entity mapped to table "RSS_SOURCE". This class represents Rss source
+ * @see workshop.akbolatss.tagsnews.model.DBRssSourceRepository
  */
 @Entity
 public class RssSource {
 
     @Id(autoincrement = true)
     private Long id;
+    /**
+     * Position index
+     */
     private Integer positionIndex;
+    /**
+     * Is source active
+     */
     private Boolean isActive;
+    /**
+     * Title
+     */
     @SerializedName("title")
     private String title;
+    /**
+     * Link to RSS of source
+     */
     @SerializedName("feedId")
     private String link;
+    /**
+     * Rss description
+     */
     @SerializedName("description")
     private String description;
+    /**
+     * Subscribers count
+     */
     @SerializedName("subscribers")
     private int subscribers;
+    /**
+     * Link to website
+     */
     @SerializedName("website")
     private String website;
 
+    /**
+     * Link to RSS icon
+     */
     @SerializedName("visualUrl")
     private String visualUrl;
 

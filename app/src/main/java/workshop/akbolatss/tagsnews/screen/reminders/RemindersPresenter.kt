@@ -16,6 +16,10 @@ import workshop.akbolatss.tagsnews.util.UtilityMethods
 import java.util.*
 import javax.inject.Inject
 
+/**
+ * MVP Presenter for #RemindersActivity
+ * @see RemindersActivity
+ */
 class RemindersPresenter @Inject constructor() : BasePresenter<RemindersView>() {
 
     @Inject
@@ -24,6 +28,13 @@ class RemindersPresenter @Inject constructor() : BasePresenter<RemindersView>() 
     @Inject
     lateinit var mRepository: DBReminderItemRepository
 
+    /**
+     * Activate Reminder. Uses AlarmManager to trigger BroadcastReceiver and execute JobScheduler.
+     * #RequestCode uses as ID to turn On/Off AlarmManager
+     * @see ReminderReceiver
+     * @see UtilityMethods.scheduleJob
+     * @see UtilityMethods.scheduleOffJob
+     */
     fun onActivateNotification(rItem: ReminderItem, isNewAdded: Boolean) {
         if (!isNewAdded) {
             mRepository.activateReminder(rItem)
@@ -38,9 +49,12 @@ class RemindersPresenter @Inject constructor() : BasePresenter<RemindersView>() 
         calendar.timeInMillis = System.currentTimeMillis()
         calendar.set(Calendar.HOUR_OF_DAY, rItem.hour!!)
         calendar.set(Calendar.MINUTE, rItem.minute!!)
-        amc.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+        amc.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, 1000 * 60 * 60 * 24, pendingIntent)
     }
 
+    /**
+     * Deactivate activated reminder using #RequestCode
+     */
     fun onDeactivateNotification(rItem: ReminderItem) {
         mRepository.deactivateReminder(rItem)
 
@@ -56,23 +70,32 @@ class RemindersPresenter @Inject constructor() : BasePresenter<RemindersView>() 
         }
     }
 
+    /**
+     * Add new reminder to DB
+     */
     fun onAddReminder(rItem: ReminderItem) {
         onActivateNotification(rItem, true)
         mRepository.addReminder(rItem)
-        view.onUpdateReminders()
     }
 
+    /**
+     * Update existing reminder in DB
+     */
     fun onUpdate(rItem: ReminderItem) {
         mRepository.updateReminder(rItem)
-        view.onUpdateReminders()
     }
 
+    /**
+     *  Remove existing reminder from DB
+     */
     fun onRemoveReminder(rItem: ReminderItem) {
         onDeactivateNotification(rItem)
         mRepository.removeReminder(rItem)
-        view.onUpdateReminders()
     }
 
+    /**
+     * Load list of all reminder
+     */
     fun onLoadReminders() {
         mRepository.loadReminders()
                 .subscribeOn(Schedulers.io())

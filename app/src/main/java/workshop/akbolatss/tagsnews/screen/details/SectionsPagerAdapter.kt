@@ -2,12 +2,14 @@ package workshop.akbolatss.tagsnews.screen.details
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import me.toptas.rssconverter.RssItem
-import workshop.akbolatss.tagsnews.screen.browser.BrowserFragment
+import workshop.akbolatss.tagsnews.model.dao.RssFeedItem
 import workshop.akbolatss.tagsnews.util.SmartFragmentStatePagerAdapter
 
-
-class SectionsPagerAdapter(fm: FragmentManager, private val rssItem: RssItem)
+/**
+ * FragmentStatePager adapter to handle #RecommendationsFragment and #DetailsFragment in #BrowserFragment
+ * @see DetailsActivity
+ */
+class SectionsPagerAdapter(fm: FragmentManager, private val rssItem: RssFeedItem)
     : SmartFragmentStatePagerAdapter<Fragment>(fm) {
 
     override fun getItem(position: Int): Fragment {
@@ -24,9 +26,9 @@ class SectionsPagerAdapter(fm: FragmentManager, private val rssItem: RssItem)
 
     override fun getPageTitle(position: Int): CharSequence? {
         return if (position == 0) {
-            "TAB1"
+            "Details"
         } else {
-            "TAB2"
+            "Browser"
         }
     }
 }

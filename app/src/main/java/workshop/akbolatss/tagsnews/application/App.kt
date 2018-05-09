@@ -13,8 +13,14 @@ import workshop.akbolatss.tagsnews.util.Constants.BASE_URL
 
 import workshop.akbolatss.tagsnews.util.Constants.SELECTED_THEME
 
+/**
+ * Application class. Uses to initiate Dagger2, Hawk, Fresco
+ */
 class App : Application() {
 
+    /**
+     * Main Dagger2 Component
+     */
     lateinit var appComponent: AppComponent
 
     override fun onCreate() {
@@ -32,6 +38,7 @@ class App : Application() {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
+
 
         Fresco.initialize(applicationContext)
     }

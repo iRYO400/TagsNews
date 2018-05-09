@@ -1,87 +1,68 @@
-package workshop.akbolatss.tagsnews.screen.browser
+package workshop.akbolatss.tagsnews.screen.details
 
+import android.annotation.TargetApi
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.*
 import android.webkit.WebView
 import kotlinx.android.synthetic.main.fragment_browser.*
-import me.toptas.rssconverter.RssItem
 import vcm.github.webkit.proview.ProWebView
 import workshop.akbolatss.tagsnews.R
-import workshop.akbolatss.tagsnews.screen.details.DetailsActivity
-import workshop.akbolatss.tagsnews.util.UtilityMethods.isWifiConnected
+import workshop.akbolatss.tagsnews.model.dao.RssFeedItem
+import workshop.akbolatss.tagsnews.util.UtilityMethods
+import workshop.akbolatss.tagsnews.util.UtilityMethods.getDirection
+import workshop.akbolatss.tagsnews.util.UtilityMethods.getDistance
+import workshop.akbolatss.tagsnews.util.UtilityMethods.isWiFiConnected
 
-class BrowserFragment : Fragment(), BrowserView {
+/**
+ * Fragment with WebView, where all urls are being loaded
+ */
+class BrowserFragment : Fragment() {
 
-    private var mRssItem: RssItem? = null
+    /**
+     * RssFeedItem object
+     */
+    private var mRssFeedItem: RssFeedItem? = null
+    /**
+     * Current loaded page title
+     */
     private var mCurrPageTitle = ""
+    /**
+     * Current loaded page url
+     */
     private var mCurrPageUrl = ""
+    /**
+     * Reference to View's distance in pixels a touch can wander before we think the user is scrolling
+     */
     private var touchSlop: Int = 0
+    /**
+     * Old X coordinate touch value. Used for hide/unhide #Toolbar
+     */
     private var startX: Float = 0f
+    /**
+     * Old Y coordinate touch value. Used for hide/unhide #Toolbar
+     */
     private var startY: Float = 0f
+    /**
+     * Check if Url already loaded
+     */
     private var isUrlStartLoading = false
 
     companion object {
 
         private const val PARAM_TYPE = "RssItemFragment"
 
-        fun newInstance(rssItem: RssItem): BrowserFragment {
+        fun newInstance(rssItem: RssFeedItem): BrowserFragment {
             val fragment = BrowserFragment()
             val args = Bundle()
-            args.putSerializable(PARAM_TYPE, rssItem)
+            args.putParcelable(PARAM_TYPE, rssItem)
             fragment.arguments = args
             return fragment
-        }
-
-        private fun getDirection(x1: Float, y1: Float, x2: Float, y2: Float): Direction {
-            val angle = getAngle(x1, y1, x2, y2)
-            return Direction[angle]
-        }
-
-        private fun getAngle(x1: Float, y1: Float, x2: Float, y2: Float): Double {
-            val rad = Math.atan2((y1 - y2).toDouble(), (x2 - x1).toDouble()) + Math.PI
-            return (rad * 180 / Math.PI + 180) % 360
-        }
-
-        private fun getDistance(ev: MotionEvent, startX: Float, startY: Float): Float {
-            var distanceSum = 0f
-
-            val dx = ev.getX(0) - startX
-            val dy = ev.getY(0) - startY
-            distanceSum += Math.sqrt((dx * dx + dy * dy).toDouble()).toFloat()
-
-            return distanceSum
-        }
-
-        enum class Direction {
-            NOT_DETECTED,
-            UP,
-            DOWN,
-            LEFT,
-            RIGHT;
-
-            companion object {
-
-                operator fun get(angle: Double): Direction {
-                    return if (inRange(angle, 45f, 135f)) {
-                        Direction.UP
-                    } else if (inRange(angle, 0f, 45f) || inRange(angle, 315f, 360f)) {
-                        Direction.RIGHT
-                    } else if (inRange(angle, 225f, 315f)) {
-                        Direction.DOWN
-                    } else {
-                        Direction.LEFT
-                    }
-                }
-
-                private fun inRange(angle: Double, init: Float, end: Float): Boolean {
-                    return angle >= init && angle < end
-                }
-            }
         }
     }
 
@@ -91,12 +72,15 @@ class BrowserFragment : Fragment(), BrowserView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mRssItem = arguments!!.getSerializable(PARAM_TYPE) as RssItem
+        mRssFeedItem = arguments!!.getParcelable(PARAM_TYPE) as RssFeedItem
 
         initView()
         initListeners()
     }
 
+    /**
+     * Init WebView's properties and listeners
+     */
     private fun initView() {
         proWebView.setActivity(activity)
         proWebView.settings.domStorageEnabled = true
@@ -122,14 +106,19 @@ class BrowserFragment : Fragment(), BrowserView {
             }
         })
 
-        if (isWifiConnected(context!!)) {
-            proWebView.loadUrl(mRssItem!!.link)
+        //Load if WiFi connected
+        if (isWiFiConnected(context!!)) {
+            proWebView.loadUrl(mRssFeedItem!!.link)
             isUrlStartLoading = true
         }
 
         touchSlop = ViewConfiguration.get(context).scaledTouchSlop
     }
 
+    /**
+     * Init button listeners.
+     * Page scroll progression
+     */
     private fun initListeners() {
         btnClose.setOnClickListener {
             (activity as DetailsActivity).onOpenDetails()
@@ -145,7 +134,7 @@ class BrowserFragment : Fragment(), BrowserView {
             pageProgress.showProgress(true)
         }
         btnBrowser.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(mRssItem!!.link))
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(mRssFeedItem!!.link))
             startActivity(intent)
         }
         btnShareCurrent.setOnClickListener {
@@ -157,16 +146,13 @@ class BrowserFragment : Fragment(), BrowserView {
             startActivity(Intent.createChooser(shareIntent, resources.getText(R.string.tvShare)))
         }
 
+        //To show page scroll progress
+        onScrollListener()
 
-        proWebView.setOnScrollChangeListener { _, _, _, _, _ ->
-            if (loadProgress != null) {
-                val percentage = calculateProgression(proWebView)
-                loadProgress.progress = percentage
-            }
-        }
 
-        proWebView.addOnTouchListener { v, event ->
-            var direction: Direction = Direction.NOT_DETECTED
+        //To hide/unhide Toolbar when scrolling page
+        proWebView.addOnTouchListener { _, event ->
+            var direction: UtilityMethods.Direction = UtilityMethods.Direction.NOT_DETECTED
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     startX = event.x
@@ -184,11 +170,11 @@ class BrowserFragment : Fragment(), BrowserView {
 
                     val dy = Math.abs(newY - startY)
                     val layoutParams = pageProgress.layoutParams
-                    if (direction == Direction.UP) {
+                    if (direction == UtilityMethods.Direction.UP) {
                         if (layoutParams.height >= 120) {
                             layoutParams.height = (layoutParams.height - dy * 0.1).toInt()
                         }
-                    } else if (direction == Direction.DOWN) {
+                    } else if (direction == UtilityMethods.Direction.DOWN) {
                         if (layoutParams.height <= 224f) {
                             layoutParams.height = (layoutParams.height + dy * 0.1).toInt()
                         }
@@ -203,46 +189,81 @@ class BrowserFragment : Fragment(), BrowserView {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
+    private fun onScrollListener() {
+//        proWebView.setOnScrollChangeListener { _, _, _, _, _ ->
+//            if (loadProgress != null) {
+//                val percentage = calculateProgression(proWebView)
+//                loadProgress.progress = percentage
+//            }
+//        }
+    }
+
+    /**
+     * Calculate page scroll progression
+     */
     private fun calculateProgression(content: WebView): Int {
         val contentHeight = content.contentHeight.toFloat() * content.scaleY
         val total = contentHeight * resources.displayMetrics.density - content.height
         return (content.scrollY * 1000) / total.toInt()
     }
 
+    /**
+     * Load page
+     * WebView's onResume call
+     */
     override fun onResume() {
         super.onResume()
         proWebView.onResume()
         if (!isUrlStartLoading) {
-            proWebView.loadUrl(mRssItem!!.link)
+            proWebView.loadUrl(mRssFeedItem!!.link)
             isUrlStartLoading = true
         }
     }
 
+    /**
+     * WebView's onPause call
+     */
     override fun onPause() {
         proWebView.onPause()
         super.onPause()
     }
 
+    /**
+     * WebView's onDestroy call
+     */
     override fun onDestroyView() {
         proWebView.onDestroy()
         super.onDestroyView()
     }
 
+    /**
+     * WebView's onActivityResult call
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         proWebView.onActivityResult(requestCode, resultCode, data)
     }
 
+    /**
+     * WebView's onViewStateRestored call
+     */
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         proWebView.onRestoreInstanceState(savedInstanceState)
     }
 
+    /**
+     * WebView's onRequestPermissionsResult call
+     */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         proWebView.onRequestPermissionResult(requestCode, permissions, grantResults)
     }
 
+    /**
+     * WebView's onSaveInstanceState call
+     */
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         proWebView.onSavedInstanceState(outState)

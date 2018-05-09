@@ -1,36 +1,45 @@
 package workshop.akbolatss.tagsnews.screen.board
 
-import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-
-import workshop.akbolatss.tagsnews.screen.news.NewsSource
+import workshop.akbolatss.tagsnews.model.dao.RssSource
+import workshop.akbolatss.tagsnews.screen.news.NewsFragment
+import workshop.akbolatss.tagsnews.screen.recommendations.RecommendationsFragment
 import workshop.akbolatss.tagsnews.util.SmartFragmentStatePagerAdapter
 
-
-class SectionsPagerAdapter(fm: FragmentManager, private val sections: MutableList<NewsSource>?) : SmartFragmentStatePagerAdapter<Fragment>(fm) {
+/**
+ * FragmentStatePager adapter to handle #RecommendationsFragment and #NewsFragment in #BoardActivity
+ * @see BoardActivity
+ */
+class SectionsPagerAdapter(fm: FragmentManager, private val sections: MutableList<RssSource>) : SmartFragmentStatePagerAdapter<Fragment>(fm) {
 
     override fun getItem(position: Int): Fragment {
-        val bundle = Bundle()
-        bundle.putString(position.toString(), sections!![position].name)
-        bundle.putString(getPageTitle(position)!!.toString(), sections[position].url)
-        sections[position].fragment.arguments = bundle
-        return sections[position].fragment
+        return if (position == 0) {
+            RecommendationsFragment()
+        } else {
+            NewsFragment.newInstance(sections[position - 1].id, sections[position - 1].link)
+        }
     }
 
     override fun getCount(): Int {
-        return sections?.size ?: 0
+        return sections.size + 1
     }
 
-    fun onUpdate(newSections: List<NewsSource>) {
-        for (i in count - 1 downTo 1) {
-            sections!!.removeAt(i)
+    fun onUpdate(newSections: List<RssSource>) {
+        if (count > 1) {
+            for (i in sections.size downTo 1) {
+                sections.removeAt(i - 1)
+            }
         }
-        sections!!.addAll(newSections)
+        sections.addAll(newSections)
         notifyDataSetChanged()
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return sections!![position].name
+        return if (position == 0) {
+            "+"
+        } else {
+            sections[position - 1].title
+        }
     }
 }

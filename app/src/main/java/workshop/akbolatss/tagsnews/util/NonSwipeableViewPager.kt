@@ -6,8 +6,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 
 /**
- * Author: Akbolat Sadvakassov
- * Date: 28.04.2018
+ * Custom ViewPager with disabled swipe gestures
  */
 class NonSwipeableViewPager : ViewPager {
     constructor(context: Context) : super(context) {}

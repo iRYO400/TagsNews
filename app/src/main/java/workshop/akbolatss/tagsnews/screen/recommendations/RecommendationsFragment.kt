@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
@@ -12,9 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import java.util.Random
@@ -23,19 +19,21 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.fragment_recommendations.*
 import workshop.akbolatss.tagsnews.R
 import workshop.akbolatss.tagsnews.application.App
-import workshop.akbolatss.tagsnews.di.component.AppComponent
 import workshop.akbolatss.tagsnews.di.component.DaggerSourcesComponent
 import workshop.akbolatss.tagsnews.di.module.SourcesModule
 import workshop.akbolatss.tagsnews.model.dao.RssSource
 import workshop.akbolatss.tagsnews.screen.sources.SourcesPresenter
 import workshop.akbolatss.tagsnews.screen.sources.SourcesView
 
-open class RecommendationsFragment : Fragment(), SourcesView, RecommendationsAdapter.onSourceClickListener {
+/**
+ * Fragment to search new RSS sources. Creates in #BoardActivity
+ * @see BoardActivity
+ */
+class RecommendationsFragment : Fragment(), SourcesView, RecommendationsAdapter.RecommendationsListener {
 
     @Inject
     lateinit var mContext: Context
@@ -48,9 +46,7 @@ open class RecommendationsFragment : Fragment(), SourcesView, RecommendationsAda
     private var searchSubject: BehaviorSubject<String>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_recommendations, container, false)
-        initDagger()
-        return rootView
+        return inflater.inflate(R.layout.fragment_recommendations, container, false)
     }
 
     private fun initDagger() {
@@ -63,7 +59,7 @@ open class RecommendationsFragment : Fragment(), SourcesView, RecommendationsAda
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        initDagger()
         initRV()
         initEditText()
     }
@@ -76,6 +72,9 @@ open class RecommendationsFragment : Fragment(), SourcesView, RecommendationsAda
         recyclerView.adapter = mAdapter
     }
 
+    /**
+     * Init TextInput View
+     */
     private fun initEditText() {
         searchSubject = BehaviorSubject.create()
         etQuery.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, event ->
@@ -110,13 +109,14 @@ open class RecommendationsFragment : Fragment(), SourcesView, RecommendationsAda
         etQuery.setText(suggestions[Random().nextInt(9)])
         onSubmitQuery()
 
+        //Query for new result after typing within 1 second
         etQuery.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 searchSubject!!.debounce(1000, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe { s ->
                             if (s.trim { it <= ' ' }.isNotEmpty()) {
-                                mPresenter.onSearchSources(s)
+                                mPresenter.searchSources(s)
                                 btnSearch.visibility = View.GONE
                                 progressBar.visibility = View.VISIBLE
                             }
@@ -126,14 +126,21 @@ open class RecommendationsFragment : Fragment(), SourcesView, RecommendationsAda
     }
 
     override fun onAddNewSource() {
+        //not used in this class
     }
 
+    /**
+     * Submit query make search API call
+     */
     private fun onSubmitQuery() {
         if (etQuery.text.toString().trim { it <= ' ' }.isNotEmpty()) {
-            mPresenter.onSearchSources(etQuery.text.toString().trim { it <= ' ' })
+            mPresenter.searchSources(etQuery.text.toString().trim { it <= ' ' })
         }
     }
 
+    /**
+     * Load items to RecyclerView.Adapter
+     */
     override fun onLoadSources(rssSourceList: List<RssSource>) {
         mAdapter!!.onAddItems(rssSourceList)
     }
@@ -148,25 +155,45 @@ open class RecommendationsFragment : Fragment(), SourcesView, RecommendationsAda
         }
     }
 
+    /**
+     * Adds/Removes RSS source from DB
+     * @param rssSource to save or delete
+     */
     override fun onSourceClick(rssSource: RssSource, toDelete: Boolean) {
         if (toDelete) {
-            mPresenter.onRemoveSource(rssSource)
+            mPresenter.removeSourceByLink(rssSource)
         } else {
-            mPresenter.onAddNewSource(rssSource)
+            mPresenter.addNewSource(rssSource)
         }
         mListener!!.onUpdateRSS()
     }
 
+    /**
+     * Check in Database if exists
+     */
+    override fun checkIfExists(rssSource: RssSource): Boolean {
+        return mPresenter.checkInSources(rssSource)
+    }
+
+    /**
+     * Show loading state
+     */
     override fun onShowLoading() {
         btnSearch.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
     }
 
+    /**
+     * Hide loading state
+     */
     override fun onHideLoading() {
         btnSearch.visibility = View.VISIBLE
         progressBar.visibility = View.GONE
     }
 
+    /**
+     * Attach listener
+     */
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         if (context is OnFragmentInteractionListener) {
@@ -176,6 +203,9 @@ open class RecommendationsFragment : Fragment(), SourcesView, RecommendationsAda
         }
     }
 
+    /**
+     * Detach listener
+     */
     override fun onDetach() {
         super.onDetach()
         mListener = null

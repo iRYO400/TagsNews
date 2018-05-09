@@ -13,21 +13,31 @@ import workshop.akbolatss.tagsnews.di.component.DaggerBoardComponent
 import workshop.akbolatss.tagsnews.di.module.BoardModule
 import workshop.akbolatss.tagsnews.model.dao.RssSource
 import workshop.akbolatss.tagsnews.screen.favorites.FavoritesActivity
-import workshop.akbolatss.tagsnews.screen.news.NewsSource
 import workshop.akbolatss.tagsnews.screen.recommendations.RecommendationsFragment
 import workshop.akbolatss.tagsnews.screen.reminders.RemindersActivity
 import workshop.akbolatss.tagsnews.screen.sources.SourcesActivity
 import workshop.akbolatss.tagsnews.util.Constants.SELECTED_THEME
-import java.util.*
 import javax.inject.Inject
 
+/**
+ * Main Activity, that handles tabs with active RSS sources
+ */
 class BoardActivity : BaseActivity(), BoardView, RecommendationsFragment.OnFragmentInteractionListener {
 
+    /**
+     * MVP Presenter, where stored logic related to API calls, DB
+     */
     @Inject
     lateinit var mPresenter: BoardPresenter
 
+    /**
+     * FragmentStatePagerAdapter for ViewPager
+     */
     private var mSectionsAdapter: SectionsPagerAdapter? = null
 
+    /**
+     * Checker to update RSS Source when they changed
+     */
     private var isUpdateBoardNeeded: Boolean = false
 
     override fun onViewReady(savedInstanceState: Bundle?, intent: Intent) {
@@ -37,6 +47,9 @@ class BoardActivity : BaseActivity(), BoardView, RecommendationsFragment.OnFragm
         mPresenter.onLoadSources(false)
     }
 
+    /**
+     * Init listeners for Floating Action Buttons
+     */
     private fun initListeners() {
         fabNotifies.setOnClickListener {
             onOpenReminders()
@@ -54,16 +67,10 @@ class BoardActivity : BaseActivity(), BoardView, RecommendationsFragment.OnFragm
 
     /**
      * Init TabLayout Fragments
-     * @param rssSources
+     * @param rssSources List of RSS sources from DB
      */
     override fun onInitSources(rssSources: List<RssSource>) {
-        val fragments = ArrayList<NewsSource>()
-        fragments.add(NewsSource("+", null, true))
-        for (rssSource in rssSources) {
-            fragments.add(NewsSource(rssSource.title, rssSource.link, false))
-        }
-
-        mSectionsAdapter = SectionsPagerAdapter(supportFragmentManager, fragments)
+        mSectionsAdapter = SectionsPagerAdapter(supportFragmentManager, rssSources as MutableList<RssSource>)
         viewPager.offscreenPageLimit = 5
         viewPager.adapter = mSectionsAdapter
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
@@ -89,34 +96,43 @@ class BoardActivity : BaseActivity(), BoardView, RecommendationsFragment.OnFragm
 
     }
 
+    /**
+     * Update RSS sources after they changed in #SourceActivity
+     * @see SourcesActivity
+     */
     override fun onUpdateSources(rssSources: List<RssSource>) {
-        val fragments = ArrayList<NewsSource>()
-        for (rssSource in rssSources) {
-            fragments.add(NewsSource(rssSource.title, rssSource.link, false))
-        }
-        mSectionsAdapter!!.onUpdate(fragments)
+        mSectionsAdapter!!.onUpdate(rssSources)
     }
 
+    /**
+     * Directly update new added RSS source
+     */
     override fun onUpdateRSS() {
         mPresenter.onLoadSources(true)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_details, menu)
-        return true
-    }
-
+    /**
+     * Open #FavoritesActivity
+     * @see FavoritesActivity
+     */
     private fun onOpenFavorites() {
         btnFam.close(true)
-        val i = Intent(this, FavoritesActivity::class.java)
-        startActivity(i)
+        startActivity(Intent(this, FavoritesActivity::class.java))
     }
 
+    /**
+     * Open #RemindersActivity
+     * @see RemindersActivity
+     */
     private fun onOpenReminders() {
         btnFam.close(true)
         startActivity(Intent(this, RemindersActivity::class.java))
     }
 
+    /**
+     * Open #SourcesActivity
+     * @see SourcesActivity
+     */
     private fun onOpenSourceManager() {
         btnFam.close(true)
         val i = Intent(this, SourcesActivity::class.java)
@@ -124,6 +140,9 @@ class BoardActivity : BaseActivity(), BoardView, RecommendationsFragment.OnFragm
         startActivity(i)
     }
 
+    /**
+     * Switch between Day and Night themes
+     */
     private fun turnNightMode() {
         if (Hawk.contains(SELECTED_THEME)) { // False = Day, True = Night
             if (Hawk.get(SELECTED_THEME)) {

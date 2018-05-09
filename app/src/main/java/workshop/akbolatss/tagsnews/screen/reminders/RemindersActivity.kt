@@ -9,7 +9,6 @@ import android.support.v7.widget.PopupMenu
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.CheckBox
 import android.widget.TimePicker
 import kotlinx.android.synthetic.main.activity_reminders.*
 import java.util.Random
@@ -22,6 +21,10 @@ import workshop.akbolatss.tagsnews.di.component.DaggerRemindersComponent
 import workshop.akbolatss.tagsnews.di.module.RemindersModule
 import workshop.akbolatss.tagsnews.model.dao.ReminderItem
 
+/**
+ * Activity where user can add, edit, remove #Reminders
+ * @see ReminderItem
+ */
 class RemindersActivity : BaseActivity(), RemindersView, RemindersAdapter.ReminderListener {
 
     @Inject
@@ -58,7 +61,10 @@ class RemindersActivity : BaseActivity(), RemindersView, RemindersAdapter.Remind
         }
     }
 
-    override fun onReminderOptions(rItem: ReminderItem, view: View, position: Int) {
+    /**
+     * Show Reminder options. Edit timing and remove
+     */
+    override fun onReminderOptions(rItem: ReminderItem, view: View, pos: Int) {
             val popupMenu = PopupMenu(this, view)
             popupMenu.inflate(R.menu.menu_popup_reminder)
             popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
@@ -100,6 +106,7 @@ class RemindersActivity : BaseActivity(), RemindersView, RemindersAdapter.Remind
                                     rItem.pM_AM = "PM"
                                 }
                             }
+                            mAdapter!!.updateItem(rItem, pos)
                             mPresenter.onUpdate(rItem)
                             dialogInterface.dismiss()
                         }
@@ -108,6 +115,7 @@ class RemindersActivity : BaseActivity(), RemindersView, RemindersAdapter.Remind
                         return@OnMenuItemClickListener true
                     }
                     R.id.mRemove -> {
+                        mAdapter!!.removeItem(rItem, pos)
                         mPresenter.onRemoveReminder(rItem)
                         return@OnMenuItemClickListener true
                     }
@@ -117,6 +125,9 @@ class RemindersActivity : BaseActivity(), RemindersView, RemindersAdapter.Remind
             popupMenu.show()
     }
 
+    /**
+     * Switch Reminder state
+     */
     override fun onReminderSwitch(rItem: ReminderItem, isActive: Boolean, pos: Int) {
         if (isActive) {
             mPresenter.onActivateNotification(rItem, false)
@@ -125,16 +136,15 @@ class RemindersActivity : BaseActivity(), RemindersView, RemindersAdapter.Remind
         }
     }
 
-    override fun onUpdateReminders() {
-        mPresenter.onLoadReminders()
-    }
-
+    /**
+     * Add new Reminder
+     */
     override fun onAddReminder() {
         val layoutInflater = LayoutInflater.from(this@RemindersActivity)
         val subView = layoutInflater.inflate(R.layout.dialog_timepicker, null)
         val timePicker = subView.findViewById<TimePicker>(R.id.timePicker)
 
-        val builder = AlertDialog.Builder(this, R.style.Dialog)
+        val builder = AlertDialog.Builder(this, R.style.TimePickerDialog)
 
         builder.setView(subView)
         builder.setPositiveButton(R.string.tvAdd) { dialogInterface, i ->
@@ -160,7 +170,7 @@ class RemindersActivity : BaseActivity(), RemindersView, RemindersAdapter.Remind
                 }
             }
 
-            mPresenter!!.onAddReminder(rItem)
+            mPresenter.onAddReminder(rItem)
             mAdapter!!.onAddItem(rItem)
             dialogInterface.dismiss()
         }
@@ -168,8 +178,21 @@ class RemindersActivity : BaseActivity(), RemindersView, RemindersAdapter.Remind
         builder.show()
     }
 
+    /**
+     * Load items to RecyclerView.Adapter
+     */
     override fun onShowReminders(reminderItems: List<ReminderItem>) {
         mAdapter!!.onAddItems(reminderItems)
+    }
+
+    override fun onNoContent(isEmpty: Boolean) {
+        if (isEmpty) {
+            recyclerView.visibility = View.GONE
+            tvNoContent.visibility = View.VISIBLE
+        } else {
+            recyclerView.visibility = View.VISIBLE
+            tvNoContent.visibility = View.GONE
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

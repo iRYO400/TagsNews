@@ -8,17 +8,34 @@ import org.greenrobot.greendao.annotation.*;
 // KEEP INCLUDES END
 
 /**
- * Entity mapped to table "REMINDER_ITEM".
+ * Entity mapped to table "REMINDER_ITEM". This class represents Push Notifications
+ * @see workshop.akbolatss.tagsnews.model.DBReminderItemRepository
  */
 @Entity
 public class ReminderItem {
 
     @Id(autoincrement = true)
     private Long id;
+    /**
+     * Request code for AlarmManager. Helps to deactivate activated Reminder
+     * @see android.app.AlarmManager
+     */
     private Integer requestCode;
+    /**
+     * Is reminder active
+     */
     private Boolean isActive;
+    /**
+     * Selected hour
+     */
     private Integer hour;
+    /**
+     * Selected minute
+     */
     private Integer minute;
+    /**
+     * Helper
+     */
     private String PM_AM;
 
     // KEEP FIELDS - put your custom fields here

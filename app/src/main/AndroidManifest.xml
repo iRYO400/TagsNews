@@ -33,8 +33,7 @@
         <activity android:name=".screen.sources.SourcesActivity" />
         <activity android:name=".screen.reminders.RemindersActivity" />
         <activity
-            android:name=".screen.details.DetailsActivity"
-            android:theme="@style/SwipeTheme" />
+            android:name=".screen.details.DetailsActivity" />
 
         <receiver android:name=".screen.reminders.ReminderReceiver" />
 

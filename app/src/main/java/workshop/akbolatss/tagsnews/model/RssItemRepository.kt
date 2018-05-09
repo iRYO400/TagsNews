@@ -1,15 +1,18 @@
 package workshop.akbolatss.tagsnews.model
 
 import io.reactivex.Observable
-import me.toptas.rssconverter.RssItem
+import workshop.akbolatss.tagsnews.model.dao.RssFeedItem
 
+/**
+ * @see DBRssItemRepository
+ */
 interface RssItemRepository {
 
-    val favorites: Observable<List<RssItem>>
+    val favorites: Observable<List<RssFeedItem>>
 
-    fun addRssItem(rssItem: RssItem)
+    fun addRssItem(rssFeedItem: RssFeedItem)
 
-    fun removeRssItem(pubDate: String)
+    fun removeRssItem(rssFeedItem: RssFeedItem)
 
-    fun checkIfExists(pubDate: String): Boolean
+    fun checkIfExists(rssFeedItem: RssFeedItem): Boolean
 }

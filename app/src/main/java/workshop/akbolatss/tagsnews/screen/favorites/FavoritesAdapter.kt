@@ -1,4 +1,4 @@
-package workshop.akbolatss.tagsnews.screen.news
+package workshop.akbolatss.tagsnews.screen.favorites
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -7,21 +7,21 @@ import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import com.stfalcon.frescoimageviewer.ImageViewer
 import kotlinx.android.synthetic.main.rv_news_item_small.view.*
-import me.toptas.rssconverter.RssItem
 import workshop.akbolatss.tagsnews.R
+import workshop.akbolatss.tagsnews.model.dao.RssFeedItem
 import workshop.akbolatss.tagsnews.util.Constants.ITEM_VIEW_MAIN
 import workshop.akbolatss.tagsnews.util.UtilityMethods
 import java.util.*
 
 /**
- * Custom RecyclerView.Adapter for News items
+ * Custom RecyclerView.Adapter for Favorite items
  */
-class NewsAdapter(private val mClickListener: NewsListener) : RecyclerView.Adapter<NewsAdapter.NewsHolder>() {
+class FavoritesAdapter(private val mClickListener: FavoritesListener) : RecyclerView.Adapter<FavoritesAdapter.NewsHolder>() {
 
     /**
-     * List of RSS feeds
+     * List of favorites
      */
-    private val mNewsList: MutableList<RssItem> = ArrayList()
+    private val mNewsList: MutableList<RssFeedItem> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsHolder {
         val mLayoutInflater = LayoutInflater.from(parent.context)
@@ -45,7 +45,7 @@ class NewsAdapter(private val mClickListener: NewsListener) : RecyclerView.Adapt
     /**
      * Load list of items to this adapter
      */
-    fun onAddItems(rssItems: List<RssItem>?) {
+    fun onAddItems(rssItems: List<RssFeedItem>?) {
         if (rssItems != null) {
             mNewsList.clear()
             mNewsList.addAll(rssItems)
@@ -53,27 +53,33 @@ class NewsAdapter(private val mClickListener: NewsListener) : RecyclerView.Adapt
         }
     }
 
-    interface NewsListener {
-        fun onItemClick(rssItem: RssItem)
+    /**
+     * Click listener
+     */
+    interface FavoritesListener {
+        /**
+         * Open details
+         */
+        fun onItemClick(rssFeedItem: RssFeedItem)
     }
 
     /**
-     * Custom View Holder where View instantiates
+     * Custom View Holder where View inits
      */
     inner class NewsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(rssItem: RssItem, listener: NewsListener) {
+        fun bind(rssFeedItem: RssFeedItem, listener: FavoritesListener) {
 
-            itemView.tvTitle.text = rssItem.title
-            if (rssItem.publishDate != null && rssItem.publishDate.isNotEmpty())
-                itemView.tvTimestamp.text = UtilityMethods.convertTime(rssItem.publishDate)
+            itemView.tvTitle.text = rssFeedItem.title
+            if (rssFeedItem.pubDate != null && rssFeedItem.pubDate.isNotEmpty())
+                itemView.tvTimestamp.text = UtilityMethods.convertTime(rssFeedItem.pubDate)
 
-            itemView.tvDescription.text = rssItem.description
+            itemView.tvDescription.text = rssFeedItem.description
 
-            if (rssItem.image != null) {
+            if (rssFeedItem.image != null) {
                 itemView.imgImage.visibility = View.VISIBLE
                 Picasso.with(itemView.context)
-                        .load(rssItem.image)
+                        .load(rssFeedItem.image)
                         .placeholder(R.drawable.placeholder)
                         .into(itemView.imgImage)
             } else {
@@ -81,12 +87,7 @@ class NewsAdapter(private val mClickListener: NewsListener) : RecyclerView.Adapt
             }
 
             itemView.flItem.setOnClickListener {
-                listener.onItemClick(rssItem)
-            }
-            itemView.flImage.setOnClickListener {
-                ImageViewer.Builder(itemView.context, arrayListOf(rssItem.image))
-                        .setStartPosition(0)
-                        .show()
+                listener.onItemClick(rssFeedItem)
             }
         }
     }

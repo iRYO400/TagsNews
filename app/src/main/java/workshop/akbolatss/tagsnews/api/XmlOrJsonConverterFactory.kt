@@ -8,6 +8,10 @@ import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+/**
+ * Custom Json/Xml converter manager for #Retrofit2
+ * @see Retrofit
+ */
 class XmlOrJsonConverterFactory : Converter.Factory() {
 
     private val rssXml: Converter.Factory = RssConverterFactory.create()
@@ -24,18 +28,3 @@ class XmlOrJsonConverterFactory : Converter.Factory() {
         return null
     }
 }
-
-//    final Converter.Factory rssXml = RssConverterFactory.create();
-//    final Converter.Factory json = GsonConverterFactory.create();
-//
-//    @Override
-//    public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
-//        for (Annotation annotation : annotations) {
-//            if (annotation.annotationType() == NewsApiService.Json.class) {
-//                return json.responseBodyConverter(type, annotations, retrofit);
-//            } else if (annotation.annotationType() == NewsApiService.Xml.class){
-//                return rssXml.responseBodyConverter(type, annotations, retrofit);
-//            }
-//        }
-//        return null;
-//    }

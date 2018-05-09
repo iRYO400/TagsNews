@@ -12,7 +12,9 @@ import workshop.akbolatss.tagsnews.screen.sources.helper.ItemTouchHelperAdapter
 import workshop.akbolatss.tagsnews.screen.sources.helper.ItemTouchHelperViewHolder
 import java.util.*
 
-
+/**
+ * Custom RecyclerView.Adapter for RSS source items
+ */
 class SourcesAdapter(private val mClickListener: SourceListener) : RecyclerView.Adapter<SourcesAdapter.NewsHolder>(), ItemTouchHelperAdapter {
 
     private val mSourcesList: MutableList<RssSource> = ArrayList()
@@ -32,6 +34,9 @@ class SourcesAdapter(private val mClickListener: SourceListener) : RecyclerView.
         return mSourcesList.size
     }
 
+    /**
+     * Load list of items to this adapter
+     */
     fun onAddItems(rssItems: List<RssSource>?) {
         if (rssItems != null) {
             mSourcesList.clear()
@@ -40,6 +45,9 @@ class SourcesAdapter(private val mClickListener: SourceListener) : RecyclerView.
         }
     }
 
+    /**
+     * Add item to this adapter
+     */
     fun onAddItem(rssSource: RssSource?) {
         if (rssSource != null) {
             mSourcesList.add(rssSource)
@@ -47,6 +55,10 @@ class SourcesAdapter(private val mClickListener: SourceListener) : RecyclerView.
         }
     }
 
+    /**
+     * Update item in specific position
+     * @param pos position
+     */
     fun onUpdateItem(rssSource: RssSource?, pos: Int) {
         if (rssSource != null) {
             mSourcesList[pos] = rssSource
@@ -54,11 +66,18 @@ class SourcesAdapter(private val mClickListener: SourceListener) : RecyclerView.
         }
     }
 
+    /**
+     * Remove item from specific position
+     * @param pos position
+     */
     fun onRemoveItem(pos: Int) {
         mSourcesList.removeAt(pos)
         notifyItemRemoved(pos)
     }
 
+    /**
+     * Swap items
+     */
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         Collections.swap(mSourcesList, fromPosition, toPosition)
         notifyItemMoved(fromPosition, toPosition)
@@ -80,7 +99,10 @@ class SourcesAdapter(private val mClickListener: SourceListener) : RecyclerView.
         fun onSourceSwitch(rssSource: RssSource, isActive: Boolean, pos: Int)
     }
 
-    inner class NewsHolder(itemView: View) : RecyclerView.ViewHolder(itemView), ItemTouchHelperViewHolder {
+    /**
+     * Custom View Holder where View instantiates
+     */
+    inner class NewsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(rssSource: RssSource, listener: SourceListener) {
             itemView.tvTitle.text = rssSource.title
@@ -116,14 +138,6 @@ class SourcesAdapter(private val mClickListener: SourceListener) : RecyclerView.
             } else {
                 itemView.imgAdd.setImageResource(R.drawable.ic_add_24dp)
             }
-        }
-
-        override fun onItemSelected() {
-            //            cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorCardDragged));
-        }
-
-        override fun onItemClear() {
-            //            cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorCardBackground));
         }
     }
 }

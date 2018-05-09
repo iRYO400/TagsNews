@@ -3,7 +3,7 @@ package workshop.akbolatss.tagsnews.screen.splash
 import workshop.akbolatss.tagsnews.base.BaseView
 
 /**
- * Created by AkbolatSS on 11.08.2017.
+ * MVP View for #SplashActivity
+ * @see SplashActivity
  */
-
 interface SplashView : BaseView

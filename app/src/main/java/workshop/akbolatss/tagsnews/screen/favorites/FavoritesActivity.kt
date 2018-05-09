@@ -5,17 +5,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
+import android.view.View
 import kotlinx.android.synthetic.main.activity_favorites.*
 import me.toptas.rssconverter.RssItem
 import workshop.akbolatss.tagsnews.R
 import workshop.akbolatss.tagsnews.base.BaseActivity
 import workshop.akbolatss.tagsnews.di.component.DaggerFavoritesComponent
 import workshop.akbolatss.tagsnews.di.module.FavoritesModule
+import workshop.akbolatss.tagsnews.model.dao.RssFeedItem
 import workshop.akbolatss.tagsnews.screen.details.DetailsActivity
 import workshop.akbolatss.tagsnews.screen.news.NewsAdapter
+import workshop.akbolatss.tagsnews.util.Constants
 import javax.inject.Inject
 
-class FavoritesActivity : BaseActivity(), FavoritesView, NewsAdapter.NewsListener {
+/**
+ * Activity that load all favorite RSS feeds
+ */
+class FavoritesActivity : BaseActivity(), FavoritesView, FavoritesAdapter.FavoritesListener {
 
     @Inject
     lateinit var mPresenter: FavoritesPresenter
@@ -23,7 +29,7 @@ class FavoritesActivity : BaseActivity(), FavoritesView, NewsAdapter.NewsListene
     @Inject
     lateinit var mContext: Context
 
-    private var mNewsAdapter: NewsAdapter? = null
+    private var mFavoritesAdapter: FavoritesAdapter? = null
 
     override fun onViewReady(savedInstanceState: Bundle?, intent: Intent) {
         super.onViewReady(savedInstanceState, intent)
@@ -38,32 +44,36 @@ class FavoritesActivity : BaseActivity(), FavoritesView, NewsAdapter.NewsListene
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-        recyclerView.isNestedScrollingEnabled = false
 
-        mNewsAdapter = NewsAdapter(this)
-        recyclerView.adapter = mNewsAdapter
+        mFavoritesAdapter = FavoritesAdapter(this)
+        recyclerView.adapter = mFavoritesAdapter
     }
 
-    override fun onItemClick(rssItem: RssItem) {
+    /**
+     * Opens #DetailsActivity with extra info
+     * @param rssFeedItem RSS feed item
+     */
+    override fun onItemClick(rssFeedItem: RssFeedItem) {
         val intent = Intent(this@FavoritesActivity, DetailsActivity::class.java)
-        intent.putExtra("RssItem", rssItem)
+        intent.putExtra(Constants.INTENT_RSS_FEED_ITEM, rssFeedItem)
         startActivity(intent)
     }
 
-    override fun onLoadFavorites(rssItems: List<RssItem>) {
-        mNewsAdapter!!.onAddItems(rssItems)
-    }
-
-    override fun onShowLoading() {
-
-    }
-
-    override fun onHideLoading() {
-
+    /**
+     * Load items to RecyclerView.Adapter
+     */
+    override fun onLoadFavorites(rssItems: List<RssFeedItem>) {
+        mFavoritesAdapter!!.onAddItems(rssItems)
     }
 
     override fun onNoContent(isEmpty: Boolean) {
-
+        if (isEmpty) {
+            recyclerView.visibility = View.GONE
+            tvNoContent.visibility = View.VISIBLE
+        } else {
+            recyclerView.visibility = View.VISIBLE
+            tvNoContent.visibility = View.GONE
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
