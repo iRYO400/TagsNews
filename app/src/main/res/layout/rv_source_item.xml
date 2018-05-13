@@ -1,74 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="4dp"
-    android:layout_marginStart="4dp"
-    android:layout_marginTop="4dp"
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
-    app:cardBackgroundColor="@color/colorCardBackground"
-    app:cardCornerRadius="0dp">
+    android:focusable="true"
+    app:cardCornerRadius="0dp"
+    app:cardElevation="0dp">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/cbInit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="4dp"
-            android:layout_marginStart="4dp" />
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/imgIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_rss_feed_24dp" />
+
+        <ImageView
+            android:id="@+id/imgSwap"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_swap_vert_24dp" />
+
+        <FrameLayout
+            android:id="@+id/flSwap"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:src="@drawable/ic_rss_feed_24dp" />
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvLink"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/sourceTitle"
+            app:layout_constraintEnd_toStartOf="@+id/imgAdd"
+            app:layout_constraintStart_toEndOf="@+id/imgIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Title" />
 
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:text="DTF.ru"
-                android:textColor="@color/colorTextWhite"
-                android:textSize="@dimen/sourceTitle" />
+        <TextView
+            android:id="@+id/tvLink"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="@dimen/smTimestamp"
+            app:layout_constraintEnd_toStartOf="@+id/tvSubscribers"
+            app:layout_constraintStart_toEndOf="@+id/imgIcon"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+            tools:text="Link" />
 
-            <TextView
-                android:id="@+id/tvLink"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="https://dtf.ru/all/rss"
-                android:textColor="@color/colorTextPrimaryDark"
-                android:textSize="@dimen/sourceUrl" />
+        <TextView
+            android:id="@+id/tvSubscribers"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="2dp"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="@dimen/smTimestamp"
+            app:layout_constraintEnd_toStartOf="@+id/imgAdd"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+            tools:text="25M Subscribers" />
 
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:maxLines="3"
+            android:textColor="@color/colorTextSecondary"
+            android:textSize="@dimen/smDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imgIcon"
+            app:layout_constraintTop_toBottomOf="@+id/tvSubscribers"
+            tools:text="Description..." />
+
+        <ImageView
+            android:id="@+id/imgAdd"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="8dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_add_24dp"
+            app:layout_constraintBottom_toTopOf="@+id/tvDescription"
+            app:layout_constraintEnd_toStartOf="@+id/imgOptions"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/imgOptions"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:src="@drawable/ic_more_vert_24dp" />
-    </LinearLayout>
+            android:focusable="true"
+            android:src="@drawable/ic_more_vert_24dp"
+            app:layout_constraintBottom_toTopOf="@+id/tvDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--<FrameLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/imgIcon"-->
+            <!--app:layout_constraintTop_toTopOf="parent">-->
+
+        <!--</FrameLayout>-->
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/colorTextSecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imgIcon"
+            app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+    </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

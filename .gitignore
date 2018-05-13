@@ -8,3 +8,5 @@
 .externalNativeBuild
 /app/build
 /app/libs
+/app/release
+/app/oldReleases

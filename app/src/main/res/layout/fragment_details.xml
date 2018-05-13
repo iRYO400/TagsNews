@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imgView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/largeImageHeight"
+                android:scaleType="centerCrop"
+                android:src="@drawable/placeholder"
+                tools:ignore="ContentDescription" />
+
+            <FrameLayout
+                android:id="@+id/flImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <android.support.v7.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorTransBack2"
+                android:popupTheme="@style/ToolbarStyle"
+                android:theme="@style/ToolbarStyle"
+                android:visibility="gone"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/btnShare"
+                        android:layout_width="48dp"
+                        android:layout_height="56dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:scaleType="center"
+                        android:src="@drawable/ic_share_24dp" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.Toolbar>
+
+        </FrameLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="3"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/smTitle"
+                ads:layout_constraintEnd_toStartOf="@+id/btnFavorite"
+                ads:layout_constraintStart_toStartOf="parent"
+                ads:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btnFavorite"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleType="center"
+                android:src="@drawable/ic_favorite_border_24dp"
+                ads:layout_constraintBottom_toTopOf="@+id/tvSourceName"
+                ads:layout_constraintEnd_toEndOf="parent"
+                ads:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_rss_feed_24dp"
+                ads:layout_constraintBottom_toTopOf="@+id/tvDescription"
+                ads:layout_constraintStart_toStartOf="parent"
+                ads:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+            <TextView
+                android:id="@+id/tvSourceName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="@dimen/smTimestamp"
+                ads:layout_constraintBottom_toTopOf="@+id/tvDescription"
+                ads:layout_constraintEnd_toStartOf="@+id/tvTimestamp"
+                ads:layout_constraintHorizontal_bias="0.0"
+                ads:layout_constraintStart_toEndOf="@+id/imageView"
+                ads:layout_constraintTop_toBottomOf="@+id/tvTitle"
+                tools:text="dtf.ru" />
+
+            <TextView
+                android:id="@+id/tvTimestamp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="@dimen/smTimestamp"
+                ads:layout_constraintBottom_toTopOf="@+id/tvDescription"
+                ads:layout_constraintEnd_toEndOf="parent"
+                ads:layout_constraintTop_toBottomOf="@+id/tvTitle"
+                tools:text="Sat, 05 Aug 2017 10:22:45" />
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif"
+                android:maxLines="5"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/smDescription"
+                ads:layout_constraintBottom_toBottomOf="parent"
+                ads:layout_constraintEnd_toEndOf="parent"
+                ads:layout_constraintStart_toStartOf="parent"
+                tools:text="Description" />
+        </android.support.constraint.ConstraintLayout>
+
+
+        <Button
+            android:id="@+id/btnOpenSource"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/shareButtonsHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/bg_btn"
+            android:text="@string/tvReadSource"
+            android:textColor="@color/colorTextWhite" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <ImageButton
+                android:id="@+id/btnVkShare"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/shareButtonsHeight"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@drawable/bg_btn_vk"
+                android:src="@drawable/ic_vk_logo" />
+
+            <ImageButton
+                android:id="@+id/btnFbShare"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/shareButtonsHeight"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@drawable/bg_btn_fb"
+                android:src="@drawable/ic_facebook_logo" />
+
+            <ImageButton
+                android:id="@+id/btnTwShare"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/shareButtonsHeight"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@drawable/bg_btn_twitter"
+                android:src="@drawable/ic_twitter_logo_silhouette" />
+
+        </LinearLayout>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="72dp"
+            android:layout_marginTop="24dp"
+            ads:adSize="SMART_BANNER"
+            ads:adUnitId="@string/banner_ad_unit_id" />
+
+    </LinearLayout>
+</ScrollView>
+
