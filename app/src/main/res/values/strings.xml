@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">PaperFeed</string>
-    <string name="app_name_icon">PaperFeed - My News</string>
+    <string name="app_name">TagNews</string>
+    <string name="app_name_icon">TagNews - My News</string>
     <string name="app_sign" translatable="false">Tag News App bit.ly/</string>
     <string name="tvReadMore"><u>Read more</u></string>
     <string name="tvReadSource">Read more…</string>

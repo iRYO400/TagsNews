@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PaperFeed</string>
-    <string name="app_name_icon">PaperFeed - Мои Новости</string>
+    <string name="app_name">TagNews</string>
+    <string name="app_name_icon">TagNews - Мои Новости</string>
     <string name="tvReadMore"><u>Читать далее</u></string>
     <string name="tvReadSource">Читать подробности…</string>
 

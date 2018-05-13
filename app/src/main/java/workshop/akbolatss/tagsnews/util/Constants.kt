@@ -13,7 +13,7 @@ object Constants {
     /**
      * Data Base name. That will actually created on smartphone's memory
      */
-    const val DB_NAME = "paperFeed.db"
+    const val DB_NAME = "tagnews.db"
 
     /**
      * Package names for Facebook, VK.com, Twitter
@@ -33,8 +33,8 @@ object Constants {
 
     const val NOTIFICATION_ID = 500
     const val NOTIFICATION_CHANNEL_ID = "workshop.akbolatss.tagsnews.channel"
-    const val NOTIFICATION_CHANNEL_NAME = "PaperFeed"
-    const val NOTIFICATION_CHANNEL_DESCRIPTION = "PaperFeed - RSS Newsletter"
+    const val NOTIFICATION_CHANNEL_NAME = "TagNews"
+    const val NOTIFICATION_CHANNEL_DESCRIPTION = "TagNews - RSS Newsletter"
 
     const val SELECTED_THEME = "VIEW_THEME" // False = Day, True = Night
 

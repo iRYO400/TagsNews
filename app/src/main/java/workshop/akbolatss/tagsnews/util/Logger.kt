@@ -16,7 +16,7 @@ class Logger {
 
         fun i(s: String) {
             if (BuildConfig.DEBUG) {
-                Log.d("PaperFeed", s)
+                Log.d("TagNews", s)
             }
         }
 
@@ -28,7 +28,7 @@ class Logger {
 
         fun e(s: String) {
             if (BuildConfig.DEBUG) {
-                Log.e("PaperFeed", s)
+                Log.e("TagNews", s)
             }
         }
     }

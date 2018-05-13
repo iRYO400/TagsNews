@@ -1,21 +1,7 @@
-## PaperFeed ##
+## TagNews ##
 Compact RSS-feed reader
 
-<p align="center">
-  <img src="showcase/ShowcaseGif.gif" align="center">
- </p>
-
-<a href='https://play.google.com/store/apps/details?id=workshop.akbolatss.tagsnews'>
-<img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="200"/></a>
-
 <a name="overview" />
-
-## Overview ##
-
-### Permissions: ###
-
-* Internet
-* Access Network State
 
 ### Features: ###
 
